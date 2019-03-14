@@ -42,5 +42,132 @@ $teal: #39c0ba;
 }
 
 .light-theme {
+
+	--primary: #ccc;
+	--primary-darker: #a4a4a4;
+
+	--secondary: #6b6b6b;
+	--secondary--darker: #626262;
+
+	--background: #ececec;
+
+	--surface: #aeaeae;
+	--surface-surround: #fcfcfc;
+	--surface-highlight: #ddd;
+
+	--good-effect: #84db00;
+	--mild-effect: #404040;
+	--warn-effect: #ff7514;
+	--error-effect: #ff2448;
+
+	--on-primary: #000;
+	--on-secondary: #000;
+	--on-background: #000;
+	--on-surface: #000;
+
+}
+
+.pink-theme{
+
+	--primary: #ff00ff;
+	--primary-darker: #0d0b0d;
+
+	--secondary: #cc33ff;
+	--secondary-darker: #0d0b0d;
+
+	--background: #ff00ff;
+
+	--surface: #dd00aa;
+	--surface-surround: #dd00aa;
+	--surface-highlight: #ff6699;
+
+	--good-effect: #84db00;
+	--mild-effect: #404040;
+	--warn-effect: #ff7514;
+	--error-effect: #ff2448;
+
+	--on-primary: #fff;
+	--on-secondary: #fff;
+	--on-background: #fff;
+	--on-surface: #fff;
+
+}
+
+.green-theme{
+
+	--primary: #009900;
+	--primary-darker: #007700;
+
+	--secondary: #006633;
+	--secondary-darker: #004411;
+
+	--background: #006600;
+
+	--surface: #009900;
+	--surface-surround: #006600;
+	--surface-highlight: #33cc33;
+
+	--good-effect: #84db00;
+	--mild-effect: #404040;
+	--warn-effect: #ff7514;
+	--error-effect: #ff2448;
+
+	--on-primary: #fff;
+	--on-secondary: #fff;
+	--on-background: #fff;
+	--on-surface: #fff;
+
+}
+
+.blue-theme{
+
+	--primary: #00ffff;
+	--primary-darker: #00dddd;
+
+	--secondary: #66ccff;
+	--secondary-darker: #33aadd;
+
+	--background: #00ffff;
+
+	--surface: #66ccff;
+	--surface-surround: #3399ff;
+	--surface-highlight: #33cccc;
+
+	--good-effect: #84db00;
+	--mild-effect: #404040;
+	--warn-effect: #ff7514;
+	--error-effect: #ff2448;
+
+	--on-primary: #000;
+	--on-secondary: #000;
+	--on-background: #000;
+	--on-surface: #000;
+
+}
+
+.navy-theme{
+
+	--primary: #0011aa;
+	--primary-darker: #0011dd;
+
+	--secondary: #0000cc;
+	--secondary-darker: #0000aa;
+
+	--background: #000877;
+
+	--surface: #0000cc;
+	--surface-surround: #0011aa;
+	--surface-highlight: #0000aa;
+
+	--good-effect: #84db00;
+	--mild-effect: #404040;
+	--warn-effect: #ff7514;
+	--error-effect: #ff2448;
+
+	--on-primary: #fff;
+	--on-secondary: #fff;
+	--on-background: #fff;
+	--on-surface: #fff;
+
 }
 
