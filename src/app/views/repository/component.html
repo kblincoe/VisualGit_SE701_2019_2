@@ -1,0 +1,5 @@
+<div class="top-section">
+  <app-file-panel [changes]="changes" (displayFile)="displayFile($event)"></app-file-panel>
+  <app-diff-panel [fileDiff]="selectedFile"></app-diff-panel>
+</div>
+<app-graph-panel></app-graph-panel>

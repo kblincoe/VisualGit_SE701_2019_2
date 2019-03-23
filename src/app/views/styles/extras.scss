@@ -1,0 +1,50 @@
+
+.dropdown-menu {
+  background-color: var(--background);
+  color: var(--on-surface)
+}
+
+// The following dropdown classes override those specified by ngDropdown,
+// which is the best (maybe only) way of using ngdropdown and imposing our own styles ontop.
+.dropdown-toggle {
+  @extend .btn;
+
+  font-size: 18px;
+
+  background-color: transparent;
+  color: var(--on-surface);
+
+  &:focus {
+    border-width: 0px 1px 0px 0px;
+  }
+  &:hover {
+    background-color: var(--surface-highlight);
+    color: var(--on-surface);
+  }
+}
+
+.dropdown-item {
+  color: var(--on-surface);
+
+  &:hover {
+    color: var(--on-surface);
+    background-color: var(--surface-highlight);
+  }
+}
+
+.icon-btn {
+  @extend .btn;
+  @extend .btn-link;
+
+  margin: 0px 12px;
+  padding: 0px;
+
+  .icon {
+    width: 48px;
+    height: 48px;
+
+    &:hover {
+      filter: brightness(70%);
+    }
+  }
+}

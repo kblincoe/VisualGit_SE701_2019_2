@@ -1,0 +1,18 @@
+@import "themes.scss";
+
+:host {
+  display: block;
+
+  background-color: var(--surface);
+  border-top: 2px solid var(--surface-surround);
+
+  overflow: auto;
+
+  p {
+    margin: 0;
+  }
+
+  .git-command {
+    margin: 10px;
+  }
+}

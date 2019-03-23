@@ -1,0 +1,35 @@
+<form class="file-panel" [formGroup]="commitForm" (submit)="commit()">
+
+  <!-- Select all modified files -->
+  <div class="form-check modified-files-header">
+    <input (click)="toggleAll()" type="checkbox" class="form-check-input" formControlName="selectAll"/>
+    <label class="form-check-label">Select all</label>
+  </div>
+
+  <!-- The list of files changed, along with checkboxes controlling them -->
+  <!-- Unfortunately we cant use a radio group due to the nesting, so have to roll our own -->
+  <div class="files-changed" formArrayName="staging">
+    <p class="modified-files-message" [hidden]="changes.length > 0">Your modified files will appear here</p>
+
+    <!-- Per file -->
+    <div class="input-group" *ngFor="let change of changes; let i = index">
+      <!-- Staging checker -->
+      <div class="input-group-prepend">
+        <div class="input-group-text"><input type="checkbox" [formControlName]="i" (click)="stage(change)"/></div>
+      </div>
+
+      <!-- Select file button. Uses radios for toggling capability (i.e. only one file can be selected at a time) -->
+      <label [ngClass]="['btn', 'btn-secondary', 'shadow-none', patchTypes.get(change)]" [class.active]="selected.value === change" (click)="displayFile.emit(change)">
+        {{change.newFile().path()}}
+        <input type="radio" [formControl]="selected" [value]="change">
+      </label>
+    </div>
+
+  </div>
+
+  <div class="commit-panel align-bottom">
+    <textarea class="commit-message-input" placeholder="Describe your changes here..." formControlName="commitMessage"></textarea>
+    <button type="submit" class="commit-button" (click)="commit()">Commit</button>
+  </div>
+
+</form>

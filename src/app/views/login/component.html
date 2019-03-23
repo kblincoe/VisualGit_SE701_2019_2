@@ -1,0 +1,49 @@
+
+<div class="authenticate" id="authenticate">
+  <nav class="navbar navbar-inverse" role="navigation">
+    <div ngbDropdown class="container-fluid">
+      <button ngbDropdownToggle>color<span class="caret"></span></button>
+      <div ngbDropdownMenu>
+        <button ngbDropdownItem *ngFor="let theme of themes" (click)="changeColour(theme)">{{theme}}</button>
+      </div>
+    </div>
+  </nav>
+
+
+  <form role="form" class="login-form row justify-content-center align-items-center h-100" [formGroup]="loginForm">
+    <div class="col col-sm-6 col-md-6 col-lg-4 col-xl-3">
+      <label><h1>VisualGit</h1></label>
+      <br><br>
+
+      <div class="input-group">
+        <input type="text" class="form-control" style="width: 85%;" formControlName="username" placeholder="Username or Email">
+      </div>
+      <br>
+
+      <div class="input-group">
+        <input id="password" class="form-control" type="password" formControlName="password" placeholder="Password">
+      </div>
+      <br>
+
+      <ngb-alert type="alert" *ngIf="showAuthenticateError" (close)="showAuthenticateError = false">Username or password incorrect</ngb-alert>
+      <ngb-alert type="alert" *ngIf="showCredentialLoadError" (close)="showCredentialLoadError = false">Error loading credentials</ngb-alert>
+
+      <div class="form-check">
+        <input type="checkbox" class="form-check-input" formControlName="remember">
+        <label class="form-check-label">Remember Login</label>
+      </div>
+
+      <br>
+      <button type="submit" style="width: 85%;" class="btn btn-success" (click)="login()" [disabled]="loginForm.invalid">Sign In</button>
+
+      <br><br>
+      <button style="width: 85%;" class="btn btn-primary" (click)="relogin()">Load Saved Credentials</button>
+      <br><br>
+      <button style="width: 85%;" class="btn btn-link" (click)="resetPassword()">Forgot your password?</button>
+      <br>
+      <button style="width: 85%;" class="btn btn-link" (click)="createNewAccount()">Create New Account?</button>
+      <br><br>
+      <button style="width: 85%;" class="btn btn-primary" (click)="bypassLogin()">Continue without sign in</button>
+    </div>
+  </form>
+</div>
