@@ -319,6 +319,16 @@ function pushToRemote() {
 function createBranch() {
   let branchName = document.getElementById("branchName").value;
   let repos;
+  if(repoFullPath){
+
+    addCommand(repoFullPath);
+
+  }else{
+
+
+    displayModal("Cannot create branch, no repository was selected!");
+
+  }
   console.log(branchName + "!!!!!!");
   Git.Repository.open(repoFullPath)
   .then(function(repo) {
