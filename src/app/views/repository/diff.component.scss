@@ -1,0 +1,74 @@
+.diff-panel {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  background-color: var(--background);
+
+  .diff-panel-body {
+    width: 100%;
+    height: 100%;
+
+    flex: 1 1 auto;
+
+    background-color: var(--surface);
+    color: var(--on-surface);
+
+    overflow-y: scroll;
+    outline: 1px solid var(--surface-highlight);
+
+    p {
+      margin: -1px 0px 0px 0px;
+
+      border: 1px solid var(--surface-highlight);
+      border-left: 0;
+      border-right: 0;
+
+      font-family: monospace;
+
+      white-space: pre;
+
+      &:first-child {
+        margin: 0px;
+      }
+      &:empty:before {
+        content: "\200b";
+      }
+    }
+  }
+
+  .diff-panel-buttons button {
+    margin: 5px;
+  }
+
+  .diff-panel-minimise {
+    display: flex;
+    flex: initial;
+
+    justify-content: center;
+    align-items: center;
+
+    background-color: var(--surface);
+
+    visibility: hidden;
+  }
+
+  .diff-panel-minimise:hover {
+    background-color: var(--surface-highlight);
+  }
+}
+
+// Not using css variable colours here as you can't apply opacity to them, and we need colours that are more subtle
+.added {
+  background-color: rgba(#84db00, 0.2);
+}
+
+.same {
+  background-color: rgba(#828282, 0.2);
+}
+
+.removed {
+  background-color: rgba(#ff2448, 0.2);
+}

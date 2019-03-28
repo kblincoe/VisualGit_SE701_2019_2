@@ -1,0 +1,36 @@
+app-login {
+  height: 75vh;
+  width: 100%;
+  background-color: var(--surface);
+
+  box-sizing: border-box;
+}
+
+.authenticate {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  background-color: var(--surface);
+
+  box-sizing: border-box;
+  color: var(--on-surface);
+
+  .input-group {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
+}
+
+.navbar {
+  position: absolute;
+}
+
+.login-form {
+  text-align: center;
+}
+
+
+// TOIDO: RENAME

@@ -1,0 +1,21 @@
+
+directories:
+  output: build-artifacts
+  buildResources: build-resources
+  app: dist
+artifactName: ${productName}.${ext}
+win:
+  icon: assets/VisualGit_Logo.png
+  target:
+    - portable
+mac:
+  target:
+    - dmg
+dmg:
+  title: ${productName}
+linux:
+  target:
+    - AppImage
+nodeGypRebuild: true
+asar: false
+electronVersion: 4.0.1

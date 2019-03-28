@@ -1,0 +1,25 @@
+@import "themes.scss";
+
+.graph-panel {
+  display: block;
+  width: 100%;
+  height: 100%;
+
+  padding: 10px;
+
+  background-color: var(--background);
+
+  .network {
+    width: 100%;
+    height: 100%;
+
+    margin: 0;
+    padding: 0;
+    background-color: var(--surface);
+  }
+}
+
+#branchOptions {
+  position: absolute;
+  display:none;
+}

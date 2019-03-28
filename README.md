@@ -1,7 +1,12 @@
 # Welcome
 
-An easy-to-use, visually-oriented desktop client for Git aimed at helping students learn the standard Git workflow.
-You can get a summary of our project by reading our [cool poster](https://github.com/ElliotWhiley/VisualGit/raw/resources/visualgit-poster.pdf)   :)
+VisualGit is an easy-to-use, visually-oriented desktop client for Git aimed at helping students learn the standard Git workflow.
+
+# Project team
+Team MLT3
+
+# Origins
+VisualGit was brought to life by Elliot Whiley and Harvey Rendell. For a summary of their project, refer to their [cool poster](https://github.com/ElliotWhiley/VisualGit/raw/resources/visualgit-poster.pdf). You can find their original repo [here](https://github.com/ElliotWhiley/VisualGit).
 
 # Installation
 
@@ -25,33 +30,48 @@ If you have homebrew installed:
 ````
 brew install npm
 ````
-Otherwise download and install the latest version of [Node.j](https://nodejs.org/en/) (v6.2.1 or later)
+Otherwise download and install version 10.15.3 of [Node.js](https://nodejs.org/en/download/). It comes with npm version 6.4.1. Upgrade this to npm 6.9.0 and install important global packages by running the commands below:
+````
+sudo npm install -g npm@6.9.0
+sudo npm install -g electron node-pre-gyp
+````
 
 #### Windows
-Download and install the latest version of  [Node.js](https://nodejs.org/en/) (v6.2.1 or later)
+Download and install the latest version 10.15.3 of [Node.js](https://nodejs.org/en/download/). It comes with npm version 6.4.1. Upgrade this to npm 6.9.0 and install important global packages by running the commands below:
+````
+npm install -g npm@6.9.0
+npm install -g electron node-pre-gyp
+````
+Type "$PSHome" in a PowerShell window to get your PowerShell path. Add the PowerShell path to your PATH system environment variable.
+
+then...
+
+````
+npm install windows-build-tools -g
+````
 
 ### Setup
 Clone with either HTTPS or SSH:
 
-#### SSH
-````
-git clone git@github.com:ElliotWhiley/VisualGit.git
-````
-
 #### HTTPS
 ````
-git clone https://github.com/ElliotWhiley/VisualGit.git
+git clone https://github.com/kblincoe/VisualGit_SE701_2019_2.git
+````
+
+#### SSH
+````
+git clone git@github.com:kblincoe/VisualGit_SE701_2019_2.git
 ````
 then...
 
 ````
-cd VisualGit
+cd VisualGit_SE701_2019_2
 npm install
 npm start
 ````
 
-### ssh-agent
-As VisualGit utilises SSH for user authentication, ensure you [generate an SSH key for your GitHub account](https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/). If you are not running on Mac, you will also need to set up and run an ssh-agent to access your SSH key at run time without providing your credentials each time.
+You can log in to VisualGit using your GitHub credentials.
+
 
 # Development
 
@@ -85,7 +105,25 @@ The pulling and pushing currently works for changes which are made on master and
 
 
 # Contributing
-We are open to pull requests with new features or improvements.
+Please read the contributing guidelines [here](docs/ContributingGuidelines.md).
+
+# Project Management Decisions
+
+#### In Project Coordination Meeting 1
+- Tim chosen as leader to speak on behalf of the team if required at any point.
+- Decided to be a self-managing team.
+- Kanban Project Management methodology chosen (because of its flexibility and suitability for the team) to visualise and manage work using GitHub project boards with automation.
+- Decided to remain in 1 large team as sub-teams would unnecessarily complicate management. 
+- Issues should have completion deadlines. 
+- 3 approvers required per issue.
+- 1 code reviewer required per pull request.
+
+#### On Facebook group poll
+Majority voted to switch from restrictive and stress-inducing round robin selection of issue approvers and code reviewers to more flexible option where everyone approves issues/performs code reviews in their own time and gives everyone else a chance to meet the minimum contribution requirements via contribution tracking in [Google spreadsheet](https://docs.google.com/spreadsheets/d/1LkejPCwIMmFTnO8fR4aW8SnhFZTEAMqyIu6_s4_wmC4/edit?usp=sharing). If an urgent issue approval or code review is required, the team will be prompted so that someone who is available volunteers.
+
+#### In Project Coordination Meeting 2
+- To ensure that the codebase in master is functional across MacOS and Windows (the 2 OSs used by our team for development), everyone will aim to perform code reviews for pull requests where code is developed on an OS different to their own. Noting the development OS will be a requirement for a new pull request.
+- Decided to hold a moratorium in the last 3 days before the assignment due date to ban any new features being added. The focus during this period will be bug fixes and general improvements. 
 
 # Help
 Visualgit utilises a range of libraries and frameworks, more information on them can be found below:

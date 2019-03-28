@@ -1,0 +1,27 @@
+<button class="back-button icon-btn" (click)="back()"><img class="icon" src="./assets/Back.svg"></button>
+
+<div class="add-repository-body">
+  <h1>Clone from Internet</h1>
+  <div class="input-body">
+    <div class="input-group">
+      <input type="text" class="form-control" [formControl]="cloneUrlForm" placeholder="https://github.com/user/repository.git"/>
+    </div>
+    <br>
+    <div class="input-group">
+      <input type="text" class="form-control" readonly [formControl]="cloneDirectoryForm" (click)="chooseCloneDirectory()" placeholder="clone into"/>
+      <div class="input-group-append">
+        <button class="btn btn-primary" (click)="clone()" [disabled]="cloneUrlForm.invalid || cloneDirectoryForm.invalid">Clone</button>
+      </div>
+    </div>
+  </div>
+
+  <h1>Open Local Repository</h1>
+  <div class="input-body">
+    <div class="input-group">
+      <input type="text" class="form-control" readonly placeholder="Location of existing repository" [formControl]="localRepositoryPathForm" (click)="chooseLocalRepository()"/>
+      <div class="input-group-append">
+        <button class="btn btn-primary" (click)="open()" [disabled]="localRepositoryPathForm.invalid">Open</button>
+      </div>
+    </div>
+  </div>
+</div>
