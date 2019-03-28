@@ -1,0 +1,27 @@
+@import "~bootstrap/scss/bootstrap.scss";
+
+@import "themes.scss";
+@import "extras.scss";
+
+
+p, h1 {
+  color: var(--on-surface);
+  font-family: 'Montserrat', sans-serif;
+}
+
+// Not quite sure what to do with this
+@media screen and (max-width: 767px) {
+  .navbar .navbar-collapse .navbar-right > li:last-child { padding-left: 15px; padding-right: 15px; }
+
+  .navbar .nav-collapse { margin: 7.5px auto; padding: 0; }
+  .navbar .nav-collapse .navbar-form { margin: 0; }
+  .nav-collapse>li { float: none; }
+}
+
+body {
+  margin: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  color: var(--on-surface);
+}
