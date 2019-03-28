@@ -1,6 +1,6 @@
 # Contributing Guidelines
 
-Navigate back to [README](../README.md)
+Navigate back to [README](../README.md).
 
 #
 ### All project requirements specified in the Assignment 2 handout have been incorporated into this guide. Please aim to follow the workflow and best practices. Happy coding!
@@ -97,7 +97,7 @@ npm test runs all tests.
 
 npm lint runs the linter to check for style errors.
 
-npm start runs VisualGit.
+npm start starts VisualGit.
 
 You can log in to VisualGit using your GitHub credentials.
 
@@ -108,7 +108,7 @@ You can log in to VisualGit using your GitHub credentials.
 - If you approve of the issue, add a comment stating this.
 - The third and final approver must also replace the ‘Unapproved’ label with ‘Approved.’
 
-If you approve an issue, update the [contribution tracking sheet](https://docs.google.com/spreadsheets/d/1LkejPCwIMmFTnO8fR4aW8SnhFZTEAMqyIu6_s4_wmC4/edit?usp=sharing).
+If you approve an issue, please update the [contribution tracking sheet](https://docs.google.com/spreadsheets/d/1LkejPCwIMmFTnO8fR4aW8SnhFZTEAMqyIu6_s4_wmC4/edit?usp=sharing).
 
 ## Updating your fork
 - Always rebase before you create a new branch off master so that you can begin with the latest working version of the codebase and avoid generating too many merge conflicts later. 
@@ -158,7 +158,7 @@ This new issue must:
 -   Include dependencies on other issues if they exist e.g. "Depends on #123" or “Blocks #123”. If dependencies are found, you should coordinate your changes and document this coordination in the comments.
 -	Be approved by 3 others who must leave a comment on the new issue saying they approve. The third approver must also replace the ‘Unapproved’ label with ‘Approved.’
 
-If you have created an issue, update the [contribution tracking sheet](https://docs.google.com/spreadsheets/d/1LkejPCwIMmFTnO8fR4aW8SnhFZTEAMqyIu6_s4_wmC4/edit?usp=sharing).
+If you have created an issue, please update the [contribution tracking sheet](https://docs.google.com/spreadsheets/d/1LkejPCwIMmFTnO8fR4aW8SnhFZTEAMqyIu6_s4_wmC4/edit?usp=sharing).
 
 Once the issue is approved, assign yourself to it. Please note that you cannot claim more than one issue at a time.
 
@@ -180,7 +180,7 @@ All code additions should include associated tests. If you feel that your code c
 
 Ensure that the code is working correctly and that all tests pass.
 
-After you have made a non-trivial modification to your new branch in your local repo, you’ll need to stage changes if needed (use 'git add filename' command instead of the 'git add .' command below if you only want to stage specific files) and commit your changes. 
+After you have made a non-trivial modification to your new branch in your local repo, you’ll need to stage changes if needed (use 'git add filename' command instead of the 'git add .' command below if you only want to stage specific files and use 'git rm' to stage file deletions). Then, commit your changes. 
 ````
 git add .
 git commit -m “This commit will add contributing guidelines to the README”
@@ -204,7 +204,7 @@ git rebase -i HEAD~n
 ````
 
 An interactive text editor will pop up. Leave the first commit as ‘pick’ and replace the ‘pick’ in the other commits with ‘squash.’ You can replace that first ‘pick’ with ‘reword’ if you need to edit the commit message that will be used. The commit message that will be used should make sense with the prefix "This commit will" and should describe the issue e.g. "This commit will update documentation” makes sense so the commit message should be "Update Documentation". Save and exit the editor.
-If you select ‘reword’, you’ll be prompted to enter your new commit message.
+If you select ‘reword’, you’ll be prompted to enter your new commit message in an editor. Save and close, and then close any rebase files that open after that to finish squashing.
 
 After your commits have been squashed, push your changes to the remote fork.
 ````
@@ -214,7 +214,6 @@ or if that doesn't work...
 ````
 git push --force-with-lease origin NewBranch
 ````
-After you've pushed, test to ensure that your code works on all OSs (Mac, Windows and Linux) using the VMs you set up earlier. You just need to clone your fork and switch to your branch in every VM. Modify your code until it works on all OSs. Update the setup instructions in the documentation if you need to. If you've made changes, stage, commit and push to your fork again.
 
 
 ## Submitting a pull request
@@ -225,24 +224,25 @@ You should see the branch that was just pushed. Click on ‘Compare and pull req
 The pull request should:
 -	Include a title summarizing the changes. 
 -	Include more details about the changes made in the body.
--	Reference the number of the associated issue by using the 'Closes' keyword e.g."Closes #123" in the body. This automatically closes the issue once the pull request is approved and merged.
 -   Mention the OS used for development.
+-   Be linked to project MLT3 so that it can be automatically moved to 'In Progress' on the [Kanban board](https://github.com/kblincoe/VisualGit_SE701_2019_2/projects/1).
+-	Reference the number of the associated issue by using the 'Closes' keyword e.g."Closes #123" in the body. This automatically closes the issue once the pull request is approved and merged.
 
 Submit your pull request for code review.
 
-## Reviewing and merging a pull request (Code Review)
-Navigate to the main repo page and click ‘Pull requests.’ 
+## Reviewing a pull request (Code Review) and merging it
+Navigate to the main repo page and click ‘Pull requests.' 
 
-Select someone else’s pull request to review.
+Select someone else’s pull request to review. Please aim to choose a pull request with a development OS different to your own.
 
 Assign yourself to the selected pull request.
 
-The Code Review must include running the code and testing it on all OSs to see that everything works as expected and that all tests pass. So, check out the pull request into a new local branch and switch to it.
+The Code Review must include running the code and testing it to see that everything works as expected and that all tests pass. So, check out the pull request into a new local branch and switch to it.
 ````
 git fetch upstream pull/pullrequestnumber/head:NewPullRequestReviewBranch
 git checkout NewPullRequestReviewBranch
 ````
-Run and test to ensure that everything works as expected on all OSs(Mac, Windows and Linux) using the VMs you set up earlier.
+Run and test to ensure that everything works as expected.
 
 To add a review, click on 'Add your review' in the pull request.
 
@@ -255,13 +255,13 @@ If the code doesn’t work:
 If it does work:
 - Review the code to suggest any changes via comments. 
 - If the commits in the pull request are not squashed, please request that the code author do this before you approve and merge.
-- If there are merge conflicts, request that the author resolve them.
+- If there are merge conflicts, please request that the author resolve them.
 - Don't forget to praise concise/readable/efficient/elegant code.
 - If you would like the author to make changes before merging, choose the 'Request changes' option. Otherwise, choose 'Approve' and submit your review.
 
-Once the author has made any required changes, squashed commits and you have approved the pull request, navigate back to it and ensure that there are no merge conflicts. Then, merge using the 'rebase' option which can be selected by clicking on the dropdown arrow next to the 'merge.'
+Once the author has made all required changes, resolved all existing conflicts, squashed commits and you have approved the pull request, navigate back to the issue and then, choose the 'Rebase and merge' option by clicking on the dropdown arrow next to the 'Merge pull request' button. This will merge the pull request into the master branch of the main repo.
 
-Delete your local pull request review branch
+Delete your local pull request review branch to keep things tidy. You shouldn't be pushing this to your remote fork.
 ````
 git branch -d NewPullRequestReviewBranch
 ````
@@ -270,7 +270,7 @@ or if that complains...
 git branch -D NewPullRequestReviewBranch
 ````
 
-Once you have performed a code review, update the [contribution tracking sheet](https://docs.google.com/spreadsheets/d/1LkejPCwIMmFTnO8fR4aW8SnhFZTEAMqyIu6_s4_wmC4/edit?usp=sharing).
+Once you have performed a code review, please update the [contribution tracking sheet](https://docs.google.com/spreadsheets/d/1LkejPCwIMmFTnO8fR4aW8SnhFZTEAMqyIu6_s4_wmC4/edit?usp=sharing).
 
 ## Tidying up after a pull request merge
 After your pull request has been approved and merged, you can delete that feature branch to keep things tidy.
@@ -283,5 +283,5 @@ or if that complains...
 git branch -D NewBranch
 ````
 
-Once you have resolved an issue, update the [contribution tracking sheet](https://docs.google.com/spreadsheets/d/1LkejPCwIMmFTnO8fR4aW8SnhFZTEAMqyIu6_s4_wmC4/edit?usp=sharing).
+Once you have resolved an issue, please update the [contribution tracking sheet](https://docs.google.com/spreadsheets/d/1LkejPCwIMmFTnO8fR4aW8SnhFZTEAMqyIu6_s4_wmC4/edit?usp=sharing).
 

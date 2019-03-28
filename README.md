@@ -105,7 +105,7 @@ The pulling and pushing currently works for changes which are made on master and
 
 
 # Contributing
-Please read the contributing guidelines [here](docs/ContributingGuidelines.md)
+Please read the contributing guidelines [here](docs/ContributingGuidelines.md).
 
 # Project Management Decisions
 
@@ -122,7 +122,7 @@ Please read the contributing guidelines [here](docs/ContributingGuidelines.md)
 Majority voted to switch from restrictive and stress-inducing round robin selection of issue approvers and code reviewers to more flexible option where everyone approves issues/performs code reviews in their own time and gives everyone else a chance to meet the minimum contribution requirements via contribution tracking in [Google spreadsheet](https://docs.google.com/spreadsheets/d/1LkejPCwIMmFTnO8fR4aW8SnhFZTEAMqyIu6_s4_wmC4/edit?usp=sharing). If an urgent issue approval or code review is required, the team will be prompted so that someone who is available volunteers.
 
 #### In Project Coordination Meeting 2
-- To ensure that the codebase in master is functional across MacOS and Windows (the 2 OSs used by our team for development), we will aim to perform code reviews for pull requests where code is developed on the other OS. Noting the development OS will be a requirement for a new pull request.
+- To ensure that the codebase in master is functional across MacOS and Windows (the 2 OSs used by our team for development), everyone will aim to perform code reviews for pull requests where code is developed on an OS different to their own. Noting the development OS will be a requirement for a new pull request.
 - Decided to hold a moratorium in the last 3 days before the assignment due date to ban any new features being added. The focus during this period will be bug fixes and general improvements. 
 
 # Help
