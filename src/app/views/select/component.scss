@@ -29,3 +29,27 @@ h1 {
 
   margin-left: 30px;
 }
+
+.progress-bar-region{
+  border-radius: 30px;
+  position: absolute;
+  margin-top: 2vh;
+  right: 2vw;
+  min-width: 25vw;
+  min-height: 20vh;
+  background-color: #404040;
+}
+
+.progress-bar{
+  margin-left: 1vh;
+  margin-right: 1vh;
+  border-radius: 40px;
+}
+
+h3{
+  margin-top: 20px;
+  margin-bottom: 40px;
+  margin-left: 1vw;
+
+  color: white;
+}
