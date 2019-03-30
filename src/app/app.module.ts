@@ -15,10 +15,12 @@ import { RepositoryComponent } from './views/repository/component';
 import { FilePanelComponent } from './views/repository/file.component';
 import { GraphPanelComponent } from './views/repository/graph.component';
 import { HeaderComponent } from './views/header/component';
+import { ProgressbarComponent } from "views/select/progressbar.component";
 
 @NgModule({
   declarations: [
     SelectRepositoryComponent,
+    ProgressbarComponent,
     AppComponent,
     LoginComponent,
     RepositoryComponent,
