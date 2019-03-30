@@ -23,9 +23,6 @@ export interface GithubRepository {
   git_url: string;
 }
 
-const sshPublicKeyPath = "C:/Users/User/.ssh/id_rsa.pub";
-const sshPrivateKeyPath = "C:/Users/User/.ssh//id_rsa";
-
 /**
  * Gets a list of repositories that could be used
  */
@@ -97,26 +94,39 @@ export async function getLocalRepositories(path: string | Dirent): Promise<nodeg
 }
 
 
-export function clone(gitUrl: string, localPath: string, user?: User) {
+export function clone(gitUrl: string, localPath: string, user?: User, SSH?: string) {
   logger.info(`Cloning ${gitUrl} into ${localPath}`);
-
   // use ssh and public/private key credentials
+  let sshPublicKeyPath = "C:/Users/User/.ssh/id_rsa.pub";
+  let sshPrivateKeyPath = "C:/Users/User/.ssh//id_rsa";
+
   if(gitUrl.startsWith('git@')) {
-    const options = {
-      fetchOpts: {
-        callbacks: {
-          certificateCheck: () => 0,
-          credentials(url, userName) {
-            return nodegit.Cred.sshKeyNew(
-              userName,
-              sshPublicKeyPath,
-              sshPrivateKeyPath,
-              "");
+    // check that SSH key is set
+    if(SSH) {
+      sshPublicKeyPath = SSH + "id_rsa.pub";
+      sshPrivateKeyPath = SSH + "id_rsa";
+
+      // set clone options to include ssh keys with cred callback
+      const options = {
+        fetchOpts: {
+          callbacks: {
+            certificateCheck: () => 0,
+            credentials(url, userName) {
+              return nodegit.Cred.sshKeyNew(
+                userName,
+                sshPublicKeyPath,
+                sshPrivateKeyPath,
+                "");
+            }
           }
         }
-      }
-    };
-    return nodegit.Clone.clone(gitUrl, localPath + '/', options);
+      };
+      return nodegit.Clone.clone(gitUrl, localPath + '/', options);
+    }else {
+
+      throw new Error(`SSH key directory not set or invalid`);
+
+    }
   }
   else
   {

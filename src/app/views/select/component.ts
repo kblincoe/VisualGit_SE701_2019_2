@@ -54,6 +54,31 @@ export class SelectRepositoryComponent implements OnInit, OnDestroy {
     );
   }
 
+  async chooseSSHDirectory() {
+    // Wrapped in a promise so that the parent knows when we have updated the form
+    return new Promise(res =>
+      electron.remote.dialog.showOpenDialog(
+        electron.remote.getCurrentWindow(),
+        {
+          title: "SSH key Directory",
+          properties: ["openDirectory"],
+          message: "Select Directory where SSH keys are stored"
+        },
+        paths => {
+          if(paths && paths.length > 0) {
+            let separator = paths[0].includes('\\') ? '\\' : '/';
+            if(paths[0].endsWith(separator))
+              separator = "";
+
+            this.SSHDirectoryForm.setValue(paths[0] + separator);
+          }
+          res();
+        }
+      )
+    );
+  }
+
+
   async chooseLocalRepository() {
     // Wrapped in a promise so that the parent knows when we have updated the form.
     return new Promise(res =>
@@ -75,8 +100,9 @@ export class SelectRepositoryComponent implements OnInit, OnDestroy {
   }
 
   async clone() {
+    console.log(this.SSHDirectoryForm.value);
     try {
-      const repoInfo = await this.repositoriesService.cloneFromUrl(this.cloneUrlForm.value, this.cloneDirectoryForm.value);
+      const repoInfo = await this.repositoriesService.cloneFromUrl(this.cloneUrlForm.value, this.cloneDirectoryForm.value, this.SSHDirectoryForm.value);
       this.repositoryService.select(repoInfo);
       // If the above succeed, we can transition
       this.router.navigate(['/repo']);
@@ -110,6 +136,7 @@ export class SelectRepositoryComponent implements OnInit, OnDestroy {
 
   cloneUrlForm: FormControl = new FormControl(null, Validators.required);
   cloneDirectoryForm: FormControl = new FormControl(null, Validators.required);
+  SSHDirectoryForm: FormControl = new FormControl(null);
   localRepositoryPathForm: FormControl = new FormControl(null, Validators.required);
 
   private onCloneUrlUpdate(cloneUrl: string) {
