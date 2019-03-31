@@ -27,6 +27,7 @@ export class ProgressbarComponent implements OnInit{
 
   public hidePanel() {
     this.isHidden = true;
+    this.value = 0;
   }
 
 

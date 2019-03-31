@@ -1,4 +1,4 @@
-import { Component, NgZone, OnInit, OnDestroy } from "@angular/core";
+import { Component, NgZone, OnInit, OnDestroy, ViewChild } from "@angular/core";
 import { FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -8,6 +8,7 @@ import { logger } from "logger";
 
 import { RepositoryListService } from 'services/repository.list';
 import { RepositoryService } from 'services/repository';
+import { ProgressbarComponent } from "views/select/progressbar.component";
 
 @Component({
   selector: "app-select-screen",
@@ -15,7 +16,7 @@ import { RepositoryService } from 'services/repository';
   styleUrls: ["component.scss"]
 })
 export class SelectRepositoryComponent implements OnInit, OnDestroy {
-
+  @ViewChild(ProgressbarComponent) progressbar;
   public constructor(
     private router: Router,
     private repositoriesService: RepositoryListService,
@@ -75,17 +76,29 @@ export class SelectRepositoryComponent implements OnInit, OnDestroy {
   }
 
   async clone() {
+    this.progressbar.displayPanel();
     try {
       const repoInfo = await this.repositoriesService.cloneFromUrl(this.cloneUrlForm.value, this.cloneDirectoryForm.value);
       this.repositoryService.select(repoInfo);
       // If the above succeed, we can transition
-      this.router.navigate(['/repo']);
+
+      setTimeout(() => {
+        this.progressbar.setValue(100);
+        setTimeout(() => {
+          this.progressbar.hidePanel()
+          this.router.navigate(['/repo']);
+        }, 1000);
+      } , 1000);
     } catch(error) {
       logger.info("Cloning repository failed: ");
       logger.info(error);
-
+      this.progressbar.hidePanel();
       throw new Error("Need modal to display error");
     }
+
+
+
+
   }
 
   async open() {
