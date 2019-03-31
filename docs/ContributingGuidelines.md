@@ -16,6 +16,9 @@ You only need to complete these steps once, at the beginning. Always run your co
 Sign in to GitHub, navigate to [MLT3’s main repo](https://github.com/kblincoe/VisualGit_SE701_2019_2) and then create your own personal fork of the main repo by clicking ‘Fork’. 
 
 #### 2.	Clone your fork:
+
+Please ensure that the path to your development folder has no spaces in it before you clone to avoid errors.
+
 Get the unique https or ssh address of your fork by clicking ‘Clone’ on your newly created GitHub fork page.
 Using your fork address, run the command below in your Dev folder.
 ````
@@ -87,17 +90,19 @@ npm install
 ````
 After you run npm install once in the beginning, you only need to run it later on if you have made changes to the package.json file.
 
+Note: If you encounter an 'electron-rebuild' error during installation, ensure that your local repository path doesn't have any spaces in it. If it does, delete your local repository, rename the path to one with no spaces, clone again and run 'npm install' again.
+
 ## Running the code
 ````
-npm test
-npm lint
-npm start
+npm run test
+npm run lint
+npm run start
 ````
-npm test runs all tests. 
+npm run test runs all tests. 
 
-npm lint runs the linter to check for style errors.
+npm run lint runs the linter to check for style errors.
 
-npm start starts VisualGit.
+npm run start starts VisualGit.
 
 You can log in to VisualGit using your GitHub credentials.
 
@@ -135,13 +140,39 @@ or if that doesn't work...
 ````
 git push --force-with-lease origin master
 ````
+## Expected Contributions
+
+[Assignment 2 handout](https://canvas.auckland.ac.nz/courses/39855/files/folder/Part%201/coursework?preview=2851856). The amount of contribution may vary depending on the complexity of selected issue per person. However, it is expected that each member performs at least one of each type of contribution mentioned below. 
+
+### Types of Contributions
+
+- Contribute code and documentation changes
+
+- Create a new issue (report bug/feature request)
+
+- Approving issues
+
+- Code Review
+
+
+### Individual Project Report
+
+An individual project report must also be submitted on Canvas. The report should include the course number and name, the name of your group, your name,
+UPI, and GitHub username, and the date. The report should contain a list of your contributions
+(grouped by the type of contribution). Include the following for each contribution: a link to the
+associated GitHub artifact (issue, pull request, etc.) and estimated size of the associated issue.
+In addition to the list of contributions, you should include a very brief description of the top
+three things you learned about working in a large team through this project. This should be in
+bulleted format, and should be ½ a page or less. A single pdf file should be submitted. The file
+should be named A2_UPI.pdf. 
 
 ## Making contributions to your fork
 
 Before you can start contributing documentation or code for a feature or bug fix, you must:
 
 #### 1.	Assign yourself to an existing, unclaimed, approved issue which directly relates to the contribution you wish to make. 
-- Link the issue to project MLT3 so it can be automatically moved to the backlog of the [Kanban board](https://github.com/kblincoe/VisualGit_SE701_2019_2/projects/1).
+- Aim to select an issue from the Triage section of the [Kanban board](https://github.com/kblincoe/VisualGit_SE701_2019_2/projects/1) if available, however, you can also select one from the list of [all issues](https://github.com/kblincoe/VisualGit_SE701_2019_2/issues).
+- Link the issue (if not done already) to project MLT3 so it can be automatically moved to the backlog of the Kanban board.
 - Set yourself a completion deadline and add this to the issue. You must aim to complete your contribution and submit a pull request by this deadline.
 - By looking at the other open issues, identify dependencies for this issue in comments e.g. "Depends on #123" or “Blocks #123”. If dependencies are found, you should coordinate your changes and document this coordination in the comments.
 
@@ -162,7 +193,7 @@ If you have created an issue, please update the [contribution tracking sheet](ht
 
 Once the issue is approved, assign yourself to it. Please note that you cannot claim more than one issue at a time.
 
-On the [Kanban board](https://github.com/kblincoe/VisualGit_SE701_2019_2/projects/1), move the issue first to ‘Triage’ and then to ‘In progress’ once you begin working on it.
+On the [Kanban board](https://github.com/kblincoe/VisualGit_SE701_2019_2/projects/1), move the issue to ‘In progress’ once you begin working on it.
 
 Create a new branch every time you start work on a new issue. If the change is large, consider using a feature flag and multiple pull requests.
 Before you branch, ensure that you have updated your fork by following the instructions in [Updating your fork](##Updating-your-fork) above.
@@ -284,4 +315,3 @@ git branch -D NewBranch
 ````
 
 Once you have resolved an issue, please update the [contribution tracking sheet](https://docs.google.com/spreadsheets/d/1LkejPCwIMmFTnO8fR4aW8SnhFZTEAMqyIu6_s4_wmC4/edit?usp=sharing).
-
