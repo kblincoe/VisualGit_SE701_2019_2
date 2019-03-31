@@ -51,6 +51,9 @@ npm install windows-build-tools -g
 ````
 
 ### Setup
+
+Please ensure that the path to your repository folder has no spaces in it before you clone to avoid errors.
+
 Clone with either HTTPS or SSH:
 
 #### HTTPS
