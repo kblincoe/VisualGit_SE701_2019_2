@@ -5,6 +5,7 @@ import * as nodegit from 'nodegit';
 import * as Octokit from '@octokit/rest';
 
 import { User } from './user';
+import { ProgressbarComponent } from "views/select/progressbar.component";
 
 // Taken from https://developer.github.com/v3/repos/
 // Contains the important parts of the repo (list) response message
@@ -88,6 +89,16 @@ export function clone(gitUrl: string, localPath: string, user?: User) {
     fetchOpts: {
       callbacks: {
         certificateCheck: () => 1,
-        credentials: () => user.gitCredentials
-  }}});
+        credentials: () => user.gitCredentials,
+        transferProgress: (data) => {
+          const recvObjects = data.receivedObjects();
+          const percentage = recvObjects / data.totalObjects() * 100;
+
+        }
+      },
+
+
+
+    }
+  });
 }
