@@ -8,6 +8,13 @@
     </div>
     <br>
     <div class="input-group">
+      <input type="text" class="form-control" readonly [formControl]="chooseSSHDirectory" (click)="chooseSSHDirectory()" placeholder="add ssh key folder"/>
+      <div class="input-group-append">
+        <button class="btn btn-primary" [disabled]="cloneUrlForm.invalid || cloneDirectoryForm.invalid">add SSH key Directory</button>
+      </div>
+    </div>
+    <br>
+    <div class="input-group">
       <input type="text" class="form-control" readonly [formControl]="cloneDirectoryForm" (click)="chooseCloneDirectory()" placeholder="clone into"/>
       <div class="input-group-append">
         <button class="btn btn-primary" (click)="clone()" [disabled]="cloneUrlForm.invalid || cloneDirectoryForm.invalid">Clone</button>

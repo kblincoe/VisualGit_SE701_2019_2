@@ -6,6 +6,7 @@ import * as Octokit from '@octokit/rest';
 
 import { User } from './user';
 
+
 // Taken from https://developer.github.com/v3/repos/
 // Contains the important parts of the repo (list) response message
 export interface GithubRepository {
@@ -32,17 +33,27 @@ export async function getOwnedGithubRepositories(user: User): Promise<GithubRepo
 
 export async function findGithubRepo(gitUrl: string, user: User): Promise<GithubRepository> {
   // Fetching should be done with user (if present) so we have user's permissions
-
-  if(gitUrl.startsWith('git@'))
-    throw new Error(`Processing ssh url {${gitUrl}} is not implemented :/`);
-
   if(gitUrl.endsWith('.git'))
     gitUrl = gitUrl.substring(0, gitUrl.length - 4);
 
-  const sections = gitUrl.split('/');
-  const owner = sections[sections.length - 2];
-  const repo = sections[sections.length - 1];
+  let sections = [""];
+  let owner = "";
+  let repo = "";
+  // split contents of URL depending on ssh or https
+  if(gitUrl.startsWith('git@')) {
+    // remove semicolons in ssh
+    gitUrl = gitUrl.split(":")[1];
+    sections = gitUrl.split('/');
+    owner = sections[sections.length - 2];
+    repo = sections[sections.length - 1];
 
+  }else {
+
+    sections = gitUrl.split('/');
+    owner = sections[sections.length - 2];
+    repo = sections[sections.length - 1];
+
+  }
   if(!owner || !repo)
     throw new Error("URL not valid");
 
@@ -82,12 +93,50 @@ export async function getLocalRepositories(path: string | Dirent): Promise<nodeg
   return childRepos;
 }
 
-export function clone(gitUrl: string, localPath: string, user?: User) {
+
+export function clone(gitUrl: string, localPath: string, user?: User, SSH?: string) {
   logger.info(`Cloning ${gitUrl} into ${localPath}`);
-  return nodegit.Clone.clone(gitUrl, localPath + '/', {
-    fetchOpts: {
-      callbacks: {
-        certificateCheck: () => 1,
-        credentials: () => user.gitCredentials
-  }}});
+  // use ssh and public/private key credentials
+  let sshPublicKeyPath = "C:/Users/User/.ssh/id_rsa.pub";
+  let sshPrivateKeyPath = "C:/Users/User/.ssh//id_rsa";
+
+  if(gitUrl.startsWith('git@')) {
+    // check that SSH key is set
+    if(SSH) {
+      sshPublicKeyPath = SSH + "id_rsa.pub";
+      sshPrivateKeyPath = SSH + "id_rsa";
+
+      // set clone options to include ssh keys with cred callback
+      const options = {
+        fetchOpts: {
+          callbacks: {
+            certificateCheck: () => 0,
+            credentials(url, userName) {
+              return nodegit.Cred.sshKeyNew(
+                userName,
+                sshPublicKeyPath,
+                sshPrivateKeyPath,
+                "");
+            }
+          }
+        }
+      };
+      return nodegit.Clone.clone(gitUrl, localPath + '/', options);
+    }else {
+
+      throw new Error(`SSH key directory not set or invalid`);
+
+    }
+  }
+  else
+  {
+    return nodegit.Clone.clone(gitUrl, localPath + '/', {
+      fetchOpts: {
+        callbacks: {
+          certificateCheck: () => 1,
+          credentials: () => user.gitCredentials
+        }
+      }
+    });
+  }
 }
