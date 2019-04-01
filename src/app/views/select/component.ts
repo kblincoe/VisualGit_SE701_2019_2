@@ -78,17 +78,15 @@ export class SelectRepositoryComponent implements OnInit, OnDestroy {
   async clone() {
     this.progressbar.displayPanel();
     try {
-      const repoInfo = await this.repositoriesService.cloneFromUrl(this.cloneUrlForm.value, this.cloneDirectoryForm.value);
+      const repoInfo = await this.repositoriesService.cloneFromUrl(this.cloneUrlForm.value, this.cloneDirectoryForm.value, this.setPercentage);
       this.repositoryService.select(repoInfo);
-      // If the above succeed, we can transition
-
+      this.progressbar.value = 100;
       setTimeout(() => {
-        this.progressbar.setValue(100);
-        setTimeout(() => {
-          this.progressbar.hidePanel()
-          this.router.navigate(['/repo']);
-        }, 1000);
-      } , 1000);
+        this.progressbar.hidePanel();
+        setTimeout(() => this.router.navigate(['/repo']), 500);
+      }, 500);
+
+
     } catch(error) {
       logger.info("Cloning repository failed: ");
       logger.info(error);
@@ -143,7 +141,17 @@ export class SelectRepositoryComponent implements OnInit, OnDestroy {
       );
     }
   }
+  public setPercentage = (value) => {
+      this.progressbar.setValue(value);
+      logger.info("Printing " + value);
 
+      logger.info("setted Value" + this.progressbar.value);
+
+
+
+
+
+  }
   private cloneName = "repo-name";
   private subscription: Subscription;
 }

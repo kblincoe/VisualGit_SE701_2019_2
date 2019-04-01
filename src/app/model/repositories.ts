@@ -83,7 +83,7 @@ export async function getLocalRepositories(path: string | Dirent): Promise<nodeg
   return childRepos;
 }
 
-export function clone(gitUrl: string, localPath: string, user?: User) {
+export function clone(gitUrl: string, localPath: string, user?: User, SetProgressBarValue?) {
   logger.info(`Cloning ${gitUrl} into ${localPath}`);
   return nodegit.Clone.clone(gitUrl, localPath + '/', {
     fetchOpts: {
@@ -92,7 +92,11 @@ export function clone(gitUrl: string, localPath: string, user?: User) {
         credentials: () => user.gitCredentials,
         transferProgress: (data) => {
           const recvObjects = data.receivedObjects();
-          const percentage = recvObjects / data.totalObjects() * 100;
+          const percentage = Math.floor( recvObjects / data.totalObjects() * 100) ;
+          if(percentage % 1 === 0) {
+            //setTimeout(()=>{SetProgressBarValue(percentage)}, 1000);
+            SetProgressBarValue(percentage);
+          }
 
         }
       },

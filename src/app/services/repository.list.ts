@@ -35,19 +35,19 @@ export class RepositoryListService implements OnDestroy {
    * Clones and creates a repository from a url.
    * Throws if the url is invalid
    */
-  public async cloneFromUrl(url: string, directory: string) {
+  public async cloneFromUrl(url: string, directory: string, setPercentage) {
     // First convert URL into github repo
     const githubRepo = await findGithubRepo(url, this.userService.getUser()); // User may be null.
-    return await this.cloneFromGithub(githubRepo, directory);
+    return await this.cloneFromGithub(githubRepo, directory, setPercentage);
   }
   /**
    * Clones and creates a repository from the repository info
    */
-  public async cloneFromGithub(info: GithubRepository, directory: string) {
+  public async cloneFromGithub(info: GithubRepository, directory: string, setPercentage?) {
     this.commandRecordService.addCommand("git clone " + info.clone_url);
 
     try {
-      const repo = await clone(info.clone_url, directory, this.userService.getUser());
+      const repo = await clone(info.clone_url, directory, this.userService.getUser(), setPercentage);
 
       return {
         name: info.name,
