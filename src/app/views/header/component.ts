@@ -96,10 +96,17 @@ export class HeaderComponent implements OnInit, OnDestroy  {
     this.router.navigate(['/login']);
   }
 
-  /**
-   * When the user clicks their icon
+ /**
+   * Display or hide the help page
    */
-  selectUser() {
+  toggleHelp() {
+    throw new Error("Not implemented");
+  }
+
+ /**
+   * Display or hide settings
+   */
+  toggleSetting() {
     throw new Error("Not implemented");
   }
 
