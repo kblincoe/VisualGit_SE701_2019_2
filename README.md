@@ -50,6 +50,29 @@ then...
 npm install windows-build-tools -g
 ````
 
+#### Ubuntu
+Install npm and node
+````
+ sudo apt install npm
+ sudo apt install nodejs-legacy
+````
+Upgrade node to 10.15.3 and npm to 6.9.0
+````
+ sudo npm install -g n
+ sudo n 10.15.3
+ sudo npm install npm@6.9.0 -g
+ ````
+ Install important global packages
+ ````
+ sudo npm install -g electron node-pre-gyp --unsafe-perm=true --allow-root
+ sudo apt install libcurl4-gnutls-dev
+ ````
+ change the permission and verify cache
+ ````
+ sudo chmod +777 -R $HOME/
+ sudo npm cache verify
+````
+
 ### Setup
 
 Please ensure that the path to your repository folder has no spaces in it before you clone to avoid errors.

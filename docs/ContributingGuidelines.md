@@ -62,7 +62,16 @@ MacOS
 sudo npm install -g npm@6.9.0
 ````
 
-#### 7.	Install windows build tools (Windows users only).
+Ubuntu
+````
+ sudo apt install npm
+ sudo apt install nodejs-legacy
+ sudo npm install -g n
+ sudo n 10.15.3
+ sudo npm install npm@6.9.0 -g
+ ````
+
+#### 6.	Install windows build tools (Windows users only).
 
 If you are using Windows, type "$PSHome" in a PowerShell window to get your PowerShell path.
 Add the PowerShell path to your PATH system environment variable.
@@ -72,7 +81,7 @@ then...
 ````
 npm install windows-build-tools -g
 ````
-#### 8. Install global and local packages
+#### 7. Install global and local packages
 
 Windows
 ````
@@ -82,6 +91,14 @@ npm install -g electron node-pre-gyp
 MacOS
 ````
 sudo npm install -g electron node-pre-gyp
+````
+
+Ubuntu
+````
+ sudo npm install -g electron node-pre-gyp --unsafe-perm=true --allow-root
+ sudo apt install libcurl4-gnutls-dev
+ sudo chmod +777 -R $HOME/
+ sudo npm cache verify
 ````
 
 All 
