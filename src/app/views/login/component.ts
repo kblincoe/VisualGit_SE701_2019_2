@@ -5,9 +5,7 @@ import { Router } from '@angular/router';
 
 import { AuthenticationError } from 'model/user';
 import { CredentialsLoadError } from 'model/credentials';
-import { Theme } from 'model/themes';
 import { UserService } from 'services/user';
-import { StyleService } from 'services/style';
 
 /**
  * Handles user login, and options therein
@@ -21,13 +19,9 @@ export class LoginComponent {
   // Auto load the user service
   public constructor(
     private userService: UserService,
-    private styleService: StyleService,
     private router: Router,
     private ngZone: NgZone
-  ) {
-    // This is only allowed because the styleservice themes are constant.
-    this.themes = this.styleService.listThemes();
-  }
+  ) {}
 
   createNewAccount(): void {
     window.open("https://github.com/join?", "_blank");
@@ -87,12 +81,6 @@ export class LoginComponent {
     await this.userService.loginAsGuest();
     this.switchToMainPanel();
   }
-
-  changeColour(theme: Theme) {
-    this.styleService.setTheme(theme);
-  }
-
-  themes: Theme[] = [];
 
   loginForm = new FormGroup({
     username: new FormControl(null, [Validators.required]),

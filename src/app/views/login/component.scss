@@ -1,8 +1,6 @@
 app-login {
   height: 75vh;
   width: 100%;
-  background-color: var(--surface);
-
   box-sizing: border-box;
 }
 
@@ -11,9 +9,6 @@ app-login {
   width: 100%;
   display: flex;
   flex-direction: column;
-
-  background-color: var(--surface);
-
   box-sizing: border-box;
   color: var(--on-surface);
 
