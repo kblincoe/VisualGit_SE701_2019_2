@@ -69,13 +69,13 @@ export class User {
     const cred = nodegit.Cred.defaultNew();
 
     const octokit = new Octokit({userAgent: 'octokit/rest.js v1.2.3'});
-
+    const guestAvatar = './assets/VisualGit_Logo.png';
     return new User(
       cred,
       octokit,
       'guest',
       null,
-      null,
+      guestAvatar,
       false
     );
   }
