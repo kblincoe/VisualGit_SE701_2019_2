@@ -1,15 +1,6 @@
 
 <div class="authenticate" id="authenticate">
-  <nav class="navbar navbar-inverse" role="navigation">
-    <div ngbDropdown class="container-fluid">
-      <button ngbDropdownToggle>color<span class="caret"></span></button>
-      <div ngbDropdownMenu>
-        <button ngbDropdownItem *ngFor="let theme of themes" (click)="changeColour(theme)">{{theme}}</button>
-      </div>
-    </div>
-  </nav>
-
-
+  
   <form role="form" class="login-form row justify-content-center align-items-center h-100" [formGroup]="loginForm">
     <div class="col col-sm-6 col-md-6 col-lg-4 col-xl-3">
       <label><h1>VisualGit</h1></label>
