@@ -49,9 +49,17 @@
       <button class="icon-btn" (click)="sync()">  <img class="icon" src="./assets/refresh-button.png" title="Sync"> </button>
     </div>
 
-    <ul class="navbar-nav">
-      <li><button class="btn btn-primary" (click)="toggleLog()">{{loggedIn ? "logout" : "login"}}</button></li>
-      <li *ngIf="userIconUrl"><button class="icon-btn" (click)="selectUser()"><img class="icon" [src]="userIconUrl"></button></li>
-    </ul>
+    <li ngbDropdown *ngIf="userIconUrl" placement="bottom-right" class= "navbar-nav user-menu">
+        <button ngbDropdownToggle *ngIf="userIconUrl" class="icon-btn"><img class="icon" [src]="userIconUrl"></button>  
+        <div ngbDropdownMenu>
+            <!--<span ngbDropdownItem disabled>{{userService.getUser().name}}</span>-->
+            <!-- Need to replace guest user's URL as "/<Default name>"-->
+            <span ngbDropdownItem disabled>Signed in as <b>{{this.userService.getUser().userUrl.split("/").pop()}}</b></span>
+            <button ngbDropdownItem (click)="toggleHelp()">Help</button>
+            <button ngbDropdownItem (click)="toggleSetting()">Setting</button>
+            <button ngbDropdownItem (click)="toggleLog()">{{loggedIn ? "Logout" : "Login"}}</button>
+        </div>
+    </li>
+
   </div>
 </nav>
