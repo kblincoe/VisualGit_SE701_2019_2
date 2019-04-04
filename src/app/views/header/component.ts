@@ -10,6 +10,7 @@ import { RepositoryService } from 'services/repository';
 import { UserService } from 'services/user';
 import { logger } from 'logger';
 import { Repository } from 'model/repository';
+import { ErrorService } from "services/error.service";
 
 @Component({
   selector: "app-header",
@@ -22,7 +23,8 @@ export class HeaderComponent implements OnInit, OnDestroy  {
     private modalService: NgbModal,
     private userService: UserService,
     private repositoriesService: RepositoryListService,
-    private repositoryService: RepositoryService
+    private repositoryService: RepositoryService,
+    private errorService: ErrorService
   ) {}
 
   public ngOnInit() {
@@ -83,8 +85,8 @@ export class HeaderComponent implements OnInit, OnDestroy  {
       logger.info("Selecting branch failed:");
       logger.info(error);
 
-      // Here is where a generic modal would be created with error info, if we had one.
-      throw new Error("No modal to present with error info");
+      // popup a modal to show the error message
+      this.errorService.displayError(error);
     }
   }
 
@@ -125,8 +127,8 @@ export class HeaderComponent implements OnInit, OnDestroy  {
       logger.info("Error trying to create branch: ");
       logger.info(error);
 
-      // Here is where we would present a generic error modal for informing about error
-      throw new Error("No modal to display error with");
+      // popup a modal to show the error message
+      this.errorService.displayError(error);
     }
   }
 
@@ -140,14 +142,13 @@ export class HeaderComponent implements OnInit, OnDestroy  {
       await this.repositoryService.current().head.pull();
 
       // Get and check for conflicts
-      // Display a modal if there are
     } catch(error) {
       logger.info("Error pulling from remote: ");
       logger.info(error);
 
-      // Here is where we would present a generic error modal for user.
       // Should try and detect whether error is: no remote, no access to remote, no corresponding remote branch
-      throw new Error("No modal to display error with");
+      // popup a modal to show the error message
+      this.errorService.displayError(error);
 
       return false;
     }
@@ -161,12 +162,12 @@ export class HeaderComponent implements OnInit, OnDestroy  {
       logger.info("Error pushing to remote: ");
       logger.info(error);
 
-      // Here is where we would present a generic error modal for user.
       // Should try and detect whether error is: no remote, no push permissions
-      throw new Error("No modal to display error with");
+      // popup a modal to show the error message
+      this.errorService.displayError(error);
 
       // If the error is that there is no branch on remote, we will create one and notify user via an alert (ngAlert)
-      throw new Error("Can't detect whether error is that there is no remote branch. No alert to display if this is the case");
+      throw new Error("Can't detect whether error is that there is no remote branch. ");
     }
   }
   async clean() {

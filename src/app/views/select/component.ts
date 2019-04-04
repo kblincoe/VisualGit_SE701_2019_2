@@ -13,6 +13,7 @@ import { discoverSshCredentials } from 'model/user';
 import { UserService } from 'services/user';
 
 import { ProgressbarComponent } from './progressbar.component';
+import { ErrorService } from "services/error.service";
 
 @Component({
   selector: "app-select-screen",
@@ -27,7 +28,8 @@ export class SelectRepositoryComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private repositoriesService: RepositoryListService,
     private repositoryService: RepositoryService,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private errorService: ErrorService
   ) {}
   public ngOnInit() {
     this.subscription = this.cloneUrlForm.valueChanges.subscribe(this.onCloneUrlUpdate.bind(this));
@@ -130,7 +132,7 @@ export class SelectRepositoryComponent implements OnInit, OnDestroy {
       logger.info("Cloning repository failed: ");
       logger.info(error);
       this.progressbar.hidePanel();
-      throw new Error("Need modal to display error");
+      this.errorService.displayError(error);
     }
   }
 
@@ -144,7 +146,7 @@ export class SelectRepositoryComponent implements OnInit, OnDestroy {
       logger.info("Opening repository failed: ");
       logger.info(error);
 
-      throw new Error("Need modal to display error");
+      this.errorService.displayError(error);
     }
   }
 
