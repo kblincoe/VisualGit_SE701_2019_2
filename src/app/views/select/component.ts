@@ -1,4 +1,4 @@
-import { Component, NgZone, OnInit, OnDestroy } from "@angular/core";
+import { Component, NgZone, OnInit, OnDestroy, ViewChild } from "@angular/core";
 import { FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -8,6 +8,7 @@ import { logger } from "logger";
 
 import { RepositoryListService } from 'services/repository.list';
 import { RepositoryService } from 'services/repository';
+import { ProgressbarComponent } from "views/select/progressbar.component";
 
 @Component({
   selector: "app-select-screen",
@@ -15,7 +16,7 @@ import { RepositoryService } from 'services/repository';
   styleUrls: ["component.scss"]
 })
 export class SelectRepositoryComponent implements OnInit, OnDestroy {
-
+  @ViewChild(ProgressbarComponent) progressbar;
   public constructor(
     private router: Router,
     private repositoriesService: RepositoryListService,
@@ -75,17 +76,27 @@ export class SelectRepositoryComponent implements OnInit, OnDestroy {
   }
 
   async clone() {
+    this.progressbar.displayPanel();
     try {
-      const repoInfo = await this.repositoriesService.cloneFromUrl(this.cloneUrlForm.value, this.cloneDirectoryForm.value);
+      const repoInfo = await this.repositoriesService.cloneFromUrl(this.cloneUrlForm.value, this.cloneDirectoryForm.value, this.setPercentage);
       this.repositoryService.select(repoInfo);
-      // If the above succeed, we can transition
-      this.router.navigate(['/repo']);
+      this.progressbar.value = 100;
+      setTimeout(() => {
+        this.progressbar.hidePanel();
+        setTimeout(() => this.router.navigate(['/repo']), 500);
+      }, 500);
+
+
     } catch(error) {
       logger.info("Cloning repository failed: ");
       logger.info(error);
-
+      this.progressbar.hidePanel();
       throw new Error("Need modal to display error");
     }
+
+
+
+
   }
 
   async open() {
@@ -130,7 +141,17 @@ export class SelectRepositoryComponent implements OnInit, OnDestroy {
       );
     }
   }
+  public setPercentage = (value) => {
+      this.progressbar.setValue(value);
+      logger.info("Printing " + value);
 
+      logger.info("setted Value" + this.progressbar.value);
+
+
+
+
+
+  }
   private cloneName = "repo-name";
   private subscription: Subscription;
 }
