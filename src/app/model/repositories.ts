@@ -94,7 +94,6 @@ export function clone(gitUrl: string, localPath: string, user?: User, SetProgres
           const recvObjects = data.receivedObjects();
           const percentage = Math.floor( recvObjects / data.totalObjects() * 100) ;
           if(percentage % 1 === 0) {
-            //setTimeout(()=>{SetProgressBarValue(percentage)}, 1000);
             SetProgressBarValue(percentage);
           }
 

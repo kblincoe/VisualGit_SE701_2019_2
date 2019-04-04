@@ -21,6 +21,7 @@ export class ProgressbarComponent implements OnInit{
   }
 
   public setValue(value) {
+    // Stop progress bar when the value is larger than 90 to prevent it stops at 100% for a long time.
     if(value >= 90) {
       return;
     }
@@ -28,7 +29,7 @@ export class ProgressbarComponent implements OnInit{
       this.value = value;
     });
   }
-
+  // set the progress to 100 when it is fiished
   public setProgressbarFinish() {
     this.value = 100;
   }
@@ -39,7 +40,7 @@ export class ProgressbarComponent implements OnInit{
 
   public hidePanel() {
     this.isHidden = true;
-    this.value = 0;
+    this.value = 0;       // reset progress bar value when the panel is hidden
   }
 
 
