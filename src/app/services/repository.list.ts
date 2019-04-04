@@ -35,23 +35,23 @@ export class RepositoryListService implements OnDestroy {
    * Clones and creates a repository from a url.
    * Throws if the url is invalid
    */
-  public async cloneFromUrl(url: string, directory: string, SSH?: string) {
+  public async cloneFromUrl(url: string, directory: string, SSH?: string,setPercentage?) {
     // First convert URL into github repo
     const githubRepo = await findGithubRepo(url, this.userService.getUser()); // User may be null.
     if(url.startsWith('git@')) {
       // if ssh, then use ssh instead of https url
       githubRepo.clone_url = url;
     }
-    return await this.cloneFromGithub(githubRepo, directory, SSH);
+    return await this.cloneFromGithub(githubRepo, directory, SSH, setPercentage);
   }
   /**
    * Clones and creates a repository from the repository info
    */
-  public async cloneFromGithub(info: GithubRepository, directory: string, SSH?: string) {
+  public async cloneFromGithub(info: GithubRepository, directory: string, SSH?: string, setPercentage?) {
     this.commandRecordService.addCommand("git clone " + info.clone_url);
 
     try {
-      const repo = await clone(info.clone_url, directory, this.userService.getUser(), SSH);
+      const repo = await clone(info.clone_url, directory, this.userService.getUser(), SSH, setPercentage);
 
       return {
         name: info.name,
