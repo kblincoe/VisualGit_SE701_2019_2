@@ -16,6 +16,7 @@ import { FilePanelComponent } from './views/repository/file.component';
 import { GraphPanelComponent } from './views/repository/graph.component';
 import { HeaderComponent } from './views/header/component';
 import { ProgressbarComponent } from "views/select/progressbar.component";
+import { ErrorContentComponent } from './services/error.service';
 
 @NgModule({
   declarations: [
@@ -28,8 +29,10 @@ import { ProgressbarComponent } from "views/select/progressbar.component";
     FilePanelComponent,
     FooterComponent,
     GraphPanelComponent,
-    HeaderComponent
+    HeaderComponent,
+    ErrorContentComponent
   ],
+  entryComponents: [ErrorContentComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

@@ -7,6 +7,7 @@ import { logger } from 'logger';
 import { User } from 'model/user';
 import { getOwnedGithubRepositories, GithubRepository, findGithubRepo, clone } from 'model/repositories';
 import { UserService } from './user';
+import { ErrorService } from "services/error.service";
 
 export interface RepositoryInfo {
   name: string;
@@ -20,6 +21,7 @@ export interface RepositoryInfo {
 export class RepositoryListService implements OnDestroy {
   public constructor(
     private userService: UserService,
+    private errorService: ErrorService
   ) {
 
     this.subscription = this.userService.observeUser().subscribe(this.loadOnlineRepositories.bind(this));
@@ -58,6 +60,7 @@ export class RepositoryListService implements OnDestroy {
     } catch(error) {
       logger.warn("Error cloning: ");
       logger.warn(error);
+      this.errorService.displayError("Error cloning: " + error);
     }
   }
 
