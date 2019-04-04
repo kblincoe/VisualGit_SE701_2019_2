@@ -148,10 +148,10 @@ export function clone(gitUrl: string, localPath: string, user?: User, SSH?: stri
             const percentage = Math.floor( recvObjects / data.totalObjects() * 100) ;
             if(percentage % 1 === 0) {
                 SetProgressBarValue(percentage);
+            }
           }
         }
-      }
-    });
+    }});
   }
   return nodegit.Clone.clone(gitUrl, localPath + '/', {
     fetchOpts: {
