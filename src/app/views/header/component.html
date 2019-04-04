@@ -20,7 +20,7 @@
       <li ngbDropdown class="nav-item" [hidden]="!currentRepo && !repositories">
         <button ngbDropdownToggle class="dropdown-btn">{{currentRepo || "repository"}}</button>
         <div ngbDropdownMenu>
-          <button ngbDropdownItem *ngFor="let repo of repositories" (click)="selectRepository(repo)">{{repo.name}}</button>
+          <button ngbDropdownItem *ngFor="let repo of repositories" (click)="selectRepository(repo)">{{repo.uniqueName}}</button>
         </div>
       </li>
 
