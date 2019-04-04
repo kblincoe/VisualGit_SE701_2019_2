@@ -5,6 +5,7 @@ import * as nodegit from 'nodegit';
 import * as Octokit from '@octokit/rest';
 
 import { User } from './user';
+import { ProgressbarComponent } from "views/select/progressbar.component";
 
 
 // Taken from https://developer.github.com/v3/repos/
@@ -94,7 +95,7 @@ export async function getLocalRepositories(path: string | Dirent): Promise<nodeg
 }
 
 
-export function clone(gitUrl: string, localPath: string, user?: User, SSH?: string) {
+export function clone(gitUrl: string, localPath: string, user?: User, SSH?: string,SetProgressBarValue?) {
   logger.info(`Cloning ${gitUrl} into ${localPath}`);
   // use ssh and public/private key credentials
   let sshPublicKeyPath = "C:/Users/User/.ssh/id_rsa.pub";
@@ -111,6 +112,13 @@ export function clone(gitUrl: string, localPath: string, user?: User, SSH?: stri
         fetchOpts: {
           callbacks: {
             certificateCheck: () => 0,
+            transferProgress: (data) => {
+                const recvObjects = data.receivedObjects();
+                const percentage = Math.floor( recvObjects / data.totalObjects() * 100) ;
+                if(percentage % 1 === 0) {
+                    SetProgressBarValue(percentage);
+                }
+            },
             credentials(url, userName) {
               return nodegit.Cred.sshKeyNew(
                 userName,
@@ -134,9 +142,34 @@ export function clone(gitUrl: string, localPath: string, user?: User, SSH?: stri
       fetchOpts: {
         callbacks: {
           certificateCheck: () => 1,
-          credentials: () => user.gitCredentials
+          credentials: () => user.gitCredentials,
+          transferProgress: (data) => {
+            const recvObjects = data.receivedObjects();
+            const percentage = Math.floor( recvObjects / data.totalObjects() * 100) ;
+            if(percentage % 1 === 0) {
+                SetProgressBarValue(percentage);
+          }
         }
       }
     });
   }
+  return nodegit.Clone.clone(gitUrl, localPath + '/', {
+    fetchOpts: {
+      callbacks: {
+        certificateCheck: () => 1,
+        credentials: () => user.gitCredentials,
+        transferProgress: (data) => {
+          const recvObjects = data.receivedObjects();
+          const percentage = Math.floor( recvObjects / data.totalObjects() * 100) ;
+          if(percentage % 1 === 0) {
+            SetProgressBarValue(percentage);
+          }
+
+        }
+      },
+
+
+
+    }
+  });
 }
