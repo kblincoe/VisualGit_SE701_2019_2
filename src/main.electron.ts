@@ -101,6 +101,18 @@ function createMenu() {
         click() { shell.openExternal('https://github.com/kblincoe/VisualGit_SE701#help'); }
       }
     ]
+  },
+  {
+    label: "Edit",
+    submenu: [
+      { role: 'undo' },
+      { role: 'redo' },
+      { role: 'selectAll' },
+      { type: 'separator' },
+      { role: 'cut' },
+      { role: 'copy' },
+      { role: 'paste' }
+    ]
   }]);
 }
 
