@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { Subscription } from 'rxjs';
-import { CommandRecordService } from 'services/command.record';
+import { Subscription, Observable } from 'rxjs';
+import { RepositoryService } from 'services/repository';
+import { switchMap, scan, ignoreElements, filter } from 'rxjs/operators';
 
 @Component({
   selector: "app-footer",
@@ -9,17 +10,20 @@ import { CommandRecordService } from 'services/command.record';
 })
 export class FooterComponent implements OnInit, OnDestroy {
   public constructor(
-    private commandRecordService: CommandRecordService
+    private repositoryService: RepositoryService
   ) {}
 
   public ngOnInit() {
-    this.subscription = this.commandRecordService.observeCommands().subscribe(commands => this.commands = commands.reverse());
+    this.commands =
+      this.repositoryService.repository
+      .pipe(
+        filter(repo => !!repo),
+        switchMap(repo => repo.commandRecord),
+        scan((acc, val: string) => [val, ...acc].slice(-100), []) // Create an array, adding items to the front. Max 100.
+      );
   }
   public ngOnDestroy() {
-    this.subscription.unsubscribe();
   }
 
-  commands: string[] = [];
-
-  private subscription: Subscription;
+  public commands: Observable<string[]>;
 }

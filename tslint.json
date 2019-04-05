@@ -81,6 +81,7 @@
       "check-preblock",
       "check-postbrace"
     ],
+    "no-bitwise": false,
     "curly": false
   }
 }

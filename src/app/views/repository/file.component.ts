@@ -1,11 +1,12 @@
 import { Component, OnInit, OnDestroy, OnChanges, Input, Output, EventEmitter } from "@angular/core";
 import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable, combineLatest } from 'rxjs';
+import { pairwise, debounce, debounceTime } from 'rxjs/operators';
 
 import * as nodegit from 'nodegit';
 import { logger } from 'logger';
-import { WorkingDirectoryService } from 'services/working.directory';
-import { RepositoryService } from 'services/repository';
+
+import WorkingDirectory from 'model/repository/working-directory';
 
 enum PatchType {
   Removed = "removed",
@@ -14,82 +15,129 @@ enum PatchType {
   Modified = "modified"
 }
 
+function changesEqual(a: nodegit.ConvenientPatch, b: nodegit.ConvenientPatch) {
+  return a.newFile().path() === b.newFile().path()
+}
+
 @Component({
   selector: "app-file-panel",
   templateUrl: "file.component.html",
   styleUrls: ["file.component.scss"]
 })
 export class FilePanelComponent implements OnInit, OnDestroy, OnChanges {
-  @Input() changes: nodegit.ConvenientPatch[];
-  @Output() displayFile = new EventEmitter<nodegit.ConvenientPatch>();
-
-  public constructor(
-    private repositoryService: RepositoryService,
-    private workingDirectoryService: WorkingDirectoryService
-  ) {}
+  @Input() workingDirectory: WorkingDirectory;
+  @Output() displayFile = new EventEmitter<{patch: nodegit.ConvenientPatch, prePatch?: nodegit.ConvenientPatch}>();
 
   public clear() {}
 
   public ngOnInit() {
-    this.subscription.add(
-      this.commitForm.get('selectAll').valueChanges.subscribe(this.toggleAll.bind(this))
-    );
-    this.subscription.add(
-      this.selected.valueChanges.subscribe(change => this.displayFile.emit(change))
-    );
+    this.subscription = this.selected.valueChanges.subscribe((patch: nodegit.ConvenientPatch) => {
+      let prePatch;
+      // If this is a staged change, we should check for an unstaged change to unapply first.
+      if(this.staged.includes(patch) && !patch.isDeleted())
+        prePatch = this.unstaged.find(other => other.newFile().path() === patch.newFile().path());
+
+      this.displayFile.next({patch, prePatch});
+    });
   }
   public ngOnDestroy() {
     this.subscription.unsubscribe();
   }
-
   public ngOnChanges() {
-    // Update toggle controls
-    const controlsArray = (this.commitForm.get('staging') as FormArray);
-    // Angular 8 allows clear, but it only just came out :(
-    // Preset the check boxes to whether the patch is staged
-    controlsArray.controls = this.changes.map(change => new FormControl(!change.isUntracked()));
+    this.repoSubscription.unsubscribe();
+    this.repoSubscription = new Subscription();
 
-    if(this.changes.length === 0)
-      this.commitForm.get('selectAll').disable();
-    else
-      this.commitForm.get('selectAll').enable();
-
-    for(const change of this.changes) {
-      if(change.isModified())
-        this.patchTypes.set(change, PatchType.Modified);
-      else if(change.isAdded() || change.isCopied())
-        this.patchTypes.set(change, PatchType.Added);
-      else if(change.isDeleted())
-        this.patchTypes.set(change, PatchType.Removed);
-      else
-        this.patchTypes.set(change, PatchType.Renamed);
+    if(!this.workingDirectory) {
+      logger.error("Working directory should always be present. Leave this page.");
+      return;
     }
-  }
 
-  toggleAll() {
-    const value = this.commitForm.get("selectAll").value;
-    for(const control of (this.commitForm.get('staging') as FormArray).controls) {
-      control.setValue(value);
-    }
+    this.repoSubscription.add(
+      this.workingDirectory.stagedChanges.subscribe(changes => this.staged = changes)
+    );
+    this.repoSubscription.add(
+      this.workingDirectory.unstagedChanges.subscribe(changes => this.unstaged = changes)
+    );
+
+    this.repoSubscription.add(
+      combineLatest(this.workingDirectory.stagedChanges, this.workingDirectory.unstagedChanges)
+      .pipe(pairwise()) // Get the previous and current. Wait a bit to ensure if both change at same time, we get both.
+      .subscribe(this.refreshSelected.bind(this))
+    );
   }
 
   async stage(file: nodegit.ConvenientPatch) {
-    await this.workingDirectoryService.stageFiles([file.newFile().path(), file.oldFile().path()]);
+    // Using the set to only pass through unique items. (i.e. if both files are same, just pass one)
+    await this.workingDirectory.stage([...new Set(
+      [file.newFile().path(), file.oldFile().path()])
+    ]);
+  }
+  async stageAll() {
+    // Collect all unstaged files
+    const files = this.unstaged.reduce((acc, change) => ([...acc, change.newFile().path(), change.oldFile().path()]), []);
+    await this.workingDirectory.stage([...new Set(files)]);
+  }
+
+  async unstage(file: nodegit.ConvenientPatch) {
+    await this.workingDirectory.unstage([...new Set(
+      [file.newFile().path(), file.oldFile().path()]
+    )]);
+  }
+  async unstageAll() {
+    // Collect all staged files
+    const files = this.staged.reduce((acc, change) => ([...acc, change.newFile().path(), change.oldFile().path()]), []);
+    await this.workingDirectory.stage([...new Set(files)]);
   }
 
   async commit() {
-    await this.repositoryService.getRepository().commit(this.commitForm.controls.commitMessage.value);
+    await this.workingDirectory.commit(this.commitMessage.value);
   }
 
-  patchTypes = new Map<nodegit.ConvenientPatch, PatchType>();
+  public patchType(change: nodegit.ConvenientPatch) {
+    if(change.isModified())
+      return PatchType.Modified;
+    else if(change.isAdded() || change.isUntracked() || change.isCopied())
+      return PatchType.Added;
+    else if(change.isDeleted())
+      return PatchType.Removed;
+    else if(change.isRenamed())
+      return PatchType.Renamed;
+    else
+      logger.error("Unknown change. Status: " + change.status());
+  }
 
-  commitForm: FormGroup = new FormGroup({
-    selectAll: new FormControl(false),
-    staging: new FormArray([]),
-    commitMessage: new FormControl(null, Validators.required)
-  });
-  selected = new FormControl(null as nodegit.ConvenientPatch);
+  staged: nodegit.ConvenientPatch[];
+  unstaged: nodegit.ConvenientPatch[];
 
+  commitMessage = new FormControl(null, Validators.required);
+  selected = new FormControl(null);
 
-  private subscription: Subscription = new Subscription();
+  /**
+   * Updates the selected item when the staged/unstaged lists change so that the change is recent.
+   */
+  private refreshSelected([[prevStaged, prevUnstaged], [curStaged, curUnstaged]]: nodegit.ConvenientPatch[][][]) {
+    const prev = this.selected.value as nodegit.ConvenientPatch;
+
+    if(!prev)
+      return;
+
+    // Get potential result from both lists seperately
+    const stagedFound = curStaged.find(change => changesEqual(change, prev));
+    const unstagedFound = curUnstaged.find(change => changesEqual(change, prev));
+
+    // If there is a similar patch in BOTH lists, choose the one from the same list as prevPatch was.
+    // If there is only one similar patch, choose that regardless of which list it came from.
+    let nextValue;
+    if(prevStaged.includes(prev))
+      nextValue = stagedFound || unstagedFound;
+    else if(prevUnstaged.includes(prev))
+      nextValue = unstagedFound || stagedFound;
+    else
+      nextValue = unstagedFound || stagedFound || prev;
+
+    this.selected.setValue(nextValue);
+  }
+
+  private repoSubscription = new Subscription();
+  private subscription: Subscription;
 }

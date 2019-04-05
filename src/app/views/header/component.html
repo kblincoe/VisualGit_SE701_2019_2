@@ -50,11 +50,11 @@
     </div>
 
     <li ngbDropdown *ngIf="userIconUrl" placement="bottom-right" class= "navbar-nav user-menu">
-        <button ngbDropdownToggle *ngIf="userIconUrl" class="icon-btn"><img class="icon" [src]="userIconUrl"></button>  
+        <button ngbDropdownToggle *ngIf="userIconUrl" class="icon-btn"><img class="icon" [src]="userIconUrl"></button>
         <div ngbDropdownMenu>
             <!--<span ngbDropdownItem disabled>{{userService.getUser().name}}</span>-->
             <!-- Need to replace guest user's URL as "/<Default name>"-->
-            <span ngbDropdownItem disabled>Signed in as <b>{{this.userService.getUser().userUrl.split("/").pop()}}</b></span>
+            <span ngbDropdownItem disabled>Signed in as <b>{{this.username}}</b></span>
             <button ngbDropdownItem (click)="toggleHelp()">Help</button>
             <button ngbDropdownItem (click)="toggleSetting()">Setting</button>
             <button ngbDropdownItem (click)="toggleLog()">{{loggedIn ? "Logout" : "Login"}}</button>

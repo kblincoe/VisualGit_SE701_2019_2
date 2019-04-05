@@ -1,14 +1,18 @@
 import { Component, NgZone, OnInit, OnDestroy, ViewChild } from "@angular/core";
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
+import * as path from 'path';
 import * as electron from "electron";
 import { logger } from "logger";
 
 import { RepositoryListService } from 'services/repository.list';
 import { RepositoryService } from 'services/repository';
-import { ProgressbarComponent } from "views/select/progressbar.component";
+import { discoverSshCredentials } from 'model/user';
+import { UserService } from 'services/user';
+
+import { ProgressbarComponent } from './progressbar.component';
 
 @Component({
   selector: "app-select-screen",
@@ -17,8 +21,10 @@ import { ProgressbarComponent } from "views/select/progressbar.component";
 })
 export class SelectRepositoryComponent implements OnInit, OnDestroy {
   @ViewChild(ProgressbarComponent) progressbar;
+
   public constructor(
     private router: Router,
+    private userService: UserService,
     private repositoriesService: RepositoryListService,
     private repositoryService: RepositoryService,
     private ngZone: NgZone
@@ -29,7 +35,6 @@ export class SelectRepositoryComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this.subscription.unsubscribe();
   }
-
 
   async chooseCloneDirectory() {
     // Wrapped in a promise so that the parent knows when we have updated the form
@@ -43,11 +48,8 @@ export class SelectRepositoryComponent implements OnInit, OnDestroy {
         },
         paths => {
           if(paths && paths.length > 0) {
-            let separator = paths[0].includes('\\') ? '\\' : '/';
-            if(paths[0].endsWith(separator))
-              separator = "";
 
-            this.cloneDirectoryForm.setValue(paths[0] + separator + this.cloneName);
+            this.cloneDirectoryForm.setValue(path.join(paths[0], this.cloneName));
           }
           res();
         }
@@ -65,20 +67,27 @@ export class SelectRepositoryComponent implements OnInit, OnDestroy {
           properties: ["openDirectory"],
           message: "Select Directory where SSH keys are stored"
         },
-        paths => {
+        async paths => {
           if(paths && paths.length > 0) {
-            let separator = paths[0].includes('\\') ? '\\' : '/';
-            if(paths[0].endsWith(separator))
-              separator = "";
+            const results = await discoverSshCredentials(paths[0]);
+            if(results.length === 0) {
+              logger.info("No credentials found in path " + paths[0]);
 
-            this.SSHDirectoryForm.setValue(paths[0] + separator);
+              this.sshForm.setValue({publicPath: "", privatePath: ""});
+            }
+            else {
+              if(results.length > 1)
+                logger.error("Unable to pick between multiple ssh credentials in one directory. Choosing first one.");
+
+              console.log(results[0]);
+              this.sshForm.setValue(results[0]);
+            }
           }
           res();
         }
       )
     );
   }
-
 
   async chooseLocalRepository() {
     // Wrapped in a promise so that the parent knows when we have updated the form.
@@ -103,7 +112,12 @@ export class SelectRepositoryComponent implements OnInit, OnDestroy {
   async clone() {
     this.progressbar.displayPanel();
     try {
-      const repoInfo = await this.repositoriesService.cloneFromUrl(this.cloneUrlForm.value, this.cloneDirectoryForm.value, this.SSHDirectoryForm.value, this.setPercentage);
+      const repoInfo = await this.repositoriesService.cloneFromUrl(
+        this.cloneUrlForm.value,
+        this.cloneDirectoryForm.value,
+        value => this.progressbar.setValue(value)
+      );
+
       this.repositoryService.select(repoInfo);
       this.progressbar.value = 100;
       setTimeout(() => {
@@ -111,17 +125,13 @@ export class SelectRepositoryComponent implements OnInit, OnDestroy {
         setTimeout(() => this.router.navigate(['/repo']), 500);
       }, 500);
 
-
     } catch(error) {
+
       logger.info("Cloning repository failed: ");
       logger.info(error);
       this.progressbar.hidePanel();
       throw new Error("Need modal to display error");
     }
-
-
-
-
   }
 
   async open() {
@@ -136,18 +146,29 @@ export class SelectRepositoryComponent implements OnInit, OnDestroy {
 
       throw new Error("Need modal to display error");
     }
+  }
 
-    // Was openRepository();
+  async saveSshKeys() {
+    if(!this.userService.getUser())
+      logger.error("There should be a user by the time we are on this screen");
+    else
+      await this.userService.getUser().addSshCredentials(this.sshForm.value.publicPath, this.sshForm.value.privatePath);
   }
 
   back() {
     this.router.navigate(['/login']);
   }
 
+  // Cloning
   cloneUrlForm: FormControl = new FormControl(null, Validators.required);
   cloneDirectoryForm: FormControl = new FormControl(null, Validators.required);
-  SSHDirectoryForm: FormControl = new FormControl(null);
+  // Opening
   localRepositoryPathForm: FormControl = new FormControl(null, Validators.required);
+  // SSH
+  sshForm: FormGroup = new FormGroup({
+    publicPath: new FormControl("", Validators.required),
+    privatePath: new FormControl("", Validators.required)
+  });
 
   private onCloneUrlUpdate(cloneUrl: string) {
     const prevName = this.cloneName;
@@ -167,17 +188,7 @@ export class SelectRepositoryComponent implements OnInit, OnDestroy {
       );
     }
   }
-  public setPercentage = (value) => {
-      this.progressbar.setValue(value);
-      logger.info("Printing " + value);
 
-      logger.info("setted Value" + this.progressbar.value);
-
-
-
-
-
-  }
   private cloneName = "repo-name";
   private subscription: Subscription;
 }
