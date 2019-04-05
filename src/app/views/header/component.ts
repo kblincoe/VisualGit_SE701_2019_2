@@ -9,6 +9,7 @@ import { RepositoryInfo, RepositoryListService } from 'services/repository.list'
 import { RepositoryService } from 'services/repository';
 import { UserService } from 'services/user';
 import { logger } from 'logger';
+import { Repository } from 'model/repository';
 
 @Component({
   selector: "app-header",
@@ -25,18 +26,21 @@ export class HeaderComponent implements OnInit, OnDestroy  {
   ) {}
 
   public ngOnInit() {
-    this.subscription.add(this.userService.observeUser().subscribe(user => {
-      this.userIconUrl = user && user.avatarUrl;
-      this.loggedIn = !!user;
-    }));
-    this.subscription.add(this.repositoryService.observeRepository().subscribe(repo => {
-      this.currentRepo = repo ? repo.getName() : null;
-      this.branches = repo ? this.repositoryService.getBranches() : null;
-    }));
-    this.subscription.add(this.repositoriesService.observeRepositories().subscribe(repos =>
-      this.repositories = (repos && repos.length === 0) ? null : repos // An empty repos is made to be null for rendering purposes
-    ));
-    this.subscription.add(this.repositoryService.observeBranch().subscribe(branch => this.currentBranch = branch));
+    this.subscription.add(
+      this.userService.observeUser().subscribe(user => {
+        this.userIconUrl = user && user.githubInfo.avatar_url;
+        this.username = user && user.name;
+        this.loggedIn = !!user;
+      })
+    );
+    this.subscription.add(
+      this.repositoriesService.observeRepositories().subscribe(repos =>
+        this.repositories = (repos && repos.length === 0) ? null : repos // An empty repo list is made to be null for rendering purposes
+      )
+    );
+    this.subscription.add(
+      this.repositoryService.repository.subscribe(this.onRepoChange.bind(this))
+    );
   }
   public ngOnDestroy() {
     this.subscription.unsubscribe();
@@ -54,7 +58,6 @@ export class HeaderComponent implements OnInit, OnDestroy  {
    * This will ask the user for a directory to clone the repo into, then continue the standard repo clone process.
    */
   async selectRepository(repo: RepositoryInfo) {
-
     let usableRepo;
     if(!repo.local) {
       // Here is where a directory selection modal would be created if we had one
@@ -75,7 +78,7 @@ export class HeaderComponent implements OnInit, OnDestroy  {
    */
   async selectBranch(branch: string) {
     try {
-      this.repositoryService.selectBranch(branch);
+      this.repositoryService.current().checkout(branch);
     } catch(error) {
       logger.info("Selecting branch failed:");
       logger.info(error);
@@ -97,15 +100,15 @@ export class HeaderComponent implements OnInit, OnDestroy  {
   }
 
  /**
-   * Display or hide the help page
-   */
+  * Display or hide the help page
+  */
   toggleHelp() {
     throw new Error("Not implemented");
   }
 
  /**
-   * Display or hide settings
-   */
+  * Display or hide settings
+  */
   toggleSetting() {
     throw new Error("Not implemented");
   }
@@ -115,9 +118,9 @@ export class HeaderComponent implements OnInit, OnDestroy  {
    * prompts? whether the user wants to create that branch, does so,
    * then moves to that branch.
    */
-  createBranch() {
+  async createBranch() {
     try {
-      this.repositoryService.getRepository().createBranch(this.branchCreationName.value);
+      await this.repositoryService.current().createBranch(this.branchCreationName.value);
     } catch(error) {
       logger.info("Error trying to create branch: ");
       logger.info(error);
@@ -134,7 +137,7 @@ export class HeaderComponent implements OnInit, OnDestroy  {
   // Returns whether op succeeded, as this function is used in code as well
   async pull() {
     try {
-      await this.repositoryService.getRepository().pull();
+      await this.repositoryService.current().head.pull();
 
       // Get and check for conflicts
       // Display a modal if there are
@@ -153,7 +156,7 @@ export class HeaderComponent implements OnInit, OnDestroy  {
   // Returns whether op succeeded, as this function is used in code as well
   async push() {
     try {
-      await this.repositoryService.getRepository().push();
+      await this.repositoryService.current().head.push();
     } catch(error) {
       logger.info("Error pushing to remote: ");
       logger.info(error);
@@ -168,12 +171,36 @@ export class HeaderComponent implements OnInit, OnDestroy  {
   }
   async clean() {
     throw new Error("No modal to display to confirm whether user really wants to clean repo.");
-    await this.repositoryService.getRepository().clean();
+    await this.repositoryService.current().workingDirectory.clean();
   }
   async sync() {
     // Only push if the pull succeeded.
     if(await this.pull())
       await this.push();
+  }
+
+  onRepoChange(repo: Repository) {
+    this.repoSubscription.unsubscribe();
+    // Took me an hour to find out that adding stuff after a call to unsubscribe does weird things,
+    // so we have to recreate the subscription object.
+    this.repoSubscription = new Subscription();
+
+    if(repo) {
+      this.currentRepo = repo.getName();
+
+      this.repoSubscription.add(
+        repo.head.name.subscribe(name => this.currentBranch = name )
+      );
+      this.repoSubscription.add(
+        repo.branches.subscribe(branches =>
+          this.branches = branches.map(branch => branch.shorthand())
+        )
+      );
+    }
+    else {
+      this.currentRepo = null;
+      this.branches = [];
+    }
   }
 
   currentRepo: string;
@@ -183,11 +210,13 @@ export class HeaderComponent implements OnInit, OnDestroy  {
   branches: string[] = [];
 
   userIconUrl: string;
+  username: string;
   loggedIn = false;
 
   isCollapsed = false;
 
   branchCreationName = new FormControl('');
 
-  private subscription: Subscription = new Subscription();
+  private subscription = new Subscription();
+  private repoSubscription = new Subscription();
 }

@@ -48,12 +48,10 @@ export async function findGithubRepo(gitUrl: string, user: User): Promise<Github
     owner = sections[sections.length - 2];
     repo = sections[sections.length - 1];
 
-  }else {
-
+  } else {
     sections = gitUrl.split('/');
     owner = sections[sections.length - 2];
     repo = sections[sections.length - 1];
-
   }
   if(!owner || !repo)
     throw new Error("URL not valid");
@@ -95,81 +93,33 @@ export async function getLocalRepositories(path: string | Dirent): Promise<nodeg
 }
 
 
-export function clone(gitUrl: string, localPath: string, user?: User, SSH?: string,SetProgressBarValue?) {
+export function clone(gitUrl: string, localPath: string, user?: User, progressUpdater?: (percent: number) => void) {
   logger.info(`Cloning ${gitUrl} into ${localPath}`);
-  // use ssh and public/private key credentials
-  let sshPublicKeyPath = "C:/Users/User/.ssh/id_rsa.pub";
-  let sshPrivateKeyPath = "C:/Users/User/.ssh//id_rsa";
 
-  if(gitUrl.startsWith('git@')) {
-    // check that SSH key is set
-    if(SSH) {
-      sshPublicKeyPath = SSH + "id_rsa.pub";
-      sshPrivateKeyPath = SSH + "id_rsa";
-
-      // set clone options to include ssh keys with cred callback
-      const options = {
-        fetchOpts: {
-          callbacks: {
-            certificateCheck: () => 0,
-            transferProgress: (data) => {
-                const recvObjects = data.receivedObjects();
-                const percentage = Math.floor( recvObjects / data.totalObjects() * 100) ;
-                if(percentage % 1 === 0) {
-                    SetProgressBarValue(percentage);
-                }
-            },
-            credentials(url, userName) {
-              return nodegit.Cred.sshKeyNew(
-                userName,
-                sshPublicKeyPath,
-                sshPrivateKeyPath,
-                "");
-            }
-          }
-        }
-      };
-      return nodegit.Clone.clone(gitUrl, localPath + '/', options);
-    }else {
-
-      throw new Error(`SSH key directory not set or invalid`);
-
-    }
+  let credentials;
+  if(user) {
+    credentials = user.gitCredentials;
   }
-  else
-  {
-    return nodegit.Clone.clone(gitUrl, localPath + '/', {
-      fetchOpts: {
-        callbacks: {
-          certificateCheck: () => 1,
-          credentials: () => user.gitCredentials,
-          transferProgress: (data) => {
-            const recvObjects = data.receivedObjects();
-            const percentage = Math.floor( recvObjects / data.totalObjects() * 100) ;
-            if(percentage % 1 === 0) {
-                SetProgressBarValue(percentage);
-            }
-          }
-        }
-    }});
+  else {
+    credentials = {
+      certificateCheck: () => 0,
+      credentials: () => {
+        logger.warn("Repository asked for credentials, but we have none");
+        // Not sure how to give an error to nodegit, something like this: https://libgit2.org/docs/guides/authentication/
+        return nodegit.Error.CODE.EUSER;
+      }
+    };
   }
+
   return nodegit.Clone.clone(gitUrl, localPath + '/', {
     fetchOpts: {
       callbacks: {
-        certificateCheck: () => 1,
-        credentials: () => user.gitCredentials,
-        transferProgress: (data) => {
-          const recvObjects = data.receivedObjects();
-          const percentage = Math.floor( recvObjects / data.totalObjects() * 100) ;
-          if(percentage % 1 === 0) {
-            SetProgressBarValue(percentage);
-          }
-
+        ...credentials,
+        transferProgress: (data: nodegit.TransferProgress) => {
+          const percentage = (data.receivedObjects / data.totalObjects) * 100;
+          progressUpdater(percentage);
         }
-      },
-
-
-
+      }
     }
   });
 }

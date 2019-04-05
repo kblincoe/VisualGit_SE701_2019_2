@@ -1,12 +1,11 @@
 import { Component, Input, OnChanges } from "@angular/core";
 
 import { EOL } from 'os';
-import { promises as fs, rename } from 'fs';
+import { promises as fs } from 'fs';
 import * as nodegit from 'nodegit';
 import { logger } from 'logger';
 
-import { RepositoryService } from 'services/repository';
-import { WorkingDirectoryService } from 'services/working.directory';
+import WorkingDirectory from 'model/repository/working-directory';
 
 type ContentType = "added" | "removed" | "same";
 
@@ -15,18 +14,45 @@ interface LineInfo {
   type: ContentType;
 }
 
+async function unapply(contents: string[], diff: nodegit.ConvenientPatch): Promise<string[]> {
+  let lineTranslate = 0;
+
+  const hunks = await diff.hunks();
+  for(const hunk of hunks) {
+    for(const line of await hunk.lines()) {
+      // Remove every new line
+      if(line.newLineno() !== -1 && line.oldLineno() === -1) {
+        // Must translate the new line number to the old line number
+        contents.splice(line.newLineno() - 1 + lineTranslate, 1);
+        lineTranslate -= 1;
+      }
+      // Add every old line
+      else if(line.oldLineno() !== -1 && line.newLineno() === -1) {
+        // No translation needed: file up to this point should only be old lines
+        contents.splice(line.oldLineno() - 1, 0, line.content().replace('\n', ''));
+        lineTranslate += 1;
+      }
+    }
+  }
+
+  return contents;
+}
+
+// Warning - this is a mess
+
 @Component({
   selector: "app-diff-panel",
   templateUrl: "diff.component.html",
   styleUrls: ["diff.component.scss"]
 })
 export class DiffPanelComponent implements OnChanges {
-  @Input() fileDiff: nodegit.ConvenientPatch;
+  @Input() workingDirectory: WorkingDirectory;
 
-  public constructor(
-    private repositoryService: RepositoryService,
-    private workingDirectoryService: WorkingDirectoryService
-  ) {}
+  // If the chosen diff is staged, then prediff contains the unstaged diff for the same file (if it exists).
+  // This may seem confusing: the prediff is chronologically after the diff,
+  // but because we have to work from the file in the working directory, we work backwards, unapplying the preDiff and then the actual diff.
+  @Input() preDiff?: nodegit.ConvenientPatch;
+  @Input() diff: nodegit.ConvenientPatch;
 
   /**
    * This function (called every time there are changes) updates the line changes.
@@ -37,20 +63,33 @@ export class DiffPanelComponent implements OnChanges {
    *  and async functions only exist from ES2017
    */
   public async ngOnChanges() {
-    if(this.fileDiff === null || this.repositoryService.getRepository() === null) {
+    if(!this.diff || !this.workingDirectory) {
       this.lines = [];
       return;
     }
 
     // This could probably be written better, but for now it does some things.
+    // Im sorry.
 
-    logger.info("Updating diff panel to " + this.fileDiff.newFile().path() || this.fileDiff.oldFile().path());
+    logger.verbose("Updating diff panel to " + this.diff.newFile().path() || this.diff.oldFile().path());
     // We want to display the entire file, so we're going to load it here
     // Keep in mind this is the new file. If the file is deleted, we cant (and dont need to) load it.
-    const path = this.repositoryService.getRepository().local.workdir() + '/' + this.fileDiff.newFile().path();
-    const newFileLines = this.fileDiff.isDeleted() ? [] : (await fs.readFile(path, "utf8")).split(/(?<=\r\n|\r|\n)/g);
+    let newFileLines: string[] = [];
 
-    if(newFileLines.length > 300) {
+    if(this.preDiff) {
+      // If there is a prediff, unapply it to get the file the actual diff was used on
+      const path = this.workingDirectory.getPath() + '/' + this.preDiff.newFile().path();
+      newFileLines = await unapply(
+        this.preDiff.isDeleted() ? [] : (await fs.readFile(path, "utf8")).split(/\r\n|\r|\n/g),
+        this.preDiff
+      );
+    }
+    else {
+      const path = this.workingDirectory.getPath() + '/' + this.diff.newFile().path();
+      newFileLines = this.diff.isDeleted() ? [] : (await fs.readFile(path, "utf8")).split(/\r\n|\r|\n/g);
+    }
+
+    if(newFileLines.length > 800) {
       logger.warn("We should not be showing full contents of files this large (" + newFileLines.length + " lines)");
     }
 
@@ -61,20 +100,20 @@ export class DiffPanelComponent implements OnChanges {
 
     // Depending on whether the file is modified, deleted, or added, the default change assumption is different.
     let defaultType: ContentType = "same";
-    if(this.fileDiff.isAdded())
+    if(this.diff.isAdded() || this.diff.isUntracked())
       defaultType = "added";
-    else if(this.fileDiff.isDeleted())
+    else if(this.diff.isDeleted())
       defaultType = "removed";
 
     // Hunks are small bits of info that capture at least a section of changing lines (sometimes more)
     // This means a hunk will contain some links in both old and new, some lines that are old only, and some lines that are new only.
     // Note: There is no concept of 'partially modified' lines. They are either identical or separate.
     // Hunks only exist around changes, so the whole file might not be captured by hunks.
-    const hunks = await this.fileDiff.hunks();
+    const hunks = await this.diff.hunks();
     for(const hunk of hunks) {
       // Lines between previous hunk end and hunk start should be same
       // This assumption is not necessarily true in all cases, e.g. if the file is fully deleted there are no new lines.
-      if(this.fileDiff.isModified() &&
+      if(this.diff.isModified() &&
         (hunk.newStart() - newFileEnd !== hunk.oldStart() - oldFileEnd)) {
         throw new Error("Assumption error in hunks: line difference between previous hunk end and new hunk start: New "
           + newFileEnd + "-" + hunk.newStart() + " vs. " + oldFileEnd + "-" + hunk.oldStart());
@@ -114,7 +153,7 @@ export class DiffPanelComponent implements OnChanges {
         else
           type = defaultType;
 
-        contentLines.push({text: line.content().trimRight(), type});
+        contentLines.push({text: line.content(), type});
       });
 
       // Update ends
@@ -134,9 +173,9 @@ export class DiffPanelComponent implements OnChanges {
    * Adds the file to the index
    */
   async save() {
-    this.workingDirectoryService.stageFiles([
-      this.fileDiff.oldFile().path(),
-      this.fileDiff.newFile().path()]);
+    this.workingDirectory.stage([
+      this.diff.oldFile().path(),
+      this.diff.newFile().path()]);
   }
 
   /**
@@ -144,41 +183,29 @@ export class DiffPanelComponent implements OnChanges {
    * then stages it (staging will at most undo a previous staging of the updates)
    */
   async discard() {
-    const workDir = this.repositoryService.getRepository().local.workdir() + '/';
-    const oldFile = workDir + this.fileDiff.oldFile().path();
-    const newFile = workDir + this.fileDiff.newFile().path();
+    if(this.preDiff !== null)
+      logger.error("Cannot unapply staged diffs when there are unstaged diffs in the same file. Not implemented");
+
+    const workDir = this.workingDirectory.getPath() + '/';
+    const oldFile = workDir + this.diff.oldFile().path();
+    const newFile = workDir + this.diff.newFile().path();
 
     logger.info("Discarding changes to " + newFile);
 
-    if(this.fileDiff.isAdded() || this.fileDiff.isCopied()) {
+    if(this.diff.isAdded() || this.diff.isCopied()) {
       fs.unlink(newFile);
       return;
     }
 
-    // Unapply diffs
-    let lineTranslate = 0;
-    const contents = this.fileDiff.isDeleted() ? [] : (await fs.readFile(newFile, 'utf8')).split(EOL);
 
-    const hunks = await this.fileDiff.hunks();
-    for(const hunk of hunks) {
-      for(const line of await hunk.lines()) {
-        // Remove every new line
-        if(line.newLineno() !== -1 && line.oldLineno() === -1) {
-          // Must translate the new line number to the old line number
-          contents.splice(line.newLineno() - 1 + lineTranslate, 1);
-          lineTranslate -= 1;
-        }
-        // Add every old line
-        else if(line.oldLineno() !== -1 && line.newLineno() === -1) {
-          // No translation needed: file up to this point should only be old lines
-          contents.splice(line.oldLineno() - 1, 0, line.content().replace('\n', ''));
-          lineTranslate += 1;
-        }
-      }
-    }
+    // Unapply diffs
+    let contents = [];
+    if(!this.diff.isDeleted())
+      contents = await unapply((await fs.readFile(newFile, 'utf8')).split(EOL), this.diff);
+
 
     // delete new file if it exists, no longer need it
-    if(oldFile !== newFile && !this.fileDiff.isDeleted())
+    if(oldFile !== newFile && !this.diff.isDeleted())
       fs.unlink(newFile);
     // Overwrite/create old file
     fs.writeFile(oldFile, contents.join(EOL), {

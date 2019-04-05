@@ -7,7 +7,6 @@ import { logger } from 'logger';
 import { User } from 'model/user';
 import { getOwnedGithubRepositories, GithubRepository, findGithubRepo, clone } from 'model/repositories';
 import { UserService } from './user';
-import { CommandRecordService } from './command.record';
 
 export interface RepositoryInfo {
   name: string;
@@ -21,7 +20,6 @@ export interface RepositoryInfo {
 export class RepositoryListService implements OnDestroy {
   public constructor(
     private userService: UserService,
-    private commandRecordService: CommandRecordService
   ) {
 
     this.subscription = this.userService.observeUser().subscribe(this.loadOnlineRepositories.bind(this));
@@ -35,23 +33,21 @@ export class RepositoryListService implements OnDestroy {
    * Clones and creates a repository from a url.
    * Throws if the url is invalid
    */
-  public async cloneFromUrl(url: string, directory: string, SSH?: string,setPercentage?) {
+  public async cloneFromUrl(url: string, directory: string, setPercentage?: (percent: number) => void) {
     // First convert URL into github repo
     const githubRepo = await findGithubRepo(url, this.userService.getUser()); // User may be null.
     if(url.startsWith('git@')) {
       // if ssh, then use ssh instead of https url
       githubRepo.clone_url = url;
     }
-    return await this.cloneFromGithub(githubRepo, directory, SSH, setPercentage);
+    return await this.cloneFromGithub(githubRepo, directory, setPercentage);
   }
   /**
    * Clones and creates a repository from the repository info
    */
-  public async cloneFromGithub(info: GithubRepository, directory: string, SSH?: string, setPercentage?) {
-    this.commandRecordService.addCommand("git clone " + info.clone_url);
-
+  public async cloneFromGithub(info: GithubRepository, directory: string, progressUpdater?: (percent: number) => void) {
     try {
-      const repo = await clone(info.clone_url, directory, this.userService.getUser(), SSH, setPercentage);
+      const repo = await clone(info.clone_url, directory, this.userService.getUser(), progressUpdater);
 
       return {
         name: info.name,
@@ -112,7 +108,7 @@ export class RepositoryListService implements OnDestroy {
 
   private async loadOnlineRepositories(user: User) {
     let githubs = [];
-    if(user !== null && user.authenticated) {
+    if(user !== null && user.isAuthenticated()) {
       logger.info("Loading github repositories...");
       githubs = await getOwnedGithubRepositories(user);
     }

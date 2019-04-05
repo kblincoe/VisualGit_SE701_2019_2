@@ -1,11 +1,12 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Subscription } from 'rxjs';
 
-import { logger } from 'logger';
 import * as nodegit from 'nodegit';
 
 import { RepositoryService } from 'services/repository';
-import { WorkingDirectoryService } from 'services/working.directory';
+import WorkingDirectory from 'model/repository/working-directory';
+import { logger } from 'logger';
+import RepoHistory from 'model/repository/history';
 
 @Component({
   selector: "app-repository-screen",
@@ -14,38 +15,36 @@ import { WorkingDirectoryService } from 'services/working.directory';
 })
 export class RepositoryComponent implements OnInit, OnDestroy {
   public constructor(
-    private workingDirectoryService: WorkingDirectoryService
+    private repositoryService: RepositoryService
   ) {}
 
   public ngOnInit() {
-    this.subscription.add(
-      this.workingDirectoryService.observeChanges().subscribe(this.onChange.bind(this))
-    );
+    this.subscription = this.repositoryService.repository.subscribe(repo => {
+      if(repo === null) {
+        logger.error("Should not be on the repo page if the repo is null");
+      }
+      else {
+        this.workingDirectory = repo.workingDirectory;
+        this.history = repo.history;
+        this.selectedPatch = null;
+        this.selectedPrePatch = null;
+      }
+    });
   }
   public ngOnDestroy() {
     this.subscription.unsubscribe();
   }
 
-  displayFile(file: nodegit.ConvenientPatch) {
-    this.selectedFile = file;
+  displayFile({patch, prePatch}: {patch: nodegit.ConvenientPatch, prePatch?: nodegit.ConvenientPatch}) {
+    this.selectedPatch = patch;
+    this.selectedPrePatch = prePatch;
   }
 
-  private async onChange(changes: nodegit.ConvenientPatch[]) {
-    // Get the changed files in this branch
-    this.changes = changes;
+  workingDirectory: WorkingDirectory = null;
+  history: RepoHistory = null;
 
-    // Try to find a new patch that is on the same file as the old one. Defaults to null if not.
-    if(changes != null && changes.length > 0 && this.selectedFile != null) {
-      const newPatch = changes.find(patch => patch.newFile().path() === this.selectedFile.newFile().path());
-      this.selectedFile = newPatch;
-    } else {
-      this.selectedFile = null;
-    }
-  }
+  selectedPatch: nodegit.ConvenientPatch = null;
+  selectedPrePatch: nodegit.ConvenientPatch = null;
 
-  changes: nodegit.ConvenientPatch[] = [];
-  selectedFile: nodegit.ConvenientPatch = null;
-  selectedPath: string = null;
-
-  private subscription: Subscription = new Subscription();
+  private subscription: Subscription = null;
 }

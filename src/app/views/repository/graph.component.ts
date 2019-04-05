@@ -1,10 +1,11 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from "@angular/core";
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Input, OnChanges } from "@angular/core";
 import { Subscription } from 'rxjs';
-import { Repository } from 'model/repository';
 
 import * as nodegit from 'nodegit';
 import * as vis from 'vis';
 
+import RepoHistory from 'model/repository/history';
+import { Repository } from 'model/repository';
 import { RepositoryService } from 'services/repository';
 import { logger } from 'logger';
 
@@ -13,30 +14,27 @@ import { logger } from 'logger';
   templateUrl: "graph.component.html",
   styleUrls: ["graph.component.scss"]
 })
-export class GraphPanelComponent implements OnInit, OnDestroy {
-  public constructor(
-    private repositoryService: RepositoryService
-  ) {}
+export class GraphPanelComponent implements OnInit, OnDestroy, OnChanges {
+  @Input() history: RepoHistory;
 
   public ngOnInit() {
-    this.subscription = this.repositoryService.observeRepository().subscribe(this.recalculateGraph.bind(this));
+    if(this.history)
+      this.subscription = this.history.commits.subscribe(this.recalculateGraph.bind(this));
+  }
+  public ngOnChanges() {
+    if(this.history)
+      this.subscription = this.history.commits.subscribe(this.recalculateGraph.bind(this));
   }
   public ngOnDestroy() {
-    this.subscription.unsubscribe();
+    if(this.subscription)
+      this.subscription.unsubscribe();
   }
 
-  private async recalculateGraph(repo: Repository) {
-    if(repo === null)
-      return;
+  private async recalculateGraph(commits: nodegit.Commit[]) {
+    logger.info("Recalculating graph");
 
     const nodes: vis.Node[] = [];
     const edges: vis.Edge[] = [];
-
-    // Walk every commit
-    repo.local.head();
-    const walker = await nodegit.Revwalk.create(repo.local);
-    walker.pushGlob("refs/heads/*");
-    const commits: nodegit.Commit[] = await walker.getCommitsUntil(c => true);
 
     for(const commit of commits) {
       if(nodes.length > 100)

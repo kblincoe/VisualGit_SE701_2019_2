@@ -1,35 +1,50 @@
-<form class="file-panel" [formGroup]="commitForm" (submit)="commit()">
+<div class="file-panel">
+  <!-- List of staged changes -->
+  <div class="files-changed">
+    <h5 class="header">staged</h5>
 
-  <!-- Select all modified files -->
-  <div class="form-check modified-files-header">
-    <input (click)="toggleAll()" type="checkbox" class="form-check-input" formControlName="selectAll"/>
-    <label class="form-check-label">Select all</label>
-  </div>
+    <p class="empty-message" *ngIf="!(staged)">Your staged files will appear here</p>
 
-  <!-- The list of files changed, along with checkboxes controlling them -->
-  <!-- Unfortunately we cant use a radio group due to the nesting, so have to roll our own -->
-  <div class="files-changed" formArrayName="staging">
-    <p class="modified-files-message" [hidden]="changes.length > 0">Your modified files will appear here</p>
-
-    <!-- Per file -->
-    <div class="input-group" *ngFor="let change of changes; let i = index">
-      <!-- Staging checker -->
+    <!-- Each row -->
+    <div [ngClass]="['input-group', patchType(patch)]" *ngFor="let patch of staged; let i = index">
+      <!-- Unstage button -->
       <div class="input-group-prepend">
-        <div class="input-group-text"><input type="checkbox" [formControlName]="i" (click)="stage(change)"/></div>
+        <button class="btn btn-outline-secondary" type="button" (click)="unstage(patch)">&#9660;</button> <!-- Down arrow -->
       </div>
 
       <!-- Select file button. Uses radios for toggling capability (i.e. only one file can be selected at a time) -->
-      <label [ngClass]="['btn', 'btn-secondary', 'shadow-none', patchTypes.get(change)]" [class.active]="selected.value === change" (click)="displayFile.emit(change)">
-        {{change.newFile().path()}}
-        <input type="radio" [formControl]="selected" [value]="change">
+      <label class="btn btn-secondary shadow-none" [class.active]="selected.value === patch">
+        {{patch.newFile().path()}}
+        <input type="radio" [formControl]="selected" [value]="patch">
+      </label>
+    </div>
+  </div>
+
+  <!-- List of unstaged changes -->
+  <!-- Unfortunately we cant use a radio group due to the nesting, so have to roll our own -->
+  <div class="files-changed">
+    <h5 class="header">unstaged</h5>
+
+    <p class="empty-message" *ngIf="!(unstaged)">Your modified files will appear here</p>
+
+    <!-- Each row -->
+    <div [ngClass]="['input-group', patchType(patch)]" *ngFor="let patch of unstaged; let i = index">
+      <!-- Stage button -->
+      <div class="input-group-prepend">
+          <button class="btn btn-outline-secondary" type="button" (click)="stage(patch)">&#9650;</button> <!-- Up arrow -->
+      </div>
+
+      <!-- Select file button. Uses radios for toggling capability (i.e. only one file can be selected at a time) -->
+      <label class="btn btn-secondary shadow-none" [class.active]="selected.value === patch">
+        {{patch.newFile().path()}}
+        <input type="radio" [formControl]="selected" [value]="patch">
       </label>
     </div>
 
   </div>
 
   <div class="commit-panel align-bottom">
-    <textarea class="commit-message-input" placeholder="Describe your changes here..." formControlName="commitMessage"></textarea>
-    <button type="submit" class="commit-button" (click)="commit()">Commit</button>
+    <textarea class="commit-message-input" placeholder="Describe your changes here..." [formControl]="commitMessage"></textarea>
+    <button type="button" class="commit-button" (click)="commit()">Commit</button>
   </div>
-
-</form>
+</div>
