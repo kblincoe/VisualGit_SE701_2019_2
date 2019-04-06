@@ -86,7 +86,7 @@ export class FilePanelComponent implements OnInit, OnDestroy, OnChanges {
   async unstageAll() {
     // Collect all staged files
     const files = this.staged.reduce((acc, change) => ([...acc, change.newFile().path(), change.oldFile().path()]), []);
-    await this.workingDirectory.stage([...new Set(files)]);
+    await this.workingDirectory.unstage([...new Set(files)]);
   }
 
   async commit() {
