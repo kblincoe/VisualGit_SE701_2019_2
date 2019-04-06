@@ -24,6 +24,7 @@
     flex: 1 1 auto;
 
     .header {
+      flex: 1 1 auto;
       text-align: center;
 
       margin: 0;
@@ -120,6 +121,16 @@
     }
   }
 
+}
+
+// For the header row for staged files
+.staged-files-header {
+  display: flex;
+  flex-direction: row;
+}
+.stage-all-btn{
+  margin-right: 0px;
+  flex: initial;
 }
 
 // For the file selection lines
