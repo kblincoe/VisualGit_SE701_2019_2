@@ -7,7 +7,8 @@
   </button>
 
   <!-- Screen selection -->
-  <button class="icon-btn"><img src="./assets/AddRepositoryFolder.svg" (click)="gotoAddRepository()" class="icon" title="Add Repository"></button>
+  <button class="icon-btn"><img src="./assets/AddRepositoryFolder.svg" (click)="gotoAddRepository()" class="icon"
+      title="Add Repository"></button>
 
   <!-- Collapsible menu giving options for repository management -->
   <!-- NOTE: Uses https://getbootstrap.com/docs/4.0/components/navbar/ -->
@@ -43,23 +44,28 @@
 
     <!-- Repo Github options. Presented as icons, on far left. -->
     <div class="navbar-nav ml-auto" [hidden]="!currentRepo">
-      <button class="icon-btn" (click)="push()">  <img class="icon" src="./assets/push.svg"           title="Push"> </button>
-      <button class="icon-btn" (click)="pull()">  <img class="icon" src="./assets/pull.svg"           title="Pull"> </button>
-      <button class="icon-btn" (click)="clean()"> <img class="icon" src="./assets/Clean-Dark.svg"     title="Clean"></button>
-      <button class="icon-btn" (click)="sync()">  <img class="icon" src="./assets/refresh-button.png" title="Sync"> </button>
+      <button class="icon-btn" (click)="toggleTag()"> <img class="icon" src="./assets/Tag.svg" title="Tag"> </button>
+      <button class="icon-btn" (click)="push()"> <img class="icon" src="./assets/push.svg" title="Push"> </button>
+      <button class="icon-btn" (click)="pull()"> <img class="icon" src="./assets/pull.svg" title="Pull"> </button>
+      <button class="icon-btn" (click)="clean()"> <img class="icon" src="./assets/Clean-Dark.svg"
+          title="Clean"></button>
+      <button class="icon-btn" (click)="sync()"> <img class="icon" src="./assets/refresh-button.png" title="Sync">
+      </button>
     </div>
 
-    <li ngbDropdown *ngIf="userIconUrl" placement="bottom-right" class= "navbar-nav user-menu">
-        <button ngbDropdownToggle *ngIf="userIconUrl" class="icon-btn"><img class="icon" [src]="userIconUrl"></button>
-        <div ngbDropdownMenu>
-            <!--<span ngbDropdownItem disabled>{{userService.getUser().name}}</span>-->
-            <!-- Need to replace guest user's URL as "/<Default name>"-->
-            <span ngbDropdownItem disabled>Signed in as <b>{{this.username}}</b></span>
-            <button ngbDropdownItem (click)="toggleHelp()">Help</button>
-            <button ngbDropdownItem (click)="toggleSetting()">Setting</button>
-            <button ngbDropdownItem (click)="toggleLog()">{{loggedIn ? "Logout" : "Login"}}</button>
-        </div>
+    <li ngbDropdown *ngIf="userIconUrl" placement="bottom-right" class="navbar-nav user-menu">
+      <button ngbDropdownToggle *ngIf="userIconUrl" class="icon-btn"><img class="icon" [src]="userIconUrl"></button>
+      <div ngbDropdownMenu>
+        <!--<span ngbDropdownItem disabled>{{userService.getUser().name}}</span>-->
+        <!-- Need to replace guest user's URL as "/<Default name>"-->
+        <span ngbDropdownItem disabled>Signed in as <b>{{this.username}}</b></span>
+        <button ngbDropdownItem (click)="toggleHelp()">Help</button>
+        <button ngbDropdownItem (click)="toggleSetting()">Setting</button>
+        <button ngbDropdownItem (click)="toggleLog()">{{loggedIn ? "Logout" : "Login"}}</button>
+      </div>
     </li>
 
   </div>
 </nav>
+
+<app-header-tags #tags></app-header-tags>

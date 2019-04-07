@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppRoutingModule } from './views/app-routing.module';
 
@@ -17,6 +17,7 @@ import { GraphPanelComponent } from './views/repository/graph.component';
 import { HeaderComponent } from './views/header/component';
 import { ProgressbarComponent } from "views/select/progressbar.component";
 import { ErrorContentComponent } from './services/error.service';
+import { TagsComponent } from 'views/header/tags.component';
 
 @NgModule({
   declarations: [
@@ -30,9 +31,10 @@ import { ErrorContentComponent } from './services/error.service';
     FooterComponent,
     GraphPanelComponent,
     HeaderComponent,
-    ErrorContentComponent
+    ErrorContentComponent,
+    TagsComponent
   ],
-  entryComponents: [ErrorContentComponent],
+  entryComponents: [ErrorContentComponent, TagsComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -42,4 +44,4 @@ import { ErrorContentComponent } from './services/error.service';
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

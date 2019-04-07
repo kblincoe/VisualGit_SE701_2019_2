@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, NgZone } from "@angular/core";
+import { Component, OnInit, OnDestroy, NgZone, ViewChild } from "@angular/core";
 import { Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
@@ -11,6 +11,7 @@ import { UserService } from 'services/user';
 import { logger } from 'logger';
 import { Repository } from 'model/repository';
 import { ErrorService } from "services/error.service";
+import { TagsComponent } from './tags.component';
 
 @Component({
   selector: "app-header",
@@ -129,6 +130,10 @@ export class HeaderComponent implements OnInit, OnDestroy  {
     throw new Error("Not implemented");
   }
 
+  toggleTag() {
+    this.tags.open();
+  }
+
   /**
    * Taking a branch name from the form control,
    * prompts? whether the user wants to create that branch, does so,
@@ -217,6 +222,8 @@ export class HeaderComponent implements OnInit, OnDestroy  {
       this.branches = [];
     }
   }
+
+  @ViewChild('tags') tags: TagsComponent;
 
   currentRepo: string;
   repositories: RepositoryInfo[] = [];
