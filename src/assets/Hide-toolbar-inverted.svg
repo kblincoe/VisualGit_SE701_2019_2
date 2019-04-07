@@ -1,0 +1,17 @@
+<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+
+ <g>
+  <title>background</title>
+  <rect fill="none" id="canvas_background" height="26" width="26" y="-1" x="-1"/>
+ </g>
+ <g>
+  <title>Layer 1</title>
+  <ellipse ry="5.632823" rx="10.744089" id="svg_3" cy="12" cx="12" stroke-opacity="null" stroke-width="null" stroke="null" fill="#ffffff"/>
+  <ellipse stroke="null" ry="4" rx="4" id="svg_8" cy="12.000001" cx="12" stroke-opacity="null" stroke-width="null" fill="#000000"/>
+  <ellipse stroke="null" ry="2" rx="2" id="svg_9" cy="12.000001" cx="12" stroke-opacity="null" stroke-width="null" fill="#ffffff"/>
+  <g id="svg_25">
+   <path stroke="null" transform="rotate(45 11.72183322906495,11.629304885864254) " id="svg_23" d="m11.336536,0.349854l0.770596,0l0,22.558899l-0.770596,0l0,-22.558899z" stroke-opacity="null" stroke-width="null" fill="#000000"/>
+   <path stroke="null" transform="rotate(45 12.2781629562378,12.18562889099121) " id="svg_24" d="m11.892863,0.906179l0.7706,0l0,22.5589l-0.7706,0l0,-22.5589z" stroke-opacity="null" stroke-width="null" fill="#ffffff"/>
+  </g>
+ </g>
+</svg>
