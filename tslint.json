@@ -25,8 +25,7 @@
       {
         "order": [
           "static-field",
-          "static-method",
-          "instance"
+          "static-method"
         ]
       }
     ],
