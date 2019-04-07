@@ -98,8 +98,9 @@ export class DiffPanelComponent implements OnChanges {
       logger.warn("We should not be showing full contents of files this large (" + newFileLines.length + " lines)");
     }
 
-    let newFileEnd = 0;
-    let oldFileEnd = 0;
+    // Line numbers start at 1
+    let newFileEnd = 1;
+    let oldFileEnd = 1;
 
     let contentLines: LineInfo[] = [];
 
@@ -126,8 +127,8 @@ export class DiffPanelComponent implements OnChanges {
 
       // Add missing lines
       if(newFileEnd < hunk.newStart()) {
-        contentLines = contentLines.concat(
-          newFileLines.slice(newFileEnd, hunk.newStart()).map(text => ({text, type: defaultType}))
+        contentLines = contentLines.concat( // Subtract 1 to get our actual file lines
+          newFileLines.slice(newFileEnd - 1, hunk.newStart() - 1).map(text => ({text, type: defaultType}))
         );
       }
 
@@ -167,8 +168,8 @@ export class DiffPanelComponent implements OnChanges {
     }
 
     // And go to past end of hunks
-    contentLines = contentLines.concat(
-      newFileLines.slice(newFileEnd).map(text => ({text, type: defaultType}))
+    contentLines = contentLines.concat( // Subtract 1 to get our actual file lines
+      newFileLines.slice(newFileEnd - 1).map(text => ({text, type: defaultType}))
     );
 
     this.lines = contentLines;
