@@ -3,7 +3,7 @@
 
   <!-- Navbar expansion button -->
   <button type="button" class="icon-btn expansion-btn" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="navbar">
-    <img class="icon" src="./assets/RightArrow.svg">
+    <img class="icon" [src]="isCollapsed ? './assets/Show-toolbar-inverted.svg' : './assets/Hide-toolbar-inverted.svg'">
   </button>
 
   <!-- Screen selection -->
