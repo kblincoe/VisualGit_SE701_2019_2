@@ -1,6 +1,6 @@
 import { Component, NgZone, OnInit, OnDestroy, ViewChild } from "@angular/core";
 import { FormControl, Validators, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import * as path from 'path';
@@ -14,6 +14,7 @@ import { UserService } from 'services/user';
 
 import { ProgressbarComponent } from './progressbar.component';
 import { ErrorService } from "services/error.service";
+import { take, map } from 'rxjs/operators';
 
 @Component({
   selector: "app-select-screen",
@@ -29,13 +30,28 @@ export class SelectRepositoryComponent implements OnInit, OnDestroy {
     private repositoriesService: RepositoryListService,
     private repositoryService: RepositoryService,
     private ngZone: NgZone,
-    private errorService: ErrorService
-  ) {}
+    private errorService: ErrorService,
+    private route: ActivatedRoute
+  ) {
+
+  }
   public ngOnInit() {
-    this.subscription = this.cloneUrlForm.valueChanges.subscribe(this.onCloneUrlUpdate.bind(this));
+    this.subscription.add(this.cloneUrlForm.valueChanges.subscribe(this.onCloneUrlUpdate.bind(this)));
+    this.subscription.add(this.route.queryParams.subscribe((params) => {this.setGitHubURLName(params)}));
+
   }
   public ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  //Sets the github url field when users select a repo from the header button
+  async setGitHubURLName(params : Params) {
+
+    var value = params['clone_url'];
+    if (value !== undefined) {
+      this.cloneUrlForm.setValue("https://github.com/" + value + ".git");
+    }    
+
   }
 
   async chooseCloneDirectory() {
@@ -192,5 +208,5 @@ export class SelectRepositoryComponent implements OnInit, OnDestroy {
   }
 
   private cloneName = "repo-name";
-  private subscription: Subscription;
+  private subscription: Subscription = new Subscription();
 }

@@ -22,7 +22,7 @@ export class RepositoryService implements OnDestroy {
   ) {
     this.repository = this.repositorySubject.asObservable();
 
-    // Refresh every 3 seconds
+    // Refresh every 3 seconds 
     this.subscription =
       combineLatest(this.repository, interval(REFRESH_RATE))
       .subscribe( ([repo, _]) => repo ? repo.refresh() : null );
@@ -47,4 +47,5 @@ export class RepositoryService implements OnDestroy {
 
   private repositorySubject = new BehaviorSubject(null as Repository);
   private subscription: Subscription;
+  
 }
