@@ -1,9 +1,9 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, NgZone } from "@angular/core";
 import { Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { RepositoryInfo, RepositoryListService } from 'services/repository.list';
 import { RepositoryService } from 'services/repository';
@@ -24,7 +24,8 @@ export class HeaderComponent implements OnInit, OnDestroy  {
     private userService: UserService,
     private repositoriesService: RepositoryListService,
     private repositoryService: RepositoryService,
-    private errorService: ErrorService
+    private errorService: ErrorService,
+    private ngZone: NgZone
   ) {}
 
   public ngOnInit() {
@@ -62,17 +63,30 @@ export class HeaderComponent implements OnInit, OnDestroy  {
   async selectRepository(repo: RepositoryInfo) {
     let usableRepo;
     if(!repo.local) {
-      // Here is where a directory selection modal would be created if we had one
-      throw new Error("Modals not implemented, cannot determine directory to clone repo into");
-      const directory = null;
+      //Changes to select router if currently not on clone screen
+      if (this.router.url !== '/select') {
+        this.ngZone.run(() => this.router.navigate(['/select'], {queryParams: { clone_url: repo.uniqueName } }));
+      }
+      else {
+        //Else do from whats said in 
+        //this link https://stackoverflow.com/questions/43698032/angular-how-to-update-queryparams-without-changing-route
+        this.router.navigate(
+          [], { 
+            queryParams: {
+              clone_url: repo.uniqueName
+            }
+          });
+      }
 
-      usableRepo = await this.repositoriesService.cloneFromGithub(repo.github, directory);
     }
-    else
+    else {
       usableRepo = repo;
+      await this.repositoryService.select(usableRepo);
+      await this.router.navigate(['/repo']);
 
-    await this.repositoryService.select(usableRepo);
-    await this.router.navigate(['/repo']);
+    }
+     
+    
   }
   /**
    * Select a branch.
