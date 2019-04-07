@@ -1,0 +1,88 @@
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Tags</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="tag-table table-responsive">
+            <table class="table table-striped table-sm">
+                <thead>
+                    <tr>
+                        <th>
+                            Commit ID
+                        </th>
+                        <th>
+                            Tags
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let commit of tagMap | keyvalue">
+                        <ng-container *ngIf="commit.value.toString()">
+                            <td>
+                                {{commit.key.getId()}}
+                            </td>
+                            <td>
+                                {{commit.value.toString()}}
+                            </td>
+                        </ng-container>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <ngb-tabset>
+            <ngb-tab title="Add Tag">
+                <ng-template ngbTabContent>
+                    <form class="tag-form" [formGroup]="addTagForm">
+                        <label class="row">
+                            Tag Name:
+                            <input class="form-control" type="text" formControlName="tagName">
+                        </label>
+                        <label class="row">
+                            Commit:
+                            <select class="form-control" formControlName="commitList">
+                                <option *ngFor="let commit of commits" [ngValue]="commit">
+                                    ID: {{commit.getId()}}
+                                </option>
+                            </select>
+                        </label>
+                    </form>
+                    <button [disabled]="addTagForm.invalid"
+                        type="button" class="add-tag-button btn btn-success" (click)="addTag()">
+                        Add Tag
+                    </button>
+                </ng-template>
+            </ngb-tab>
+            <ngb-tab title="Remove Tag">
+                <ng-template ngbTabContent>
+                    <form class="tag-form" [formGroup]="removeTagForm">
+                        <label class="row">
+                            Commit:
+                            <select class="form-control" formControlName="commitList">
+                                <option *ngFor="let commit of commits" [ngValue]="commit">
+                                    ID: {{commit.getId()}}
+                                </option>
+                            </select>
+                        </label>
+                        <label class="row">
+                            Tag:
+                            <select class="form-control"
+                                formControlName="tagName">
+                                <option *ngFor="let tag of tagMap.get(removeTagForm.get('commitList').value)"
+                                    [ngValue]="tag">
+                                    {{tag}}
+                                </option>
+                            </select>
+                        </label>
+                    </form>
+                    <button [disabled]="removeTagForm.invalid"
+                        type="button" class="remove-tag-button btn btn-danger" (click)="removeTag()">
+                        Remove Tag
+                    </button>
+                </ng-template>
+            </ngb-tab>
+        </ngb-tabset>
+    </div>
+</ng-template>

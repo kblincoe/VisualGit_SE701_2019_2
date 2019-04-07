@@ -10,6 +10,7 @@ import WorkingDirectory from './working-directory';
 import RepoHistory from './history';
 
 import { GithubRepository } from '../repositories';
+import Commit from './commit';
 
 export class BranchNotFoundError extends Error {}
 
@@ -113,6 +114,10 @@ export class Repository {
         workdir.endsWith(separator) ? workdir.length - 1 : workdir.length
       );
     }
+  }
+
+  public getCommit(commit: nodegit.Commit) {
+    return new Commit(this.git, commit);
   }
 
   public hasChanges() {

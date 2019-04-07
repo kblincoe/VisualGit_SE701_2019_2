@@ -1,0 +1,22 @@
+.tag-table {
+    max-height: 300px;
+}
+
+.tag-form {
+    padding: 10px;
+
+    .row {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    input,select {
+        width: 80%;
+        height: 40px;
+    }
+}
+
+.btn {
+    float: right;
+}
