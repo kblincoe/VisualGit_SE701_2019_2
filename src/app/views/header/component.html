@@ -19,7 +19,7 @@
       <li [hidden]="!currentRepo && !repositories"><img src="./assets/RightArrow.svg" class="right-arrow"></li>
       <li ngbDropdown class="nav-item" [hidden]="!currentRepo && !repositories">
         <button ngbDropdownToggle class="dropdown-btn">{{currentRepo || "repository"}}</button>
-        <div ngbDropdownMenu>
+        <div ngbDropdownMenu class="scrollable-menu">
           <button ngbDropdownItem *ngFor="let repo of repositories" (click)="selectRepository(repo)">{{repo.uniqueName}}</button>
         </div>
       </li>
@@ -29,12 +29,12 @@
       <!-- Branch list -->
       <li ngbDropdown class="nav-item" [hidden]="!currentRepo">
         <button ngbDropdownToggle class="dropdown-btn">{{currentBranch || "branch"}}</button>
-        <div ngbDropdownMenu>
+        <div ngbDropdownMenu class="scrollable-menu">
           <div ngbDropdownItem>
-            <input type="text" class="form-control" [formControl]="branchCreationName" placeholder="Search or create branch">
-            <span class="input-group-btn">
-              <button class="btn btn-default" type="button" (click)="createBranch()">OK</button>
-            </span>
+            <div>
+              <input type="text" class="form-group" [formControl]="branchCreationName" placeholder="Search or create branch">
+              <button class="btn btn-color" type="button" (click)="createBranch()">OK</button>
+            </div>
           </div>
           <button ngbDropdownItem *ngFor="let branch of branches" (click)="selectBranch(branch)">{{branch}}</button>
         </div>
