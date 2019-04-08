@@ -1,4 +1,4 @@
-import { app, dialog, shell, Menu, BrowserWindow } from 'electron';
+import { app, dialog, shell, Menu, BrowserWindow, nativeImage } from 'electron';
 
 // Using the theme enum to get available themes
 import { Theme } from './app/model/themes';
@@ -24,11 +24,12 @@ function onClosed() {
 }
 
 function createMainWindow() {
+  var iconImg = nativeImage.createFromPath('src/assets/vg_icon.png');
   const win = new BrowserWindow({
     backgroundColor : "#000",
     minHeight: 750,
     minWidth: 1175,
-    icon: __dirname + 'src/assets/VisualGit_Logo.png'
+    icon: iconImg
   });
 
 
