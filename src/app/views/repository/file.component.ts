@@ -16,7 +16,7 @@ enum PatchType {
 }
 
 function changesEqual(a: nodegit.ConvenientPatch, b: nodegit.ConvenientPatch) {
-  return a.newFile().path() === b.newFile().path()
+  return a.newFile().path() === b.newFile().path();
 }
 
 @Component({
