@@ -28,14 +28,12 @@
       <li [hidden]="!currentRepo"><img src="./assets/RightArrow.svg" class="right-arrow"></li>
 
       <!-- Branch list -->
-      <li ngbDropdown class="nav-item" [hidden]="!currentRepo">
+      <li ngbDropdown autoClose="outside" class="nav-item" [hidden]="!currentRepo" >
         <button ngbDropdownToggle class="dropdown-btn">{{currentBranch || "branch"}}</button>
-        <div ngbDropdownMenu class="scrollable-menu">
-          <div ngbDropdownItem>
-            <div>
-              <input type="text" class="form-group" [formControl]="branchCreationName" placeholder="Search or create branch">
-              <button class="btn btn-color" type="button" (click)="createBranch()">OK</button>
-            </div>
+        <div ngbDropdownMenu class="scrollable-menu" >
+          <div ngbDropdownItem >
+            <input type="text" class="form-group" [(ngModel)]="createBranchInput" [formControl]="branchCreationName" placeholder="Create branch">
+            <button class="btn btn-color" type="button" (click)="createBranch()">OK</button>
           </div>
           <button ngbDropdownItem *ngFor="let branch of branches" (click)="selectBranch(branch)">{{branch}}</button>
         </div>

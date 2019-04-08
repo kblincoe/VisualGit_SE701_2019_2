@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, NgZone, ViewChild } from "@angular/core";
 import { Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Subscription, config } from 'rxjs';
 
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -16,7 +16,7 @@ import { TagsComponent } from './tags.component';
 @Component({
   selector: "app-header",
   templateUrl: "component.html",
-  styleUrls: ["component.scss"]
+  styleUrls: ["component.scss"],
 })
 export class HeaderComponent implements OnInit, OnDestroy  {
   public constructor(
@@ -45,6 +45,7 @@ export class HeaderComponent implements OnInit, OnDestroy  {
     this.subscription.add(
       this.repositoryService.repository.subscribe(this.onRepoChange.bind(this))
     );
+
   }
   public ngOnDestroy() {
     this.subscription.unsubscribe();
@@ -94,7 +95,7 @@ export class HeaderComponent implements OnInit, OnDestroy  {
    * Same rules as normal for branch selection
    */
   async selectBranch(branch: string) {
-    try {
+    try {   
       this.repositoryService.current().checkout(branch);
     } catch(error) {
       logger.info("Selecting branch failed:");
@@ -141,6 +142,7 @@ export class HeaderComponent implements OnInit, OnDestroy  {
    */
   async createBranch() {
     try {
+      this.createBranchInput = "";
       await this.repositoryService.current().createBranch(this.branchCreationName.value);
     } catch(error) {
       logger.info("Error trying to create branch: ");
@@ -225,6 +227,8 @@ export class HeaderComponent implements OnInit, OnDestroy  {
 
   @ViewChild('tags') tags: TagsComponent;
 
+  createBranchInput: string;
+  
   currentRepo: string;
   repositories: RepositoryInfo[] = [];
 
