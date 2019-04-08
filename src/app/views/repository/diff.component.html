@@ -1,6 +1,8 @@
 <div class="diff-panel">
   <div class="diff-panel-body">
-    <p *ngFor="let line of lines" [className]="line.type.toString()">{{line.text}}</p>
+    <ol>
+    <p *ngFor="let line of lines" [className]="line.type.toString()"><li>{{line.text}}</li></p>
+    </ol>
   </div>
 
   <div class="diff-panel-buttons">
