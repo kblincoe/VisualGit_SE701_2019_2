@@ -234,9 +234,9 @@ git add .
 git commit -m “This commit will add contributing guidelines to the README”
 ````
 
-Ensuring that you’re in your local branch, rebase to update it with changes from upstream. Remember to rebase often.
+Rebase your forks master branch to update it with changes from upstream. Remember to rebase often.
 ````
-git checkout NewBranch
+git checkout master
 git fetch upstream
 git rebase upstream/master
 ````
@@ -246,21 +246,24 @@ If the rebase command results in conflicts, solve these and then:
 git rebase --continue
 ````
 
-Once you are done with your doc update, feature or bug fix, you must squash your commits if you have more than 1, before submitting a pull request. Replace n with the last number of commits you want to review.
+Once you are done with your doc update, feature or bug fix, you must squash your commits if you have more than 1, before submitting a pull request. Ensure your branch is up to date with the master branch, then use the following commands:
 ````
-git rebase -i HEAD~n
+git checkout <Your feature branch>
+git rebase -i master
+````
+Again, if the rebase command results in conflicts, solve these and then:
+````
+git rebase --continue
 ````
 
-An interactive text editor will pop up. Leave the first commit as ‘pick’ and replace the ‘pick’ in the other commits with ‘squash.’ You can replace that first ‘pick’ with ‘reword’ if you need to edit the commit message that will be used. The commit message that will be used should make sense with the prefix "This commit will" and should describe the issue e.g. "This commit will update documentation” makes sense so the commit message should be "Update Documentation". Save and exit the editor.
+
+An interactive text editor will pop up. By default the editor is [Vim](https://coderwall.com/p/adv71w/basic-vim-commands-for-getting-started).
+Leave the first commit as ‘pick’ and replace the ‘pick’ in the other commits with ‘squash.’ You can replace that first ‘pick’ with ‘reword’ if you need to edit the commit message that will be used. The commit message that will be used should make sense with the prefix "This commit will" and should describe the issue e.g. "This commit will update documentation” makes sense so the commit message should be "Update Documentation". Save and exit the editor.
 If you select ‘reword’, you’ll be prompted to enter your new commit message in an editor. Save and close, and then close any rebase files that open after that to finish squashing.
 
-After your commits have been squashed, push your changes to the remote fork.
+Then you have to force push your final, squashed commit to the remote fork.
 ````
-git push origin NewBranch
-````
-or if that doesn't work...
-````
-git push --force-with-lease origin NewBranch
+git push -f
 ````
 
 
