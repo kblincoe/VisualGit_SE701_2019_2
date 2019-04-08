@@ -65,15 +65,15 @@ export class HeaderComponent implements OnInit, OnDestroy  {
   async selectRepository(repo: RepositoryInfo) {
     let usableRepo;
     if(!repo.local) {
-      //Changes to select router if currently not on clone screen
+      // Changes to select router if currently not on clone screen
       if (this.router.url !== '/select') {
         this.ngZone.run(() => this.router.navigate(['/select'], {queryParams: { clone_url: repo.uniqueName } }));
       }
       else {
-        //Else do from whats said in 
-        //this link https://stackoverflow.com/questions/43698032/angular-how-to-update-queryparams-without-changing-route
+        // Else do from whats said in
+        // this link https://stackoverflow.com/questions/43698032/angular-how-to-update-queryparams-without-changing-route
         this.router.navigate(
-          [], { 
+          [], {
             queryParams: {
               clone_url: repo.uniqueName
             }
@@ -87,8 +87,8 @@ export class HeaderComponent implements OnInit, OnDestroy  {
       await this.router.navigate(['/repo']);
 
     }
-     
-    
+
+
   }
   /**
    * Select a branch.

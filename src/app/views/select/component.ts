@@ -37,20 +37,20 @@ export class SelectRepositoryComponent implements OnInit, OnDestroy {
   }
   public ngOnInit() {
     this.subscription.add(this.cloneUrlForm.valueChanges.subscribe(this.onCloneUrlUpdate.bind(this)));
-    this.subscription.add(this.route.queryParams.subscribe((params) => {this.setGitHubURLName(params)}));
+    this.subscription.add(this.route.queryParams.subscribe((params) => {this.setGitHubURLName(params); }));
 
   }
   public ngOnDestroy() {
     this.subscription.unsubscribe();
   }
 
-  //Sets the github url field when users select a repo from the header button
-  async setGitHubURLName(params : Params) {
+  // Sets the github url field when users select a repo from the header button
+  async setGitHubURLName(params: Params) {
 
-    var value = params['clone_url'];
+    const value = params.clone_url;
     if (value !== undefined) {
       this.cloneUrlForm.setValue("https://github.com/" + value + ".git");
-    }    
+    }
 
   }
 
