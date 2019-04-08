@@ -92,8 +92,8 @@ function createMenu() {
         click() { shell.openExternal('https://github.com/kblincoe/VisualGit_SE701/issues'); }
       },
       {
-        label: 'Offline Support',
-        click() { shell.openItem(__dirname + '/README.pdf');   }
+        label: 'User Guide',
+        click() { shell.openItem(__dirname + '/../UserGuide.pdf');   }
       },
       {type: 'separator'},
       {
