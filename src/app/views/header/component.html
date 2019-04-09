@@ -28,18 +28,8 @@
       <div [hidden]="!currentRepo"><img src="./assets/RightArrow.svg" class="right-arrow"></div>
 
       <!-- Branch list -->
-      <div ngbDropdown autoClose="outside" class="nav-item" [hidden]="!currentRepo" >
-        <button ngbDropdownToggle class="dropdown-btn">{{currentBranch || "branch"}}</button>
-        <div ngbDropdownMenu class="scrollable-menu" >
-          <div ngbDropdownItem >
-            <input type="text" class="form-group" [(ngModel)]="createBranchInput" [formControl]="branchCreationName" placeholder="Create branch">
-            <button class="btn btn-color" type="button" (click)="createBranch()">OK</button>
-          </div>
-          <button ngbDropdownItem *ngFor="let branch of branches" (click)="selectBranch(branch)">{{branch}}</button>
-        </div>
-      </div>
+      <button [hidden]="!currentRepo" class="btn branch-button-style" (click)="openBranchModal()">Current Branch: {{currentBranch || "branch"}}</button>
     </div>
-
     <!-- Repo Github options. Presented as icons, on far left. -->
     <div class="button-bar toolbar navbar-nav ml-auto" [hidden]="!currentRepo">
       <button class="icon-btn" (click)="toggleTag()"> <img class="icon" src="./assets/Tag.svg" title="Tag"> </button>
@@ -66,4 +56,5 @@
   </div>
 </nav>
 
+<app-header-branch #branch></app-header-branch>
 <app-header-tags #tags></app-header-tags>
