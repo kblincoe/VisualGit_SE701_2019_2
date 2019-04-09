@@ -21,6 +21,7 @@ import { TagsComponent } from 'views/header/tags.component';
 import { IFrameComponent } from "views/issuePage/component";
 import { NewIssueComponent } from "views/issuePage/createIssuePage/component";
 import { CommentIssueComponent } from "views/issuePage/commentIssuePanel/component";
+import { BranchComponent } from 'views/header/branch.component';
 
 @NgModule({
   declarations: [
@@ -38,9 +39,10 @@ import { CommentIssueComponent } from "views/issuePage/commentIssuePanel/compone
     GraphPanelComponent,
     HeaderComponent,
     ErrorContentComponent,
-    TagsComponent
+    TagsComponent,
+    BranchComponent
   ],
-  entryComponents: [ErrorContentComponent, TagsComponent],
+  entryComponents: [ErrorContentComponent, TagsComponent, BranchComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

@@ -47,5 +47,4 @@ export class RepositoryService implements OnDestroy {
 
   private repositorySubject = new BehaviorSubject(null as Repository);
   private subscription: Subscription;
-
 }

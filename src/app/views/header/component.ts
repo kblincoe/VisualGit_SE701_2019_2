@@ -12,6 +12,7 @@ import { logger } from 'logger';
 import { Repository } from 'model/repository';
 import { ErrorService } from "services/error.service";
 import { TagsComponent } from './tags.component';
+import { BranchComponent } from './branch.component';
 
 @Component({
   selector: "app-header",
@@ -45,7 +46,6 @@ export class HeaderComponent implements OnInit, OnDestroy  {
     this.subscription.add(
       this.repositoryService.repository.subscribe(this.onRepoChange.bind(this))
     );
-
   }
   public ngOnDestroy() {
     this.subscription.unsubscribe();
@@ -90,21 +90,6 @@ export class HeaderComponent implements OnInit, OnDestroy  {
 
 
   }
-  /**
-   * Select a branch.
-   * Same rules as normal for branch selection
-   */
-  async selectBranch(branch: string) {
-    try {   
-      this.repositoryService.current().checkout(branch);
-    } catch(error) {
-      logger.info("Selecting branch failed:");
-      logger.info(error);
-
-      // popup a modal to show the error message
-      this.errorService.displayError(error);
-    }
-  }
 
   /**
    * Logs in or out, depending on user state
@@ -134,24 +119,6 @@ export class HeaderComponent implements OnInit, OnDestroy  {
 
   toggleTag() {
     this.tags.open();
-  }
-
-  /**
-   * Taking a branch name from the form control,
-   * prompts? whether the user wants to create that branch, does so,
-   * then moves to that branch.
-   */
-  async createBranch() {
-    try {
-      this.createBranchInput = "";
-      await this.repositoryService.current().createBranch(this.branchCreationName.value);
-    } catch(error) {
-      logger.info("Error trying to create branch: ");
-      logger.info(error);
-
-      // popup a modal to show the error message
-      this.errorService.displayError(error);
-    }
   }
 
   /**
@@ -235,7 +202,12 @@ export class HeaderComponent implements OnInit, OnDestroy  {
     }
   }
 
+  openBranchModal() {
+    this.branch.open();
+  }
+
   @ViewChild('tags') tags: TagsComponent;
+  @ViewChild('branch') branch: BranchComponent;
 
   createBranchInput: string;
   
