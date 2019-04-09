@@ -1,0 +1,26 @@
+.issue-list-region{
+  border-radius: 5px;
+  margin-left: 2vh;
+  margin-top: 2vh;
+  height: 65vh;
+  width: 100%;
+  background-color: #404040;
+  overflow: auto;
+}
+.issue-button-region{
+  margin-top: 2vh;
+  height: 8vh;
+  width: 100%;
+}
+
+.issue-button{
+  float: right;
+  margin-top: 1vh;
+}
+
+.label {
+  display:block;
+  width:100%;
+  height:50%;
+  text-align:left;
+}
