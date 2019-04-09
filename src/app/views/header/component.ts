@@ -201,6 +201,15 @@ export class HeaderComponent implements OnInit, OnDestroy  {
       await this.push();
   }
 
+  async issue() {
+    try {
+      this.router.navigate(['/issues']);
+    }catch (e) {
+      throw new Error("Please Log in Before visualizing the issue");
+    }
+
+  }
+
   onRepoChange(repo: Repository) {
     this.repoSubscription.unsubscribe();
     // Took me an hour to find out that adding stuff after a call to unsubscribe does weird things,

@@ -18,11 +18,17 @@ import { HeaderComponent } from './views/header/component';
 import { ProgressbarComponent } from "views/select/progressbar.component";
 import { ErrorContentComponent } from './services/error.service';
 import { TagsComponent } from 'views/header/tags.component';
+import { IFrameComponent } from "views/issuePage/component";
+import { NewIssueComponent } from "views/issuePage/createIssuePage/component";
+import { CommentIssueComponent } from "views/issuePage/commentIssuePanel/component";
 
 @NgModule({
   declarations: [
     SelectRepositoryComponent,
     ProgressbarComponent,
+    IFrameComponent,
+    NewIssueComponent,
+    CommentIssueComponent,
     AppComponent,
     LoginComponent,
     RepositoryComponent,

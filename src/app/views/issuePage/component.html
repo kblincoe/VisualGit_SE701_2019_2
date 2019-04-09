@@ -1,0 +1,33 @@
+<!-- Back Button -->
+
+
+  <!-- New Issue Panel-->
+  <div class="issue-button-region">
+    <button class="back-button icon-btn" (click)="onBackBtnClicked()"><img class="icon" src="./assets/Back.svg"></button>
+    <button class="btn btn-primary issue-button" (click)="onNewIssueBtnClicked()">New Issue</button>
+  </div>
+
+  <!-- Issue List Panel -->
+  <div class="issue-list-region">
+    <div class="files-changed">
+
+      <!-- Each row -->
+      <div [ngClass]="['input-group']" *ngFor="let issue of issueArray; let i = index" style="margin-bottom: 1px">
+
+        <!-- Select file button. Uses radios for toggling capability (i.e. only one file can be selected at a time) -->
+        <button class="btn btn-secondary shadow-none" style="width: 100%" (click)="OnRowClicked(issue)">
+          <label class="label" style="font-size: large; font-weight: bold">
+            {{issue.title}}
+          </label>
+          <label class="label" style="font-size: small"> #{{issue.number}}: created at {{getIssueTime(issue)}} by {{issue.user.login}}</label>
+        </button>
+
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Create Issue Button Panel-->
+
+
