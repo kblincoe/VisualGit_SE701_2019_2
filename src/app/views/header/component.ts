@@ -112,6 +112,7 @@ export class HeaderComponent implements OnInit, OnDestroy  {
   toggleLog() {
     if(this.loggedIn) {  // Log out
       this.userService.logout();
+      this.currentRepo = null;
     }
     // Either way, go to login screen.
     this.router.navigate(['/login']);
