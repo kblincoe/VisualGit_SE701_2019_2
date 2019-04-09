@@ -48,11 +48,11 @@
     "github-avatar-url": "^2.0.0",
     "jquery": "^3.3.1",
     "jquery-contextmenu": "^2.8.0",
+    "konva": "^3.2.4",
     "nodegit": "^0.24.1",
     "popper.js": "^1.14.7",
     "rxjs": "~6.3.3",
     "tslib": "^1.9.0",
-    "vis": "^4.21.0",
     "winston": "^3.2.1",
     "zone.js": "~0.8.26"
   },

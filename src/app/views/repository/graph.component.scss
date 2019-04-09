@@ -9,7 +9,7 @@
 
   background-color: var(--background);
 
-  .network {
+  #network {
     width: 100%;
     height: 100%;
 
@@ -17,9 +17,4 @@
     padding: 0;
     background-color: var(--surface);
   }
-}
-
-#branchOptions {
-  position: absolute;
-  display:none;
 }

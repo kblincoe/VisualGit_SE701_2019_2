@@ -8,7 +8,7 @@ import { logger } from 'logger';
 
 const CREDENTIALS_FILE = './.app/credentials.json';
 const SECRET_PASS = "passphrase";
-const FILE_NOT_FOUND_ERRORCODE = "ENOENT"
+const FILE_NOT_FOUND_ERRORCODE = "ENOENT";
 
 export class CredentialsLoadError extends Error {}
 

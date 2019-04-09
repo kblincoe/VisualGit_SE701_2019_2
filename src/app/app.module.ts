@@ -12,6 +12,7 @@ import { FooterComponent } from './views/footer/component';
 import { RepositoryComponent } from './views/repository/component';
 import { FilePanelComponent } from './views/repository/file.component';
 import { GraphPanelComponent } from './views/repository/graph.component';
+import { GraphTooltipComponent } from 'views/repository/graph.tooltip.component';
 import { HeaderComponent } from './views/header/component';
 import { ProgressbarComponent } from "views/select/progressbar.component";
 import { ErrorContentComponent } from './services/error.service';
@@ -33,12 +34,13 @@ import { BranchComponent } from 'views/header/branch.component';
     RepositoryComponent,
     DiffPanelComponent,
     FilePanelComponent,
-    FooterComponent,
     GraphPanelComponent,
-    HeaderComponent,
+    GraphTooltipComponent,
     ErrorContentComponent,
     TagsComponent,
-    BranchComponent
+    BranchComponent,
+    FooterComponent,
+    HeaderComponent
   ],
   entryComponents: [ErrorContentComponent, TagsComponent, BranchComponent],
   imports: [

@@ -1,0 +1,25 @@
+.node-tooltip {
+  position: fixed;
+
+  z-index: 1080;
+
+  border: 4px solid var(--surface-highlight);
+  background-color: var(--surface);
+  color: var(--on-surface);
+}
+
+.modal-title {
+  font-size: 1em;
+}
+
+.modal-body p {
+  margin: 0.1em 0;
+  line-height: 1em;
+
+  font-size: 0.7em;
+  white-space: pre-line;
+}
+
+.author {
+  text-align: right;
+}

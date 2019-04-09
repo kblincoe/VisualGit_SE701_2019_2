@@ -40,8 +40,10 @@ export class Repository {
             return false;
           }
 
+          const aSorted = a.sort((x, y) => x.name().localeCompare(y.name()));
+          const bSorted = b.sort((x, y) => x.name().localeCompare(y.name()));
           for(let i = 0; i < a.length; ++i) {
-            if(a[i].name() !== b[i].name()) {
+            if(aSorted[i].name() !== bSorted[i].name()) {
               logger.info("Updating branches");
               return false;
             }
@@ -116,6 +118,9 @@ export class Repository {
     }
   }
 
+  public getHeadCommit(head: nodegit.Reference) {
+    return this.git.repo.getReferenceCommit(head);
+  }
   public getCommit(commit: nodegit.Commit) {
     return new Commit(this.git, commit);
   }

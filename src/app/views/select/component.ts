@@ -96,7 +96,6 @@ export class SelectRepositoryComponent implements OnInit, OnDestroy {
               if(results.length > 1)
                 logger.error("Unable to pick between multiple ssh credentials in one directory. Choosing first one.");
 
-              console.log(results[0]);
               this.sshForm.setValue(results[0]);
             }
           }
