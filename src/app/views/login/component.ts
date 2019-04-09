@@ -32,7 +32,14 @@ export class LoginComponent {
   }
 
   /**
-   * Submits the login info
+   * Try to automatically login when the login page is loaded.
+   */
+  ngOnInit(){
+    this.relogin();
+  }
+
+  /**
+   * Login using the login info
    */
   async login() {
     const username = this.loginForm.controls.username.value;
@@ -63,13 +70,14 @@ export class LoginComponent {
 
       this.switchToMainPanel();
     } catch(error) {
-      logger.info("Relog in failed");
-      logger.info(error);
-      if(error instanceof AuthenticationError) {
-        this.showAuthenticateError = true;
-      }
-      else if(error instanceof CredentialsLoadError) {
-        this.showCredentialLoadError = true;
+      // Ignore if there is no credential file
+      // Otherwise display error information
+      if (! (error instanceof CredentialsLoadError)) {
+        logger.info("Relog in failed");
+        logger.info(error);
+        if(error instanceof AuthenticationError) {
+          this.showAuthenticateError = true;
+        }
       }
     }
   }
