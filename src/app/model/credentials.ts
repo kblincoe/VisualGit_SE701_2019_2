@@ -8,6 +8,7 @@ import { logger } from 'logger';
 
 const CREDENTIALS_FILE = './.app/credentials.json';
 const SECRET_PASS = "passphrase";
+const FILE_NOT_FOUND_ERRORCODE = "ENOENT"
 
 export class CredentialsLoadError extends Error {}
 
@@ -36,11 +37,24 @@ export async function load() {
       username: cryptojs.AES.decrypt(file.username, SECRET_PASS).toString(cryptojs.enc.Utf8),
       password: cryptojs.AES.decrypt(file.password, SECRET_PASS).toString(cryptojs.enc.Utf8)
     };
-  } catch(e) {
-    if(e.code && "ENOENT" === e.code) {
+  } catch(error) {
+    if(error.code && FILE_NOT_FOUND_ERRORCODE === error.code) {
       throw new CredentialsLoadError("No credentials saved");
     } else {
-      throw e;
+      throw error;
     }
   }
 }
+
+/**
+ * Remove credentials from file. Ignore error if there is no credential file. 
+ * Otherwise throw the error.
+ */
+export async function remove() {
+  fs.unlink(CREDENTIALS_FILE).catch((error) => {
+    if (!(error.code && FILE_NOT_FOUND_ERRORCODE === error.code)) {
+      throw error;
+    }
+  })
+}
+

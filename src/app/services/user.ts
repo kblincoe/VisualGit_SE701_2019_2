@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from "rxjs";
 
 import { User } from 'model/user';
+import { CredentialsLoadError } from 'model/credentials';
 import * as credentials from 'model/credentials';
 
 /**
@@ -32,6 +33,8 @@ export class UserService {
    * Logs out the user.
    */
   public async logout() {
+    //Disable automatic login when logout
+    await credentials.remove();
     this.user.next(null);
   }
 
