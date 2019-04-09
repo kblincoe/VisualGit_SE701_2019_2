@@ -18,11 +18,23 @@ export default class RepoHistory {
       );
   }
 
+  public findCommit(sha: string) {
+    return nodegit.Commit.lookup(this.git.repo, sha);
+  }
+
+  public async getBranchHistory(branch: nodegit.Reference) {
+    const walker = await nodegit.Revwalk.create(this.git.repo);
+    walker.pushRef(branch.name());
+
+    return walker.getCommitsUntil(c => true) as Promise<nodegit.Commit[]>;
+  }
 
   public commits: Observable<nodegit.Commit[]>;
 
-  private async getAllCommits() {
+  public async getAllCommits(reverse = false) {
     const walker = await nodegit.Revwalk.create(this.git.repo);
+    walker.sorting(nodegit.Revwalk.SORT.TIME + nodegit.Revwalk.SORT.TOPOLOGICAL + (reverse ? nodegit.Revwalk.SORT.REVERSE : 0));
+
     walker.pushGlob("refs/heads/*");
 
     return walker.getCommitsUntil(c => true) as Promise<nodegit.Commit[]>;

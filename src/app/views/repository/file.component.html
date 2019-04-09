@@ -38,7 +38,7 @@
     <div [ngClass]="['input-group', patchType(patch)]" *ngFor="let patch of unstaged; let i = index">
       <!-- Stage button -->
       <div class="input-group-prepend">
-          <button class="btn btn-outline-secondary" type="button" (click)="stage(patch)">&#9650;</button> <!-- Up arrow -->
+        <button class="btn btn-outline-secondary" type="button" (click)="stage(patch)">&#9650;</button> <!-- Up arrow -->
       </div>
 
       <!-- Select file button. Uses radios for toggling capability (i.e. only one file can be selected at a time) -->
@@ -47,7 +47,6 @@
         <input type="radio" [formControl]="selected" [value]="patch">
       </label>
     </div>
-
   </div>
 
   <div class="commit-panel align-bottom">

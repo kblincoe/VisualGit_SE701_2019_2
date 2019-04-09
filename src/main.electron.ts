@@ -29,7 +29,7 @@ function onClosed() {
 }
 
 function createMainWindow() {
-  var iconImg = nativeImage.createFromPath('src/assets/vg_icon.png');
+  const iconImg = nativeImage.createFromPath('src/assets/vg_icon.png');
   const win = new BrowserWindow({
     backgroundColor : "#000",
     minHeight: 750,

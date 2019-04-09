@@ -151,9 +151,6 @@ export class User {
       },
 
       credentials(url: string, usernameFromUrl: string, allowedTypes: number) {
-        console.log("Recieved request. url: " + url + " username?: " + usernameFromUrl);
-        console.log("Allowed type: " + allowedTypes);
-
         if((allowedTypes & nodegit.Cred.TYPE.SSH_KEY) > 0) {
           if(!ssh)
             logger.error("Repository asks for ssh credentials when none are supplied");

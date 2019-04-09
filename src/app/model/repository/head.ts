@@ -70,7 +70,6 @@ export default class Head {
       remoteBranch = this.remoteBranch;
     }
 
-    logger.info("PURRRRSRSRSRSRSRSRS");
     await remote.push([branch.name() + ":" + branch.name()], {
       callbacks: this.git.credentials
     });

@@ -1,0 +1,9 @@
+<div class="node-tooltip" *ngIf="!!commit" [ngStyle]="{ 'left': x + 'px', 'top': y + 'px' }">
+  <div class="modal-header">
+    <h4 class="modal-title">{{title}}</h4>
+  </div>
+  <div class="modal-body">
+    <p>{{body}}</p>
+    <p class="author">{{author}}</p>
+  </div>
+</div>

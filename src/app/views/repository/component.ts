@@ -7,6 +7,7 @@ import { RepositoryService } from 'services/repository';
 import WorkingDirectory from 'model/repository/working-directory';
 import { logger } from 'logger';
 import RepoHistory from 'model/repository/history';
+import { Repository } from 'model/repository';
 
 @Component({
   selector: "app-repository-screen",
@@ -24,8 +25,8 @@ export class RepositoryComponent implements OnInit, OnDestroy {
         logger.error("Should not be on the repo page if the repo is null");
       }
       else {
+        this.repository = repo;
         this.workingDirectory = repo.workingDirectory;
-        this.history = repo.history;
         this.selectedPatch = null;
         this.selectedPrePatch = null;
       }
@@ -40,8 +41,8 @@ export class RepositoryComponent implements OnInit, OnDestroy {
     this.selectedPrePatch = prePatch;
   }
 
+  repository: Repository = null;
   workingDirectory: WorkingDirectory = null;
-  history: RepoHistory = null;
 
   selectedPatch: nodegit.ConvenientPatch = null;
   selectedPrePatch: nodegit.ConvenientPatch = null;
