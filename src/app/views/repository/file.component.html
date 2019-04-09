@@ -1,13 +1,13 @@
 <div class="file-panel">
   <!-- List of staged changes -->
-  <div class="files-changed">
+  <!-- <div class="files-changed"> -->
     <div class="staged-files-header">
       <h5 class="header">staged</h5>
       <button type="button" class="btn btn-outline-secondary " (click)="unstageAll()">&#9660;</button> <!-- Down arrow -->
     </div>
 
     <p class="empty-message" *ngIf="!(staged)">Your staged files will appear here</p>
-
+  <div class="file-list">
     <!-- Each row -->
     <div [ngClass]="['input-group', patchType(patch)]" *ngFor="let patch of staged; let i = index">
       <!-- Unstage button -->
@@ -25,7 +25,7 @@
 
   <!-- List of unstaged changes -->
   <!-- Unfortunately we cant use a radio group due to the nesting, so have to roll our own -->
-  <div class="files-changed">
+  <!-- <div class="files-changed"> -->
     <div class="staged-files-header">
       <h5 class="header"> unstaged</h5>
       <button type="button" class="btn btn-outline-secondary stage-all-btn" (click)="stageAll()">&#9650;</button> <!-- Up arrow -->
@@ -33,7 +33,7 @@
     
 
     <p class="empty-message" *ngIf="!(unstaged)">Your modified files will appear here</p>
-
+  <div class="file-list">
     <!-- Each row -->
     <div [ngClass]="['input-group', patchType(patch)]" *ngFor="let patch of unstaged; let i = index">
       <!-- Stage button -->
