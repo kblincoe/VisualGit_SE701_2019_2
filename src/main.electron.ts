@@ -26,6 +26,8 @@ function onClosed() {
 function createMainWindow() {
   const win = new BrowserWindow({
     backgroundColor : "#000",
+    minHeight: 750,
+    minWidth: 1175,
     icon: __dirname + 'src/assets/VisualGit_Logo.png'
   });
 

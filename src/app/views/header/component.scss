@@ -20,9 +20,20 @@
     align-items: center;
   }
 }
+.icon-btn {
+  margin: 0px 5px !important;
+  height: 42px;
+  width: 42px;
+}
 
-.expansion-btn {
-  margin-right: 30px;
+.icon {
+  width: 100%;
+  height: auto;
+}
+
+.toolbar {
+  display: inline-flex;
+  flex-wrap: nowrap !important;
 }
 
 .right-arrow {
@@ -46,3 +57,14 @@
   margin-right: 10px;
 }
 
+.full-width {
+  width: 100%;
+}
+
+.horizontal-align {
+  flex-direction: row !important;
+}
+
+.button-bar {
+  display: inline-block;
+}

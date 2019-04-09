@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg" role="navigation">
+<nav class="toolbar full-width navbar navbar-expand-lg" role="navigation">
   <!-- Header row, for navigation to other pages -->
 
   <!-- Navbar expansion button -->
@@ -12,23 +12,23 @@
 
   <!-- Collapsible menu giving options for repository management -->
   <!-- NOTE: Uses https://getbootstrap.com/docs/4.0/components/navbar/ -->
-  <div class="header-left navbar" id="navbar" [ngbCollapse]="isCollapsed">
+  <div class="toolbar header-left navbar" id="navbar" [hidden]="isCollapsed">
     <!-- Left side navbar part, showing repository dropdown and branch dropdown -->
-    <ul class="navbar-nav mr-auto">
+    <div class="horizontal-align navbar-nav mr-auto">
 
       <!-- Repo list -->
-      <li [hidden]="!currentRepo && !repositories"><img src="./assets/RightArrow.svg" class="right-arrow"></li>
-      <li ngbDropdown class="nav-item" [hidden]="!currentRepo && !repositories">
+      <div [hidden]="!currentRepo && !repositories"><img src="./assets/RightArrow.svg" class="right-arrow"></div>
+      <div ngbDropdown class="nav-item" [hidden]="!currentRepo && !repositories">
         <button ngbDropdownToggle class="dropdown-btn">{{currentRepo || "repository"}}</button>
         <div ngbDropdownMenu class="scrollable-menu">
           <button ngbDropdownItem *ngFor="let repo of repositories" (click)="selectRepository(repo)">{{repo.uniqueName}}</button>
         </div>
-      </li>
+      </div>
 
-      <li [hidden]="!currentRepo"><img src="./assets/RightArrow.svg" class="right-arrow"></li>
+      <div [hidden]="!currentRepo"><img src="./assets/RightArrow.svg" class="right-arrow"></div>
 
       <!-- Branch list -->
-      <li ngbDropdown autoClose="outside" class="nav-item" [hidden]="!currentRepo" >
+      <div ngbDropdown autoClose="outside" class="nav-item" [hidden]="!currentRepo" >
         <button ngbDropdownToggle class="dropdown-btn">{{currentBranch || "branch"}}</button>
         <div ngbDropdownMenu class="scrollable-menu" >
           <div ngbDropdownItem >
@@ -37,20 +37,18 @@
           </div>
           <button ngbDropdownItem *ngFor="let branch of branches" (click)="selectBranch(branch)">{{branch}}</button>
         </div>
-      </li>
-    </ul>
+      </div>
+    </div>
 
     <!-- Repo Github options. Presented as icons, on far left. -->
-    <div class="navbar-nav ml-auto" [hidden]="!currentRepo">
+    <div class="button-bar toolbar navbar-nav ml-auto" [hidden]="!currentRepo">
       <button class="icon-btn" (click)="toggleTag()"> <img class="icon" src="./assets/Tag.svg" title="Tag"> </button>
       <button class="icon-btn" (click)="issue()"><img class="icon" src="./assets/Issues.svg" title="Issues"></button>
       <button class="icon-btn" (click)="push()"> <img class="icon" src="./assets/push.svg" title="Push"> </button>
       <button class="icon-btn" (click)="pull()"> <img class="icon" src="./assets/pull.svg" title="Pull"> </button>
       <button class="icon-btn" (click)="clean()"> <img class="icon" src="./assets/Clean-Dark.svg"
           title="Clean"></button>
-      <button class="icon-btn" (click)="sync()"> <img class="icon" src="./assets/refresh-button.png" title="Sync">
-      </button>
-      
+      <button class="icon-btn" (click)="sync()"> <img class="icon" src="./assets/refresh-button.png" title="Sync"></button>
     </div>
 
     <li ngbDropdown *ngIf="userIconUrl" placement="bottom-right" class="navbar-nav user-menu">
