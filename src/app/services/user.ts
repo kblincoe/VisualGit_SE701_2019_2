@@ -7,18 +7,28 @@ import { User } from 'model/user';
 import { CredentialsLoadError } from 'model/credentials';
 import * as credentials from 'model/credentials';
 
+import { TwoFactorConfirmService } from "services/twofactorconfirm.service";
 /**
  * Handles user login and credential information for github
  */
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class UserService {
+
+  public constructor(
+    private twoFactorService: TwoFactorConfirmService
+  ) { }
   /**
    * Attempts to login with the given credentials.
    * Throws (asynchronously) upon error and does not update user.
    */
   public async login(username: string, password: string) {
-    logger.verbose("Logging in with username: " + username);
-    const user = await User.login(username, password);
+    const twoFactorCallback = () => this.twoFactorService.displayModal()
+      .then(
+        (result) => new Promise<string>((resolve, reject) => {
+          resolve(result.code)
+        }
+        ));
+    const user = await User.login(username, password, twoFactorCallback);
     this.user.next(user);
   }
 
@@ -43,7 +53,7 @@ export class UserService {
    * Throws error message of "Credentials not saved" when there are no credentials, and also throws login errors.
    */
   public async relogin() {
-    const {username, password} = await credentials.load();
+    const { username, password } = await credentials.load();
     logger.verbose("Logging in with saved credentials");
     return await this.login(username, password);
   }

@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppRoutingModule } from './views/app-routing.module';
@@ -21,6 +21,7 @@ import { IFrameComponent } from "views/issuePage/component";
 import { NewIssueComponent } from "views/issuePage/createIssuePage/component";
 import { CommentIssueComponent } from "views/issuePage/commentIssuePanel/component";
 import { BranchComponent } from 'views/header/branch.component';
+import {TwoFactorContentComponent } from 'services/twofactorconfirm.service'
 
 @NgModule({
   declarations: [
@@ -37,16 +38,18 @@ import { BranchComponent } from 'views/header/branch.component';
     GraphPanelComponent,
     GraphTooltipComponent,
     ErrorContentComponent,
+    TwoFactorContentComponent,
     TagsComponent,
     BranchComponent,
     FooterComponent,
     HeaderComponent
   ],
-  entryComponents: [ErrorContentComponent, TagsComponent, BranchComponent],
+  entryComponents: [ErrorContentComponent,TwoFactorContentComponent, TagsComponent, BranchComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    FormsModule,
     NgbModule
   ],
   providers: [],
