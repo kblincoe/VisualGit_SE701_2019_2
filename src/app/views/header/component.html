@@ -1,4 +1,4 @@
-<nav class="toolbar full-width navbar navbar-expand-lg" role="navigation">
+<nav [hidden]="!loggedIn" class="toolbar full-width navbar navbar-expand-lg" role="navigation">
   <!-- Header row, for navigation to other pages -->
 
   <!-- Navbar expansion button -->
@@ -48,7 +48,7 @@
         <!-- Need to replace guest user's URL as "/<Default name>"-->
         <span ngbDropdownItem disabled>Signed in as <b>{{this.username}}</b></span>
         <button ngbDropdownItem (click)="toggleHelp()">Help</button>
-        <button ngbDropdownItem (click)="toggleSetting()">Setting</button>
+        <button ngbDropdownItem (click)="toggleSetting()">Settings</button>
         <button ngbDropdownItem (click)="toggleLog()">{{loggedIn ? "Logout" : "Login"}}</button>
       </div>
     </li>
