@@ -36,6 +36,10 @@ export default class Head {
       );
   }
 
+  /**
+   * Merge a branch into the current branch
+   * @param from The branch you wish to merge into the current branch
+   */
   public async merge(from: nodegit.Reference) {
     logger.info("Merging from " + from.shorthand());
 
@@ -84,6 +88,7 @@ export default class Head {
     const branch = this.git.head;
     let remoteBranch: nodegit.Reference;
 
+    // Set the remote node and the remoteBranch before calling the real merge method.
     if(remote !== undefined) {
       if(typeof remote === "string")
         remote = await this.git.repo.getRemote(remote);
@@ -99,7 +104,7 @@ export default class Head {
       }
 
       remote = this.remote;
-      remoteBranch = this.remoteBranch;
+      remoteBranch = this.remoteBranch; // This is the branch you are pulling into the current branch.
     }
 
     logger.info("Using refspec of: " + branch.name() + ":" + remoteBranch.name());

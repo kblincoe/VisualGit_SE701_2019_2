@@ -1,3 +1,4 @@
+import * as nodegit from 'nodegit';
 import { Component, OnInit, OnDestroy, NgZone, ViewChild } from "@angular/core";
 import { Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
@@ -13,6 +14,9 @@ import { ErrorService } from 'services/error.service';
 
 import { TagsComponent } from './tags.component';
 import { BranchComponent } from './branch.component';
+import { MergeComponent } from './merge.component';
+
+
 
 @Component({
   selector: "app-header",
@@ -124,7 +128,6 @@ export class HeaderComponent implements OnInit, OnDestroy  {
   /**
    * The below operations are simple wrappers around calling the repository behaviour.
    */
-
   // Returns whether op succeeded, as this function is used in code as well
   async pull() {
     try {
@@ -143,6 +146,7 @@ export class HeaderComponent implements OnInit, OnDestroy  {
     }
     return true;
   }
+
   // Returns whether op succeeded, as this function is used in code as well
   async push() {
     try {
@@ -206,8 +210,14 @@ export class HeaderComponent implements OnInit, OnDestroy  {
     this.branch.open();
   }
 
+  openMergeModal() {
+    this.merge.open();
+  }
+
   @ViewChild('tags') tags: TagsComponent;
   @ViewChild('branch') branch: BranchComponent;
+  @ViewChild('merge') merge: MergeComponent;
+
 
   createBranchInput: string;
 

@@ -1,0 +1,23 @@
+.fixed_header{
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+.fixed_header tbody{
+  display:grid;
+  width: 100%;
+  overflow: auto;
+  height: 150px;
+}
+
+.table-row {
+    cursor: pointer
+}
+
+.search-branch-input {
+    margin-bottom: 10px;
+    width: 467px;
+}
+
+
+
