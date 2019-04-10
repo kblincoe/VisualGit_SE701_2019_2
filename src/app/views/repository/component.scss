@@ -18,7 +18,9 @@
 
   // The file tree panel will occupy generally the same size, only changing width slightly
   app-file-panel {
-    flex: 1 auto;
+    max-width: 30vw;
+
+    flex: 1 2 auto;
   }
 
   // The diff file panel will occupy a lot of space.
