@@ -1,21 +1,19 @@
-import { Component, NgZone, OnInit } from "node_modules/@angular/core";
-import construct = Reflect.construct;
-import { RepositoryListService } from "services/repository.list";
+import { Component, NgZone, OnInit } from "@angular/core";
 
 @Component({
   selector: "app-select-screen-progressbar",
-  templateUrl: "../src/app/views/select/progressbar.component.html",
-  styleUrls: ["../src/app/views/select/progressbar.component.scss"]
+  templateUrl: "progressbar.component.html",
+  styleUrls: ["progressbar.component.scss"]
 })
 
 
 export class ProgressbarComponent implements OnInit{
 
-  private value = 0;
-  private isHidden: boolean;
-  public constructor(private zone: NgZone) {
+  public value = 0;
+  public isHidden: boolean;
 
-  }
+  public constructor(private zone: NgZone) {}
+
   ngOnInit(): void {
     this.isHidden = true;
   }

@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "main": "main.electron.js",
   "dependencies": {
-    "nodegit": "^0.24.1"
+    "nodegit": "^0.24.1",
+    "winston": "^3.2.1"
   }
 }

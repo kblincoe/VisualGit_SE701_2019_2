@@ -5,7 +5,6 @@ import * as nodegit from 'nodegit';
 import * as Octokit from '@octokit/rest';
 
 import { User } from './user';
-import { ProgressbarComponent } from "views/select/progressbar.component";
 
 
 // Taken from https://developer.github.com/v3/repos/

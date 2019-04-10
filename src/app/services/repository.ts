@@ -1,12 +1,10 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { BehaviorSubject, timer, interval, Subscription, Observable, combineLatest } from 'rxjs';
+import { BehaviorSubject, interval, Subscription, Observable, combineLatest } from 'rxjs';
 import { RepositoryInfo } from './repository.list';
 
 import { logger } from 'logger';
 import { Repository } from 'model/repository';
 import { UserService } from './user';
-import { map } from 'rxjs/operators';
-import { GithubRepository } from 'model/repositories';
 
 const REFRESH_RATE = 3.0 * 1000;
 

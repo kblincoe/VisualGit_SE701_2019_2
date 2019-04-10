@@ -1,11 +1,13 @@
-import { Injectable, OnDestroy } from "node_modules/@angular/core";
+import { Injectable, OnDestroy } from "@angular/core";
+import { interval, Observable, Subject, Subscription } from "rxjs";
+import { combineLatest } from "rxjs/internal/observable/combineLatest";
+import { flatMap } from "rxjs/operators";
+
+import { IssuesListForRepoResponseItem } from "@octokit/rest";
+import { CloseGitHubIssue, createGitHubIssue, getGitHubIssueList, SendGitHubCommentMessage } from "model/issue";
+
 import { UserService } from "services/user";
 import { RepositoryService } from "services/repository";
-import { interval, Observable, Subject, Subscription } from "node_modules/rxjs";
-import { IssuesListForRepoResponseItem } from "node_modules/@octokit/rest";
-import { combineLatest } from "node_modules/rxjs/internal/observable/combineLatest";
-import { flatMap } from "node_modules/rxjs/operators";
-import { CloseGitHubIssue, createGitHubIssue, getGitHubIssueList, SendGitHubCommentMessage } from "model/issue";
 
 
 @Injectable({providedIn: "root"})

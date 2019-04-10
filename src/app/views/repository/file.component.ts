@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, OnChanges, Input, Output, EventEmitter } from "@angular/core";
-import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
-import { Subscription, Observable, combineLatest } from 'rxjs';
-import { pairwise, debounce, debounceTime } from 'rxjs/operators';
+import { FormControl, Validators } from '@angular/forms';
+import { Subscription, combineLatest } from 'rxjs';
+import { pairwise } from 'rxjs/operators';
 
 import * as nodegit from 'nodegit';
 import { logger } from 'logger';

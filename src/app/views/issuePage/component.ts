@@ -1,18 +1,17 @@
-import { Component, NgZone, OnDestroy, OnInit } from "node_modules/@angular/core";
+import { Component, NgZone, OnDestroy, OnInit } from "@angular/core";
+import { FormControl } from "@angular/forms";
+import { Router } from "@angular/router";
+import { Subscription } from "rxjs";
 
 import { logger } from "logger";
-import { Router } from "node_modules/@angular/router";
-import { Subscription } from "node_modules/rxjs";
-import { IssuesListForRepoResponseItem } from "node_modules/@octokit/rest";
-import { FormControl } from "node_modules/@angular/forms";
+import { IssuesListForRepoResponseItem } from "@octokit/rest";
+
 import { IssueService } from "services/issues";
-
-
 
 @Component({
   selector: "app-issue-sreen",
-  templateUrl: '../src/app/views/issuePage/component.html',
-  styleUrls: ['../src/app/views/issuePage/component.scss']
+  templateUrl: 'component.html',
+  styleUrls: ['component.scss']
 })
 
 export class IFrameComponent implements OnInit, OnDestroy{
@@ -22,6 +21,7 @@ export class IFrameComponent implements OnInit, OnDestroy{
     this.subscription = this.issueService.issues.subscribe(this.OnChange.bind(this));
   }
   ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   ngOnInit(): void {

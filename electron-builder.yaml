@@ -16,6 +16,6 @@ dmg:
 linux:
   target:
     - AppImage
-nodeGypRebuild: true
-asar: false
-electronVersion: 4.0.1
+nodeGypRebuild: false
+asar: true
+electronVersion: 4.1.0

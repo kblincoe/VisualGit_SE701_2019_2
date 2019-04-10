@@ -5,6 +5,8 @@
 /serve
 /tmp
 /out-tsc
+/build
+/build-artifacts
 
 # App output
 .app/
