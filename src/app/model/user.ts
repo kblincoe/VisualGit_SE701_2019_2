@@ -5,6 +5,8 @@ import * as path from 'path';
 import * as nodegit from 'nodegit';
 import * as Octokit from '@octokit/rest';
 
+import * as uuid from "uuid";
+
 export class AuthenticationError extends Error {}
 export class SshAuthenticationError extends AuthenticationError {}
 
@@ -53,15 +55,15 @@ export class User {
   public static async login(username: string, password: string, authenticator?: () => Promise<string>): Promise<User> {
     logger.info(`Logging in as ${username}`);
 
-    authenticator = authenticator || (() => {
-      logger.info("Log in failed: Requires 2fa");
-      throw new AuthenticationError(`2 factor authentication required for user ${username}, but not implemented in VisualGit`);
-    });
-
     const octokit = new Octokit({
-      auth: { username, password, on2fa: authenticator },
+      auth: {
+        username, password, on2fa: authenticator
+      },
       userAgent: 'octokit/rest.js v1.2.3',
     });
+
+    await octokit.oauthAuthorizations.createAuthorization({note:uuid.v1()})
+
     const gitCredentials = await User.generateGitCredentials(username, password);
 
     // Unfortunately not typed. See https://developer.github.com/v3/users/#get-the-authenticated-user
