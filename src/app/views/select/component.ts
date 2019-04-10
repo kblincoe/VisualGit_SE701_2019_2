@@ -173,10 +173,6 @@ export class SelectRepositoryComponent implements OnInit, OnDestroy {
       await this.userService.getUser().addSshCredentials(this.sshForm.value.publicPath, this.sshForm.value.privatePath);
   }
 
-  back() {
-    this.router.navigate(['/login']);
-  }
-
   // Cloning
   cloneUrlForm: FormControl = new FormControl(null, Validators.required);
   cloneDirectoryForm: FormControl = new FormControl(null, Validators.required);
