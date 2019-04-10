@@ -34,6 +34,7 @@
     <div class="button-bar toolbar navbar-nav ml-auto" [hidden]="!currentRepo">
       <button class="icon-btn" (click)="toggleTag()"> <img class="icon" src="./assets/Tag.svg" title="Tag"> </button>
       <button class="icon-btn" (click)="issue()"><img class="icon" src="./assets/Issues.svg" title="Issues"></button>
+      <button class="icon-btn" (click)="openMergeModal()"><img class="icon" src="./assets/Merge.png" title="Merge"></button>
       <button class="icon-btn" (click)="push()"> <img class="icon" src="./assets/Push.svg" title="Push"> </button>
       <button class="icon-btn" (click)="pull()"> <img class="icon" src="./assets/Pull.svg" title="Pull"> </button>
       <button class="icon-btn" (click)="clean()"><img class="icon" src="./assets/Clean-Dark.svg" title="Clean"></button>
@@ -57,3 +58,4 @@
 
 <app-header-branch #branch></app-header-branch>
 <app-header-tags #tags></app-header-tags>
+<app-header-merge #merge></app-header-merge>

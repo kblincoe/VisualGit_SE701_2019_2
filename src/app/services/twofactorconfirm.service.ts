@@ -27,7 +27,7 @@ import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
 })
 export class TwoFactorContentComponent {
     myForm: FormGroup;
-    constructor(public activeModal: NgbActiveModal, private formBuilder: FormBuilder) { this.createForm() }
+    constructor(public activeModal: NgbActiveModal, private formBuilder: FormBuilder) { this.createForm(); }
     private createForm() {
         this.myForm = this.formBuilder.group({
             code: ''

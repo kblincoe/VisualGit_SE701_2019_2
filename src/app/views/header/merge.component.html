@@ -1,0 +1,29 @@
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Merge into current branch...</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div>
+            <input class="form-control search-branch-input" placeholder="Search Branch" (keyup)="onKeyUp($event)">
+        </div>
+        <table class="table table-striped table-hover table-sm fixed_header">
+            <thead>
+                <tr>
+                    <th>
+                        Select branch
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table-row" *ngFor="let branch of searchableBranches" (click)="mergeBranch(branch)">
+                    <td>
+                        {{branch}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</ng-template>

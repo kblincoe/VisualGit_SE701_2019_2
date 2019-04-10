@@ -62,7 +62,7 @@ export class User {
       userAgent: 'octokit/rest.js v1.2.3',
     });
 
-    await octokit.oauthAuthorizations.createAuthorization({note:uuid.v1()})
+    await octokit.oauthAuthorizations.createAuthorization({note: uuid.v1()});
 
     const gitCredentials = await User.generateGitCredentials(username, password);
 
