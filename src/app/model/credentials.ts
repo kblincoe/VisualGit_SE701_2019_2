@@ -47,7 +47,7 @@ export async function load() {
 }
 
 /**
- * Remove credentials from file. Ignore error if there is no credential file. 
+ * Remove credentials from file. Ignore error if there is no credential file.
  * Otherwise throw the error.
  */
 export async function remove() {
@@ -55,6 +55,6 @@ export async function remove() {
     if (!(error.code && FILE_NOT_FOUND_ERRORCODE === error.code)) {
       throw error;
     }
-  })
+  });
 }
 

@@ -1,13 +1,11 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Input, OnChanges } from "@angular/core";
 import { Subscription } from 'rxjs';
 
+import { logger } from 'logger';
 import * as nodegit from 'nodegit';
 import * as vis from 'vis';
 
 import RepoHistory from 'model/repository/history';
-import { Repository } from 'model/repository';
-import { RepositoryService } from 'services/repository';
-import { logger } from 'logger';
 
 @Component({
   selector: "app-graph-panel",
@@ -50,7 +48,7 @@ export class GraphPanelComponent implements OnInit, OnDestroy, OnChanges {
       }
     }
 
-    this.network = new vis.Network(
+    const network = new vis.Network(
       this.graphContainer.nativeElement,
       {nodes, edges},
       {layout: {
@@ -62,6 +60,5 @@ export class GraphPanelComponent implements OnInit, OnDestroy, OnChanges {
 
   @ViewChild("graphContainer") graphContainer: ElementRef;
 
-  private network: vis.Network;
   private subscription: Subscription;
 }

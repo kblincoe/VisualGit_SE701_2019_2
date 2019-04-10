@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { Subscription, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { RepositoryService } from 'services/repository';
-import { switchMap, scan, ignoreElements, filter } from 'rxjs/operators';
+import { switchMap, scan, filter } from 'rxjs/operators';
 
 @Component({
   selector: "app-footer",

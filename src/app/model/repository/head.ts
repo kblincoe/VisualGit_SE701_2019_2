@@ -1,6 +1,6 @@
 import * as nodegit from 'nodegit';
 import { Observable, combineLatest } from 'rxjs';
-import { map, shareReplay, refCount, flatMap } from 'rxjs/operators';
+import { map, flatMap } from 'rxjs/operators';
 import { logger } from 'logger';
 
 import Core from "./core";

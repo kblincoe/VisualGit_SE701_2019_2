@@ -1,16 +1,16 @@
 import { Component, OnInit, OnDestroy, NgZone, ViewChild } from "@angular/core";
 import { Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
-import { Subscription, config } from 'rxjs';
+import { Subscription } from 'rxjs';
 
-import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { logger } from 'logger';
 
+import { Repository } from 'model/repository';
 import { RepositoryInfo, RepositoryListService } from 'services/repository.list';
 import { RepositoryService } from 'services/repository';
 import { UserService } from 'services/user';
-import { logger } from 'logger';
-import { Repository } from 'model/repository';
-import { ErrorService } from "services/error.service";
+import { ErrorService } from 'services/error.service';
+
 import { TagsComponent } from './tags.component';
 import { BranchComponent } from './branch.component';
 
@@ -22,7 +22,6 @@ import { BranchComponent } from './branch.component';
 export class HeaderComponent implements OnInit, OnDestroy  {
   public constructor(
     private router: Router,
-    private modalService: NgbModal,
     private userService: UserService,
     private repositoriesService: RepositoryListService,
     private repositoryService: RepositoryService,
@@ -210,7 +209,7 @@ export class HeaderComponent implements OnInit, OnDestroy  {
   @ViewChild('branch') branch: BranchComponent;
 
   createBranchInput: string;
-  
+
   currentRepo: string;
   repositories: RepositoryInfo[] = [];
 

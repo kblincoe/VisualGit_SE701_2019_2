@@ -38,12 +38,12 @@ export class BranchComponent implements OnInit {
   }
 
   /**
-   * 
+   *
    * @param event Handles branch search event for table
    */
   onKeyUp(event: any) {
-    var text = event.target.value;
-    this.searchableBranches = this.branches.filter(item => -1 < item.toLowerCase().indexOf(text.toLowerCase()))
+    const text = event.target.value.toLowerCase();
+    this.searchableBranches = this.branches.filter(item => item.toLowerCase().includes(text));
   }
 
   onRepoChange(repo: Repository) {
@@ -73,10 +73,9 @@ export class BranchComponent implements OnInit {
 
   /**
    * Handles branch repo updates
-   * @param branches
    */
   setBranches(branches: nodegit.Reference[]) {
-    this.branches = branches.map(branch => branch.shorthand())
+    this.branches = branches.map(branch => branch.shorthand());
     this.searchableBranches = this.branches;
   }
 
@@ -104,7 +103,7 @@ export class BranchComponent implements OnInit {
    */
   async createBranch() {
     try {
-      if (this.branchCreationName.value !== null || this.branchCreationName.value != "") {
+      if (this.branchCreationName.value !== null || this.branchCreationName.value !== "") {
         await this.repositoryService.current().createBranch(this.branchCreationName.value);
         await this.selectBranch(this.branchCreationName.value);
         this.modalService.dismissAll();

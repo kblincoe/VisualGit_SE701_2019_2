@@ -4,7 +4,12 @@ import { app, dialog, shell, Menu, BrowserWindow, nativeImage } from 'electron';
 import { Theme } from './app/model/themes';
 
 // The package.json was originally used to populate things like name, version, and description.
-const vgPackage = require('../package.json');
+// We can't use it when packaging everything up, however.
+const vgPackage = {
+  name: "VisualGit",
+  description: "",
+  version: "1.0.0"
+};
 
 const args = process.argv.slice(1);
 // prevent window being garbage collected

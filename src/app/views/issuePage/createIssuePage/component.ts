@@ -1,13 +1,13 @@
-import { Component, OnInit } from "node_modules/@angular/core";
+import { Component, OnInit } from "@angular/core";
+import { FormControl } from "@angular/forms";
+import { Router } from "@angular/router";
 
-import { FormControl } from "node_modules/@angular/forms";
-import { Router } from "node_modules/@angular/router";
 import { IssueService } from "services/issues";
 
 @Component({
   selector: "app-new-issue-sreen",
-  templateUrl: '../src/app/views/issuePage/createIssuePage/component.html',
-  styleUrls: ['../src/app/views/issuePage/createIssuePage/component.scss']
+  templateUrl: 'component.html',
+  styleUrls: ['component.scss']
 })
 
 export class NewIssueComponent implements OnInit{

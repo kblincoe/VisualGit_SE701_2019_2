@@ -33,7 +33,7 @@ export class UserService {
    * Logs out the user.
    */
   public async logout() {
-    //Disable automatic login when logout
+    // Disable automatic login when logout
     await credentials.remove();
     this.user.next(null);
   }

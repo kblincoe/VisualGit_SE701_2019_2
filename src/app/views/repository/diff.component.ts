@@ -1,4 +1,4 @@
-import { Component, Input, NgZone, OnChanges } from "@angular/core";
+import { Component, Input, OnChanges } from "@angular/core";
 
 import { EOL } from 'os';
 import { promises as fs } from 'fs';
@@ -6,9 +6,6 @@ import * as nodegit from 'nodegit';
 import { logger } from 'logger';
 
 import WorkingDirectory from 'model/repository/working-directory';
-import { Router } from "node_modules/@angular/router";
-import { IssueService } from "services/issues";
-
 
 type ContentType = "added" | "removed" | "same";
 
@@ -50,7 +47,7 @@ async function unapply(contents: string[], diff: nodegit.ConvenientPatch): Promi
 })
 export class DiffPanelComponent implements OnChanges {
   @Input() workingDirectory: WorkingDirectory;
-  
+
   // If the chosen diff is staged, then prediff contains the unstaged diff for the same file (if it exists).
   // This may seem confusing: the prediff is chronologically after the diff,
   // but because we have to work from the file in the working directory, we work backwards, unapplying the preDiff and then the actual diff.
@@ -58,7 +55,7 @@ export class DiffPanelComponent implements OnChanges {
   @Input() diff: nodegit.ConvenientPatch;
 
 
-  constructor(private ngZone: NgZone, private router: Router,private issueService: IssueService) {}
+  constructor() {}
   /**
    * This function (called every time there are changes) updates the line changes.
    * It is a somewhat complex process but hopefully the comments explain it.

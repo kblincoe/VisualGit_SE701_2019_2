@@ -1,14 +1,14 @@
-import { Component, OnInit } from "node_modules/@angular/core";
+import { Component, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
+import { FormControl, Validators } from "@angular/forms";
 
-import { Router } from "node_modules/@angular/router";
-import { FormControl, Validators } from "node_modules/@angular/forms";
 import { IssueService } from "services/issues";
 
 
 @Component({
   selector: "app-new-issue-sreen",
-  templateUrl: '../src/app/views/issuePage/commentIssuePanel/component.html',
-  styleUrls: ['../src/app/views/issuePage/commentIssuePanel/component.scss']
+  templateUrl: 'component.html',
+  styleUrls: ['component.scss']
 })
 
 export class CommentIssueComponent implements OnInit{

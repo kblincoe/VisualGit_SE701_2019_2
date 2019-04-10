@@ -14,7 +14,6 @@ import { UserService } from 'services/user';
 
 import { ProgressbarComponent } from './progressbar.component';
 import { ErrorService } from "services/error.service";
-import { take, map } from 'rxjs/operators';
 
 @Component({
   selector: "app-select-screen",

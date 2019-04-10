@@ -1,4 +1,4 @@
-import { IssuesListForRepoResponseItem } from "node_modules/@octokit/rest";
+import { IssuesListForRepoResponseItem } from "@octokit/rest";
 import { User } from "model/user";
 
 

@@ -1,12 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgbModule, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ReactiveFormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppRoutingModule } from './views/app-routing.module';
-
 import { SelectRepositoryComponent } from './views/select/component';
-
 import { AppComponent } from './views/app.component';
 import { LoginComponent } from './views/login/component';
 import { DiffPanelComponent } from './views/repository/diff.component';

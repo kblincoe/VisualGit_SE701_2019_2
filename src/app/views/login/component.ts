@@ -1,5 +1,5 @@
 import { logger } from 'logger';
-import { Component, NgZone } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -15,7 +15,7 @@ import { UserService } from 'services/user';
   templateUrl: 'component.html',
   styleUrls: ["component.scss"]
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   // Auto load the user service
   public constructor(
     private userService: UserService,
@@ -34,7 +34,7 @@ export class LoginComponent {
   /**
    * Try to automatically login when the login page is loaded.
    */
-  ngOnInit(){
+  ngOnInit() {
     this.relogin();
   }
 

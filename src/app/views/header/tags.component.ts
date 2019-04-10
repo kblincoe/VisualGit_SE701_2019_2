@@ -1,20 +1,20 @@
-import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
-
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { RepositoryService } from 'services/repository';
-import { Subscription } from 'rxjs';
-import { logger } from 'logger';
-import * as nodegit from 'nodegit';
+import { Component, ViewChild, ElementRef, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Subscription } from 'rxjs';
+
+import { logger } from 'logger';
+
 import { Repository } from 'model/repository';
 import Commit from 'model/repository/commit';
+import { RepositoryService } from 'services/repository';
 
 @Component({
   selector: 'app-header-tags',
   templateUrl: './tags.component.html',
   styleUrls: ["./tags.component.scss"]
 })
-export class TagsComponent implements OnInit {
+export class TagsComponent implements OnInit, OnDestroy {
   constructor(private modalService: NgbModal, private repositoryService: RepositoryService) {
     this.addTagForm = new FormGroup({
       tagName: new FormControl(null, [
@@ -55,9 +55,12 @@ export class TagsComponent implements OnInit {
         // Resets the 'tag name' field in the 'Remove Tag' tab when a new commit is set
         this.removeTagForm.get('commitList').valueChanges.subscribe(() => {
           this.removeTagForm.get('tagName').reset();
-        })
+        });
       }
     });
+  }
+  public ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   public addTag() {

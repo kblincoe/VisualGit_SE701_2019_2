@@ -9,7 +9,7 @@ import { Theme, defaultTheme } from 'model/themes';
 @Injectable({providedIn: 'root'})
 export class StyleService {
   public constructor(
-    private ngZone: NgZone
+    ngZone: NgZone
   ) {
     electron.ipcRenderer.on('set-theme', (e, theme) => ngZone.run(() => this.setTheme(theme)));
   }
