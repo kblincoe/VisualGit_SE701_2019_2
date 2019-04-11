@@ -1,12 +1,13 @@
 import { Component, OnInit, OnDestroy, OnChanges, Input, Output, EventEmitter } from "@angular/core";
-import { FormControl, Validators } from '@angular/forms';
-import { Subscription, combineLatest } from 'rxjs';
-import { pairwise } from 'rxjs/operators';
+import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
+import { Subscription, Observable, combineLatest } from 'rxjs';
+import { pairwise, debounce, debounceTime } from 'rxjs/operators';
 
 import * as nodegit from 'nodegit';
 import { logger } from 'logger';
 
 import WorkingDirectory from 'model/repository/working-directory';
+import { ErrorService } from 'services/error.service';
 
 enum PatchType {
   Removed = "removed",
@@ -16,7 +17,7 @@ enum PatchType {
 }
 
 function changesEqual(a: nodegit.ConvenientPatch, b: nodegit.ConvenientPatch) {
-  return a.newFile().path() === b.newFile().path();
+  return a.newFile().path() === b.newFile().path()
 }
 
 @Component({
@@ -27,7 +28,9 @@ function changesEqual(a: nodegit.ConvenientPatch, b: nodegit.ConvenientPatch) {
 export class FilePanelComponent implements OnInit, OnDestroy, OnChanges {
   @Input() workingDirectory: WorkingDirectory;
   @Output() displayFile = new EventEmitter<{patch: nodegit.ConvenientPatch, prePatch?: nodegit.ConvenientPatch}>();
-
+  
+  constructor(private errorService: ErrorService) {}
+  
   public clear() {}
 
   public ngOnInit() {
@@ -90,7 +93,16 @@ export class FilePanelComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   async commit() {
-    await this.workingDirectory.commit(this.commitMessage.value);
+    if (this.commitMessage.value == null) {
+      this.errorService.displayError("Error: You need to enter a commit message before trying to commit");
+    } 
+    else if ((this.staged.length > 0)) {
+          await this.workingDirectory.commit(this.commitMessage.value);
+          this.commitMessage.setValue(null);
+          this.unstageAll();
+    } else {
+      this.errorService.displayError("Error: You need to stage files before you can commit");
+    } 
   }
 
   public patchType(change: nodegit.ConvenientPatch) {

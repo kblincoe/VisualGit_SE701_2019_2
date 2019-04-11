@@ -6,6 +6,8 @@ import * as nodegit from 'nodegit';
 import { logger } from 'logger';
 
 import WorkingDirectory from 'model/repository/working-directory';
+import { NgbAlert, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ErrorService } from 'services/error.service';
 
 type ContentType = "added" | "removed" | "same";
 
@@ -13,6 +15,8 @@ interface LineInfo {
   text: string;
   type: ContentType;
 }
+
+
 
 async function unapply(contents: string[], diff: nodegit.ConvenientPatch): Promise<string[]> {
   let lineTranslate = 0;
@@ -53,9 +57,10 @@ export class DiffPanelComponent implements OnChanges {
   // but because we have to work from the file in the working directory, we work backwards, unapplying the preDiff and then the actual diff.
   @Input() preDiff?: nodegit.ConvenientPatch;
   @Input() diff: nodegit.ConvenientPatch;
+ 
 
 
-  constructor() {}
+  constructor(private errorService: ErrorService) {}
   /**
    * This function (called every time there are changes) updates the line changes.
    * It is a somewhat complex process but hopefully the comments explain it.
@@ -176,9 +181,14 @@ export class DiffPanelComponent implements OnChanges {
    * Adds the file to the index
    */
   async save() {
+    try {
     this.workingDirectory.stage([
       this.diff.oldFile().path(),
       this.diff.newFile().path()]);
+    } catch(error) {
+      logger.info("No file selected");
+      this.errorService.displayError("Error: You must select a file in order to save it.");
+    }
   }
 
   /**
@@ -188,39 +198,45 @@ export class DiffPanelComponent implements OnChanges {
   async discard() {
     if(this.preDiff !== null)
       logger.error("Cannot unapply staged diffs when there are unstaged diffs in the same file. Not implemented");
+    try {
+      const workDir = this.workingDirectory.getPath() + '/';
+      const oldFile = workDir + this.diff.oldFile().path();
+      const newFile = workDir + this.diff.newFile().path();
 
-    const workDir = this.workingDirectory.getPath() + '/';
-    const oldFile = workDir + this.diff.oldFile().path();
-    const newFile = workDir + this.diff.newFile().path();
+      logger.info("Discarding changes to " + newFile);
 
-    logger.info("Discarding changes to " + newFile);
+      if(this.diff.isAdded() || this.diff.isCopied()) {
+        fs.unlink(newFile);
+        return;
+      }
 
-    if(this.diff.isAdded() || this.diff.isCopied()) {
-      fs.unlink(newFile);
-      return;
+
+      // Unapply diffs
+      let contents = [];
+      if(!this.diff.isDeleted())
+        contents = await unapply((await fs.readFile(newFile, 'utf8')).split(EOL), this.diff);
+
+
+      // delete new file if it exists, no longer need it
+      if(oldFile !== newFile && !this.diff.isDeleted())
+        fs.unlink(newFile);
+      // Overwrite/create old file
+      fs.writeFile(oldFile, contents.join(EOL), {
+        encoding: 'utf8',
+        flag: 'w'
+      });
+
+      // Now stage changes
+      await this.save();
+    } catch(error) {
+      logger.info("No file selected")
+      this.errorService.displayError("Error: You must select a file in order to discard it.");
+
     }
-
-
-    // Unapply diffs
-    let contents = [];
-    if(!this.diff.isDeleted())
-      contents = await unapply((await fs.readFile(newFile, 'utf8')).split(EOL), this.diff);
-
-
-    // delete new file if it exists, no longer need it
-    if(oldFile !== newFile && !this.diff.isDeleted())
-      fs.unlink(newFile);
-    // Overwrite/create old file
-    fs.writeFile(oldFile, contents.join(EOL), {
-      encoding: 'utf8',
-      flag: 'w'
-    });
-
-    // Now stage changes
-    await this.save();
   }
 
 
 
   lines: LineInfo[] = [];
 }
+
