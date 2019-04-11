@@ -2,7 +2,7 @@
   <!-- List of staged changes -->
   <div class="files-header">
     <h5 class="header">staged</h5>
-    <button type="button" class="btn btn-outline-secondary " (click)="unstageAll()">&#9660;</button> <!-- Down arrow -->
+    <button type="button" class="btn btn-outline-secondary stage-all-btn" [disabled]="!staged || staged.length === 0" (click)="unstageAll()">&#9660;</button> <!-- Down arrow -->
   </div>
 
   <p class="empty-message" *ngIf="!(staged)">Your staged files will appear here</p>
@@ -26,7 +26,7 @@
   <!-- Unfortunately we cant use a radio group due to the nesting, so have to roll our own -->
   <div class="files-header">
     <h5 class="header"> unstaged</h5>
-    <button type="button" class="btn btn-outline-secondary stage-all-btn" (click)="stageAll()">&#9650;</button> <!-- Up arrow -->
+    <button type="button" class="btn btn-outline-secondary stage-all-btn" [disabled]="!unstaged || unstaged.length === 0" (click)="stageAll()">&#9650;</button> <!-- Up arrow -->
   </div>
 
   <p class="empty-message" *ngIf="!(unstaged)">Your modified files will appear here</p>
