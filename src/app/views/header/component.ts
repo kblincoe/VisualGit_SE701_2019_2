@@ -15,6 +15,7 @@ import { ErrorService } from 'services/error.service';
 import { TagsComponent } from './tags.component';
 import { BranchComponent } from './branch.component';
 import { MergeComponent } from './merge.component';
+import { StashComponent } from './stash.component';
 import { NotifierService } from 'angular-notifier';
 
 @Component({
@@ -216,13 +217,16 @@ export class HeaderComponent implements OnInit, OnDestroy  {
   openMergeModal() {
     this.merge.open();
   }
+  
+  openStashModal() {
+    this.stash.open();
+  }
 
   @ViewChild('tags') tags: TagsComponent;
   @ViewChild('branch') branch: BranchComponent;
   @ViewChild('merge') merge: MergeComponent;
+  @ViewChild('stash') stash: StashComponent;
 
-
-  
   createBranchInput: string;
 
   currentRepo: string;

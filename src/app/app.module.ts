@@ -21,6 +21,7 @@ import { IFrameComponent } from "views/issuePage/component";
 import { NewIssueComponent } from "views/issuePage/createIssuePage/component";
 import { CommentIssueComponent } from "views/issuePage/commentIssuePanel/component";
 import { BranchComponent } from 'views/header/branch.component';
+import { StashComponent } from 'views/header/stash.component';
 import { TwoFactorContentComponent } from 'services/twofactorconfirm.service';
 import { MergeComponent } from 'views/header/merge.component';
 import { LabelComponent } from "views/issuePage/labelPanel/component";
@@ -54,6 +55,7 @@ import { AssigneeManagementComponent } from 'views/issuePage/assigneeManagement/
     TagsComponent,
     BranchComponent,
     MergeComponent,
+    StashComponent,
     FooterComponent,
     HeaderComponent,
     AssigneeIssueComponent,

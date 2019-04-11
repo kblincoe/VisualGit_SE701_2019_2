@@ -6,7 +6,7 @@ import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   selector: 'app-error-content',
   template: `
     <div class="modal-header">
-      <h4 class="modal-title">Error!</h4>
+      <h4 class="modal-title">{{heading}}</h4>
     </div>
     <div class="modal-body">
       <p>{{errMsg}}</p>
@@ -18,23 +18,24 @@ import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class ErrorContentComponent {
   @Input() errMsg;
+  @Input() heading;
 
   constructor(public activeModal: NgbActiveModal) {}
 }
 
+const defaultHeading = "Error!";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ErrorService {
-
   constructor(private modalService: NgbModal) { }
 
-  // popup a modal to display error message.
-  displayError(error: any)
-  {
+  // Popup a modal to display a error message.
+  displayError(error: any, heading?: string) {
     const modalRef = this.modalService.open(ErrorContentComponent);
     modalRef.componentInstance.errMsg = error;
+    modalRef.componentInstance.heading = heading ? heading : defaultHeading;
   }
 
 }

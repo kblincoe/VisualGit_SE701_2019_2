@@ -1,0 +1,35 @@
+.fixed_header{
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+.fixed_header tbody{
+  display:grid;
+  width: 100%;
+  overflow: auto;
+  height: 150px;
+}
+
+#search-stash-input {
+  margin-bottom: 16px;
+}
+
+.table-row {
+  cursor: pointer
+}
+
+#create-stash-input {
+  margin-bottom: 10px;
+  width: 60%;
+  float: left;
+  display: inline-block;
+}
+
+.btn {
+  color: white;
+  background: green;
+  float: right;
+}
+
+
+
