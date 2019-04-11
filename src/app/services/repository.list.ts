@@ -50,7 +50,6 @@ export class RepositoryListService implements OnDestroy {
    * Clones and creates a repository from the repository info
    */
   public async cloneFromGithub(info: GithubRepositoryInfo, directory: string, progressUpdater?: (percent: number) => void) {
-    try {
       const repo = await clone(info.clone_url, directory, this.userService.getUser(), progressUpdater);
 
       return {
@@ -59,11 +58,6 @@ export class RepositoryListService implements OnDestroy {
         github: info,
         local: repo
       };
-    } catch(error) {
-      logger.warn("Error cloning: ");
-      logger.warn(error);
-      this.errorService.displayError("Error cloning: " + error);
-    }
   }
 
   /**

@@ -142,10 +142,9 @@ export class SelectRepositoryComponent implements OnInit, OnDestroy {
       }, 500);
 
     } catch(error) {
-
-      logger.info("Cloning repository failed: ");
-      logger.info(error);
       this.progressbar.hidePanel();
+      logger.warn("Error cloning: ");
+      logger.warn(error);
       this.errorService.displayError(error);
     }
   }
