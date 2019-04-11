@@ -1,0 +1,33 @@
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Current Stashes</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div>
+            <input class="form-control" id="search-stash-input" placeholder="Search stashes" (keyup)="onKeyUp($event)">
+        </div>
+        <table class="table table-striped table-hover table-sm fixed_header">
+            <thead>
+                <tr>
+                    <th>
+                        Select stash to apply
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table-row" *ngFor="let stash of searchableStashes; let i = index" (click)="applyStash(i)">
+                    <td>
+                        {{stash}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div>
+            <input class="form-control" id="create-stash-input" [formControl]="stashName" placeholder="Stash name">
+            <button (click)="createStash()" class="btn">Stash current edits</button>
+        </div>
+    </div>
+</ng-template>

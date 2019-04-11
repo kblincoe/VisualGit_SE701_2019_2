@@ -62,7 +62,7 @@ export class Repository {
     this.git.commandRecord.next("git branch " + name);
     await this.git.refresh();
   }
-  
+
   public async deleteBranch(name: string) {
     logger.info("Deleting branch " + name);
     const deleted = await nodegit.Branch.delete(await this.git.repo.getReference(name));
@@ -71,6 +71,35 @@ export class Repository {
       this.git.commandRecord.next("git branch -d " + name);
       await this.git.refresh();
     }
+  }
+
+  /**
+   * Applies a stash.
+   * Also logs the action and adds it to the
+   * command record.
+   */
+  public async applyStash(index: number) {
+    // Apply the stash.
+    await nodegit.Stash.pop(this.git.repo, index, {});
+      
+    logger.info("Applying stash with index " + index.toString());
+    this.git.commandRecord.next("git stash apply stash@{" + index.toString() + "}");
+    await this.git.refresh();
+  }
+
+  /**
+   * Creates a stash.
+   * Also logs the action and adds it to the
+   * command record.
+   */
+  public async createStash(message: string) {
+    const signature = await this.git.repo.defaultSignature();
+    // Create the stash with the message.
+    await nodegit.Stash.save(this.git.repo, signature, message, 0);
+        
+    logger.info("Applying stash with message " + message);
+    this.git.commandRecord.next("git stash -m '" + message + "'");
+    await this.git.refresh();
   }
 
   public async checkout(branch: string | nodegit.Reference) {
