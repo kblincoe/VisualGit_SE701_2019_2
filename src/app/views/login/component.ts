@@ -3,9 +3,10 @@ import { Component, NgZone, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { AuthenticationError } from 'model/user';
+import { AuthenticationError, ConnectionError } from 'model/user';
 import { CredentialsLoadError } from 'model/credentials';
 import { UserService } from 'services/user';
+import { ErrorService } from 'services/error.service';
 
 /**
  * Handles user login, and options therein
@@ -19,6 +20,7 @@ export class LoginComponent implements OnInit {
   // Auto load the user service
   public constructor(
     private userService: UserService,
+    private errorService: ErrorService,
     private router: Router,
     private ngZone: NgZone
   ) {}
@@ -57,7 +59,10 @@ export class LoginComponent implements OnInit {
     } catch(error) {
       logger.info("Log in failed");
       logger.info(error);
-      this.showAuthenticateError = true;
+      if(error instanceof AuthenticationError)
+        this.showAuthenticateError = true;
+      else
+        this.errorService.displayError(error);
     }
   }
 
@@ -72,13 +77,17 @@ export class LoginComponent implements OnInit {
     } catch(error) {
       // Ignore if there is no credential file
       // Otherwise display error information
-      if (! (error instanceof CredentialsLoadError)) {
-        logger.info("Relog in failed");
-        logger.info(error);
-        if(error instanceof AuthenticationError) {
-          this.showAuthenticateError = true;
-        }
+      if (error instanceof CredentialsLoadError) {
+        logger.info("Credentials can't be loaded from file");
+        return;
       }
+
+      logger.info("Relog in failed");
+      logger.info(error);
+      if(error instanceof AuthenticationError)
+        this.showAuthenticateError = true;
+      else
+        this.errorService.displayError(error);
     }
   }
 
@@ -86,8 +95,18 @@ export class LoginComponent implements OnInit {
    * Doesn't login, but continues anyway
    */
   async bypassLogin() {
-    await this.userService.loginAsGuest();
-    this.switchToMainPanel();
+    try {
+      await this.userService.loginAsGuest();
+      this.switchToMainPanel();
+    } catch(error) {
+      if(error instanceof ConnectionError) {
+        // Allow guest login when not connected to github, but warn
+        this.errorService.displayError("Warning: No connection to GitHub. Some features may not work.");
+        this.switchToMainPanel();
+      } else {
+        this.errorService.displayError(error);
+      }
+    }
   }
 
   loginForm = new FormGroup({

@@ -3,7 +3,7 @@ import { logger } from 'logger';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from "rxjs";
 
-import { User } from 'model/user';
+import { User, ConnectionError } from 'model/user';
 import { CredentialsLoadError } from 'model/credentials';
 import * as credentials from 'model/credentials';
 
@@ -34,9 +34,23 @@ export class UserService {
 
   /**
    * Logs in without credentials as a guest.
+   *
+   * NOTE: If there is a connection error, will throw but log in anyway,
+   * to allow access to the rest of the application
    */
   public async loginAsGuest() {
-    this.user.next(await User.createUnauthenticated());
+    const user = await User.createUnauthenticated();
+    this.user.next(user);
+
+    // Get one repo from github as a connection test
+    try {
+      await user.github.repos.list({per_page: 1, page: 1});
+    } catch(error) {
+      if(error.status === 500) // Octokit seems to use 500 for connection issues.
+        throw new ConnectionError("Cannot reach GitHub servers. Are you connected to the internet?");
+      else
+        throw error;
+    }
   }
 
   /**
