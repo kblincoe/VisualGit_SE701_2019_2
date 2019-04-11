@@ -5,7 +5,9 @@ import * as nodegit from 'nodegit';
 import { logger } from 'logger';
 
 import { User } from 'model/user';
-import { getOwnedGithubRepositories, GithubRepository, findGithubRepo, clone } from 'model/repositories';
+import { GithubRepositoryInfo } from 'model/github';
+import { getOwnedGithubRepositories, findGithubRepo, clone } from 'model/repositories';
+
 import { UserService } from './user';
 import { ErrorService } from "services/error.service";
 
@@ -14,7 +16,7 @@ export interface RepositoryInfo {
   uniqueName: string;
 
   local: nodegit.Repository; // Null if no local copy
-  github: GithubRepository; // Null if no online
+  github: GithubRepositoryInfo; // Null if no online
 }
 
 @Injectable({providedIn: 'root'})
@@ -47,7 +49,7 @@ export class RepositoryListService implements OnDestroy {
   /**
    * Clones and creates a repository from the repository info
    */
-  public async cloneFromGithub(info: GithubRepository, directory: string, progressUpdater?: (percent: number) => void) {
+  public async cloneFromGithub(info: GithubRepositoryInfo, directory: string, progressUpdater?: (percent: number) => void) {
     try {
       const repo = await clone(info.clone_url, directory, this.userService.getUser(), progressUpdater);
 
@@ -79,7 +81,7 @@ export class RepositoryListService implements OnDestroy {
     let uniqueName = null;
 
     // Try to get github:
-    let github: GithubRepository = null;
+    let github: GithubRepositoryInfo = null;
     const remotes = await local.getRemotes();
     // Only use origin, as we KNOW that that is the true repo (e.g. upstream, even if on github, is not the correct repo)
     if(!remotes.includes('origin')) {

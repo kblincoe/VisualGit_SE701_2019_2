@@ -8,22 +8,20 @@ import Core from './core';
 import Head from './head';
 import WorkingDirectory from './working-directory';
 import RepoHistory from './history';
-
-import { GithubRepository } from '../repositories';
 import Commit from './commit';
 
 export class BranchNotFoundError extends Error {}
 
 export class Repository {
-  public static async create(local: nodegit.Repository, github?: GithubRepository, user?: User) {
+  public static async create(local: nodegit.Repository, name: string, user?: User) {
     const core = new Core(local, user);
     await core.refresh(true);
 
-    return new Repository(core, github);
+    return new Repository(core, name);
   }
-  public constructor(core: Core, github?: GithubRepository) {
-    this.github = github;
+  public constructor(core: Core, name: string) {
     this.git = core;
+    this.name = name;
 
     this.head = new Head(this.git);
     this.workingDirectory = new WorkingDirectory(this.git);
@@ -99,23 +97,8 @@ export class Repository {
     this.git.commandRecord.next("git checkout " + branch.shorthand());
   }
 
-  public getImageUrl() {
-    return this.github && "URL";
-  }
   public getName() {
-    if(this.github) {
-      return this.github.name;
-    }
-    else {
-      // Get the last part of the filename. Maybe theres a better way?
-      const workdir = this.git.repo.workdir();
-      const separator = workdir.includes('\\') ? '\\' : '/';
-
-      return workdir.slice(
-        workdir.lastIndexOf(separator, -1),
-        workdir.endsWith(separator) ? workdir.length - 1 : workdir.length
-      );
-    }
+    return this.name;
   }
 
   public getHeadCommit(head: nodegit.Reference) {
@@ -157,5 +140,5 @@ export class Repository {
   }
 
   private git: Core;
-  private github: GithubRepository;
+  private name: string;
 }
