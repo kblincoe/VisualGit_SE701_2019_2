@@ -6,6 +6,20 @@
         </button>
     </div>
     <div class="modal-body">
+      <table id="branch-option-container">
+        <tbody>
+          <tr>
+            <th>
+              <h5 class="modal-title" id="current-branch">Current branch: <span>{{currentBranch}}</span></h5>
+            </th>
+            <th>
+              <button type="button" class="btn" id="btn-delete" (click)="deleteBranch()" *ngIf="deletionAllowed">
+                Delete current branch
+              </button>
+            </th>
+          </tr>
+        </tbody>
+      </table>
         <div>
             <input class="form-control search-branch-input" placeholder="Search Branch" (keyup)="onKeyUp($event)">
         </div>

@@ -1,6 +1,6 @@
 .fixed_header{
-    table-layout: fixed;
-    border-collapse: collapse;
+  table-layout: fixed;
+  border-collapse: collapse;
 }
 
 .fixed_header tbody{
@@ -11,24 +11,45 @@
 }
 
 .create-branch-input {
-    width: 250px;
-    display: inline-block;
-    margin-right: 55px;
+  width: 250px;
+  display: inline-block;
+  margin-right: 55px;
 }
 
 .table-row {
-    cursor: pointer
+  cursor: pointer
 }
 
 .search-branch-input {
-    margin-bottom: 10px;
-    width: 467px;
+  margin-bottom: 10px;
+  width: 467px;
 }
 
 .btn {
-    color:white;
-    background: green;
+  color: white;
+  background: green;
 }
 
+#branch-option-container {
+  width: 100%;
+  margin-bottom: 16px;
+}
 
+#btn-delete {
+  background: #e36209;
+  float: right;
+}
 
+#btn-delete:hover {
+  background: #bf5208;
+}
+
+#current-branch {
+  font-size: 18px;
+  font-weight: normal;
+  float: left;
+}
+
+#current-branch span {
+  font-weight: bold;
+}
