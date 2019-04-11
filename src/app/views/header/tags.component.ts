@@ -66,6 +66,14 @@ export class TagsComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
+  public getCommitDescription(commit: Commit) {
+    const shortId = commit.getId().toString().substr(0, 7);
+    const messageLength = commit.getMessage().length;
+    const shortMessage = commit.getMessage().substr(0, 30);
+
+    return `${shortId} - ${messageLength > 30 ? shortMessage + '...' : shortMessage }`;
+  }
+
   public addTag() {
     const commit: Commit = this.addTagForm.get('commitList').value;
     commit.addTag(this.addTagForm.get('tagName').value, '').then(() => {
