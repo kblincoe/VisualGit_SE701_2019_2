@@ -3,9 +3,24 @@
 Navigate back to [README](../README.md).
 
 #
-### All project requirements specified in the Assignment 2 handout have been incorporated into this guide. Please aim to follow the workflow and best practices. Happy coding!
+### All project requirements specified in the [Assignment 2 handout](https://canvas.auckland.ac.nz/courses/39855/files/folder/Part%201/coursework?preview=2851856) have been incorporated into this guide. Please aim to follow the workflow and best practices. Happy coding!
 
 #
+
+# Table of Contents
+
+## 1. [ Getting Started ](#Getting-Started)
+## 2. [ Running the Code ](#Running-the-Code) 
+## 3. [ Approving Issues ](#Approving-Issues) 
+## 4. [ Updating your Fork ](#Updating-your-Fork) 
+## 5. [ Expected Contributions ](#Expected-Contributions) 
+## 6. [ Contributing to your Fork ](#Contributing-to-your-Fork)  
+## 7. [ Submitting a Pull Request](#Submitting-a-Pull-Request)   
+## 8. [ Code Review and Merging Pull Requests](#Code-Review-and-Merging-Pull-Requests)
+## 9. [ Tidying Up](#Tidying-Up)
+
+#
+<br />
 
 ## Getting Started
 We will be using the 'Fork and Pull' model for this project.
@@ -109,7 +124,9 @@ After you run npm install once in the beginning, you only need to run it later o
 
 Note: If you encounter an 'electron-rebuild' error during installation, ensure that your local repository path doesn't have any spaces in it. If it does, delete your local repository, rename the path to one with no spaces, clone again and run 'npm install' again.
 
-## Running the code
+<br />
+
+## Running the Code
 ````
 npm run test
 npm run lint
@@ -123,6 +140,8 @@ npm run start starts VisualGit.
 
 You can log in to VisualGit using your GitHub credentials.
 
+<br />
+
 ## Approving issues
 - Before approving issues, which are bugs, you should ensure that the bug exists (if you can’t, ask the author for more details). 
 - Before approving feature requests, you should ensure that the feature is appropriate for the product and the need for the feature has been well described (if not, ask the author for more details). 
@@ -132,7 +151,9 @@ You can log in to VisualGit using your GitHub credentials.
 
 If you approve an issue, please update the [contribution tracking sheet](https://docs.google.com/spreadsheets/d/1LkejPCwIMmFTnO8fR4aW8SnhFZTEAMqyIu6_s4_wmC4/edit?usp=sharing).
 
-## Updating your fork
+<br />
+
+## Updating your Fork
 - Always rebase before you create a new branch off master so that you can begin with the latest working version of the codebase and avoid generating too many merge conflicts later. 
 - Never work directly in your fork’s master. You should be working in branches. 
 - Remember: Never rebase a public branch. Your fork’s master is private as you should be the only one modifying it so it’s ok to rebase that branch.
@@ -157,9 +178,12 @@ or if that doesn't work...
 ````
 git push --force-with-lease origin master
 ````
+
+<br />
+
 ## Expected Contributions
 
-[Assignment 2 handout](https://canvas.auckland.ac.nz/courses/39855/files/folder/Part%201/coursework?preview=2851856). The amount of contribution may vary depending on the complexity of selected issue per person. However, it is expected that each member performs at least one of each type of contribution mentioned below. 
+As mentioned in the [Assignment 2 handout](https://canvas.auckland.ac.nz/courses/39855/files/folder/Part%201/coursework?preview=2851856), the amount of contribution may vary depending on the complexity of selected issues per person. However, it is expected that each member performs at least one of each contribution type below:
 
 ### Types of Contributions
 
@@ -183,14 +207,17 @@ three things you learned about working in a large team through this project. Thi
 bulleted format, and should be ½ a page or less. A single pdf file should be submitted. The file
 should be named A2_UPI.pdf. 
 
-## Making contributions to your fork
+
+<br />
+
+## Contributing to your Fork
 
 Before you can start contributing documentation or code for a feature or bug fix, you must:
 
 #### 1.	Assign yourself to an existing, unclaimed, approved issue which directly relates to the contribution you wish to make. 
 - Aim to select an issue from the Triage section of the [Kanban board](https://github.com/kblincoe/VisualGit_SE701_2019_2/projects/1) if available, however, you can also select one from the list of [all issues](https://github.com/kblincoe/VisualGit_SE701_2019_2/issues).
 - Link the issue (if not done already) to project MLT3 so it can be automatically moved to the backlog of the Kanban board.
-- Set yourself a completion deadline and add this to the issue. You must aim to complete your contribution and submit a pull request by this deadline.
+- Only if you wish to, specify a work estimate in hours and/or a completion deadline.
 - By looking at the other open issues, identify dependencies for this issue in comments e.g. "Depends on #123" or “Blocks #123”. If dependencies are found, you should coordinate your changes and document this coordination in the comments.
 
 or
@@ -202,7 +229,7 @@ This new issue must:
 -	Have a size label (Very small, Small, Medium, Large, or Very large)
 -	Initially have the ‘Unapproved’ label.
 -	Be linked to project MLT3. This will automatically move the issue to the backlog of the [Kanban board](https://github.com/kblincoe/VisualGit_SE701_2019_2/projects/1).
--	Have a completion deadline. You must aim to complete your contribution and submit a pull request by this deadline.
+-	Only if you wish to, specify a work estimate in hours and/or a completion deadline.
 -   Include dependencies on other issues if they exist e.g. "Depends on #123" or “Blocks #123”. If dependencies are found, you should coordinate your changes and document this coordination in the comments.
 -	Be approved by 3 others who must leave a comment on the new issue saying they approve. The third approver must also replace the ‘Unapproved’ label with ‘Approved.’
 
@@ -212,29 +239,43 @@ Once the issue is approved, assign yourself to it. Please note that you cannot c
 
 On the [Kanban board](https://github.com/kblincoe/VisualGit_SE701_2019_2/projects/1), move the issue to ‘In progress’ once you begin working on it.
 
-Create a new branch every time you start work on a new issue. If the change is large, consider using a feature flag and multiple pull requests.
-Before you branch, ensure that you have updated your fork by following the instructions in [Updating your fork](##Updating-your-fork) above.
+Create a new branch every time you start work on a new issue. If the change is large, consider using a feature flag and multiple pull requests. 
+Before you branch, please ensure that you have updated your fork by following the instructions in [Updating your fork](##Updating-your-fork) above.
 Pick a short descriptive branch name to describe the issue you plan to work on (Avoid using ‘#’ or a number as a prefix as it might lead to branch switching issues later). 
 
 Then, run the following command to switch to master first (if you’re not already in it) and then branch from master and switch to your new branch.
 ````
 git checkout master
-git checkout -b NewBranch
+git checkout -b YourFeatureBranch
 ````
 
 Commit early and often.
 
-All code additions should include associated tests. If you feel that your code change does not need a test, please discuss this with the TA to obtain approval.
+All code additions should include associated tests. At this point, our project does not have automated testing so just include manual testing steps in your pull requests. If you feel that your code change does not need a test, please discuss this with the TA to obtain approval.
 
-Ensure that the code is working correctly and that all tests pass.
+Ensure that the code is working correctly and that all your manual tests pass.
 
 After you have made a non-trivial modification to your new branch in your local repo, you’ll need to stage changes if needed (use 'git add filename' command instead of the 'git add .' command below if you only want to stage specific files and use 'git rm' to stage file deletions). Then, commit your changes. 
 ````
 git add .
-git commit -m “This commit will add contributing guidelines to the README”
+git commit -m “Add contributing guidelines to the README”
 ````
 
-Rebase your forks master branch to update it with changes from upstream. Remember to rebase often.
+Please rebase your feature branch often to ensure that it is up to date with upstream's master and that your contribution will still work when merged. 
+````
+git checkout YourFeatureBranch
+git fetch upstream
+git rebase upstream/master
+````
+
+If the rebase command results in conflicts, solve these and then:
+````
+git rebase --continue
+````
+
+Once you are done with your doc update, feature or bug fix, you must squash your commits if you have more than 1, before submitting a pull request. 
+
+To do this, first rebase your fork's master branch to update it with changes from upstream. 
 ````
 git checkout master
 git fetch upstream
@@ -246,9 +287,10 @@ If the rebase command results in conflicts, solve these and then:
 git rebase --continue
 ````
 
-Once you are done with your doc update, feature or bug fix, you must squash your commits if you have more than 1, before submitting a pull request. Ensure your branch is up to date with the master branch, then use the following commands:
+Then, squash your commits.
+
 ````
-git checkout <Your feature branch>
+git checkout YourFeatureBranch
 git rebase -i master
 ````
 Again, if the rebase command results in conflicts, solve these and then:
@@ -256,24 +298,25 @@ Again, if the rebase command results in conflicts, solve these and then:
 git rebase --continue
 ````
 
-
 An interactive text editor will pop up. By default the editor is [Vim](https://coderwall.com/p/adv71w/basic-vim-commands-for-getting-started).
-Leave the first commit as ‘pick’ and replace the ‘pick’ in the other commits with ‘squash.’ You can replace that first ‘pick’ with ‘reword’ if you need to edit the commit message that will be used. The commit message that will be used should make sense with the prefix "This commit will" and should describe the issue e.g. "This commit will update documentation” makes sense so the commit message should be "Update Documentation". Save and exit the editor.
-If you select ‘reword’, you’ll be prompted to enter your new commit message in an editor. Save and close, and then close any rebase files that open after that to finish squashing.
+Leave the first commit as ‘pick’ and replace the ‘pick’ in the other commits with ‘squash.’ You can replace that first ‘pick’ with ‘reword’ if you need to edit the commit message that will be used with the new message next to it. The commit message that will be used should make sense with the prefix "This commit will" and should describe the issue e.g. "This commit will update documentation” makes sense so the commit message should be "Update Documentation". You can also include the issue number in your commit (recommended) e.g. "#7 Update Documentation". Save and exit the editor. If you select ‘reword’, you’ll be prompted to enter your new commit message in an editor. Save and close, and then close any rebase files that open after that to finish squashing.
 
-Then you have to force push your final, squashed commit to the remote fork.
+Then you have to force push your final, squashed commit and all other rebase updates to the remote fork.
 ````
-git push -f
+git push --force-with-lease
 ````
 
+<br />
 
-## Submitting a pull request
+## Submitting a Pull Request
+
 Once you have committed and pushed to your fork and are ready to have your code merged into the main repository’s master branch (the only branch which will be marked), you must submit a pull request. You can do this on GitHub.
 
 You should see the branch that was just pushed. Click on ‘Compare and pull request’ next to it.
 
 The pull request should:
 -	Include a title summarizing the changes. 
+-   Include the issue number in the title.
 -	Include more details about the changes made in the body.
 -   Mention the OS used for development.
 -   Be linked to project MLT3 so that it can be automatically moved to 'In Progress' on the [Kanban board](https://github.com/kblincoe/VisualGit_SE701_2019_2/projects/1).
@@ -281,18 +324,29 @@ The pull request should:
 
 Submit your pull request for code review.
 
-## Reviewing a pull request (Code Review) and merging it
+<br />
+
+##  Code Review and Merging Pull Requests
+
 Navigate to the main repo page and click ‘Pull requests.' 
 
 Select someone else’s pull request to review. Please aim to choose a pull request with a development OS different to your own.
 
 Assign yourself to the selected pull request.
 
-The Code Review must include running the code and testing it to see that everything works as expected and that all tests pass. So, check out the pull request into a new local branch and switch to it.
+The Code Review must include running the code and testing it to see that everything works as expected and that all manual tests pass. So check out the pull request into a new temporary local branch and switch to it. When noting down the pull request number, please be careful that you don't note down the issue number accidentally as it may be in the pull request title. The greyed out pull request number is the one you want.
 ````
-git fetch upstream pull/pullrequestnumber/head:NewPullRequestReviewBranch
-git checkout NewPullRequestReviewBranch
+git fetch upstream pull/pullrequestnumber/head:PullRequestReviewBranch
+git checkout PullRequestReviewBranch
 ````
+
+While we hope that everyone will update their feature branches before submitting pull requests and that pull requests won't become stale (which happens quite often) it is better to be certain that merging the pull request into upstream/master won't break the build. In order to do this, rebase.
+````
+git checkout PullRequestReviewBranch
+git fetch upstream
+git rebase upstream/master
+````
+
 Run and test to ensure that everything works as expected.
 
 To add a review, click on 'Add your review' in the pull request.
@@ -310,28 +364,22 @@ If it does work:
 - Don't forget to praise concise/readable/efficient/elegant code.
 - If you would like the author to make changes before merging, choose the 'Request changes' option. Otherwise, choose 'Approve' and submit your review.
 
-Once the author has made all required changes, resolved all existing conflicts, squashed commits and you have approved the pull request, navigate back to the issue and then, choose the 'Rebase and merge' option by clicking on the dropdown arrow next to the 'Merge pull request' button. This will merge the pull request into the master branch of the main repo.
+Once the author has made all required changes, resolved all existing conflicts, squashed commits and you have approved the pull request, navigate back to the issue on GitHub and then, ensure that you choose the 'Rebase and merge' option by clicking on the dropdown arrow next to the 'Merge pull request' button. This will merge the pull request into the master branch of the main repo. Choosing 'Rebase and merge' is very important so that we can avoid unneccesary merge commits.
 
-Delete your local pull request review branch to keep things tidy. You shouldn't be pushing this to your remote fork.
+Delete your temporary local pull request review branch to keep things tidy. You shouldn't be committing to, merging or pushing this branch.
 ````
-git branch -d NewPullRequestReviewBranch
-````
-or if that complains...
-````
-git branch -D NewPullRequestReviewBranch
+git branch -D PullRequestReviewBranch
 ````
 
 Once you have performed a code review, please update the [contribution tracking sheet](https://docs.google.com/spreadsheets/d/1LkejPCwIMmFTnO8fR4aW8SnhFZTEAMqyIu6_s4_wmC4/edit?usp=sharing).
 
-## Tidying up after a pull request merge
+<br />
+
+## Tidying Up
+
 After your pull request has been approved and merged, you can delete that feature branch to keep things tidy.
 ````
-git branch -d NewBranch
-````
-or if that complains...
-
-````
-git branch -D NewBranch
+git branch -D YourFeatureBranch
 ````
 
 Once you have resolved an issue, please update the [contribution tracking sheet](https://docs.google.com/spreadsheets/d/1LkejPCwIMmFTnO8fR4aW8SnhFZTEAMqyIu6_s4_wmC4/edit?usp=sharing).
