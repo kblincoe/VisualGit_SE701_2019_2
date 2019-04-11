@@ -30,6 +30,7 @@
       <!-- Branch list -->
       <button [hidden]="!currentRepo" class="btn branch-button-style" (click)="openBranchModal()">Current Branch: {{currentBranch || "branch"}}</button>
     </div>
+
     <!-- Repo Github options. Presented as icons, on far left. -->
     <div class="button-bar toolbar navbar-nav ml-auto" [hidden]="!currentRepo">
       <button class="icon-btn" (click)="toggleTag()"> <img class="icon" src="./assets/Tag.svg" title="Tag"> </button>
@@ -56,6 +57,7 @@
   </div>
 </nav>
 
+<notifier-container></notifier-container>
 <app-header-branch #branch></app-header-branch>
 <app-header-tags #tags></app-header-tags>
 <app-header-merge #merge></app-header-merge>

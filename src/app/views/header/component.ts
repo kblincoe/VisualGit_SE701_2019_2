@@ -15,8 +15,7 @@ import { ErrorService } from 'services/error.service';
 import { TagsComponent } from './tags.component';
 import { BranchComponent } from './branch.component';
 import { MergeComponent } from './merge.component';
-
-
+import { NotifierService } from 'angular-notifier';
 
 @Component({
   selector: "app-header",
@@ -24,14 +23,18 @@ import { MergeComponent } from './merge.component';
   styleUrls: ["component.scss"],
 })
 export class HeaderComponent implements OnInit, OnDestroy  {
+
   public constructor(
     private router: Router,
     private userService: UserService,
     private repositoriesService: RepositoryListService,
     private repositoryService: RepositoryService,
     private errorService: ErrorService,
-    private ngZone: NgZone
-  ) {}
+    private ngZone: NgZone,
+    private notifierService: NotifierService
+  ) {
+    this.notifier = notifierService;
+  }
 
   public ngOnInit() {
     this.subscription.add(
@@ -150,7 +153,9 @@ export class HeaderComponent implements OnInit, OnDestroy  {
   // Returns whether op succeeded, as this function is used in code as well
   async push() {
     try {
+      this.notifier.notify( 'info', 'Pushing ...' );
       await this.repositoryService.current().head.push();
+      this.notifier.notify( 'success', 'Push successful!' );
     } catch(error) {
       logger.info("Error pushing to remote: ");
       logger.info(error);
@@ -219,6 +224,7 @@ export class HeaderComponent implements OnInit, OnDestroy  {
   @ViewChild('merge') merge: MergeComponent;
 
 
+  
   createBranchInput: string;
 
   currentRepo: string;
@@ -237,4 +243,6 @@ export class HeaderComponent implements OnInit, OnDestroy  {
 
   private subscription = new Subscription();
   private repoSubscription = new Subscription();
+  private readonly notifier: NotifierService;
+
 }
