@@ -71,6 +71,7 @@ export class BranchComponent implements OnInit {
       this.currentRepo = null;
       this.branches = [];
       this.searchableBranches = [];
+      this.deletionAllowed = false;
     }
   }
 
@@ -80,6 +81,7 @@ export class BranchComponent implements OnInit {
   setBranches(branches: nodegit.Reference[]) {
     this.branches = branches.map(branch => branch.shorthand());
     this.searchableBranches = this.branches;
+    this.deletionAllowed = this.branches.length > 1 && this.currentBranch !== "master";
   }
 
   /**
@@ -127,6 +129,44 @@ export class BranchComponent implements OnInit {
     }
   }
 
+  /**
+   * Delete a branch.
+   * (TODO) Pop up a modal to confirm with the user they wish to do this.
+   */
+  async deleteBranch() {
+    try {
+      // Only delete if there are other branches.
+      if (this.deletionAllowed) {
+        // TODO (Blocked by issue 241) Pop up a modal here to confirm deletion.
+        await this.repositoryService.current().deleteBranch(this.currentBranch);
+
+        if (this.branches && this.branches.length > 0) {
+          // Update the list of searchable branches.
+          const indexOfDeletedItem = this.branches.indexOf(this.currentBranch);
+          if (indexOfDeletedItem !== -1) {
+            this.branches.splice(indexOfDeletedItem, 1);
+          }
+          // Switch to the master branch, or whatever's highest in priority.
+          // This will also trigger onRepoChange, which will update the searchableBranches too.
+          await this.selectBranch(this.branches[0]);
+        }
+
+        this.modalService.dismissAll();
+        this.repositoryService.current().refresh();
+      }
+      else {
+        // Popup a modal to show the error message.
+        this.errorService.displayError("Attempting to delete a master branch or the only branch.");
+      }
+
+    } catch(error) {
+      logger.info("Error trying to delete branch: ");
+      logger.info(error);
+
+      // Popup a modal to show the error message.
+      this.errorService.displayError(error);
+    }
+  }
 
   @ViewChild('content') content: ElementRef;
 
@@ -139,4 +179,6 @@ export class BranchComponent implements OnInit {
   branchCreationName = new FormControl('');
   currentRepo: string;
   currentBranch: string;
+
+  deletionAllowed = true;
 }

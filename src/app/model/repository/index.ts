@@ -62,6 +62,16 @@ export class Repository {
     this.git.commandRecord.next("git branch " + name);
     await this.git.refresh();
   }
+  
+  public async deleteBranch(name: string) {
+    logger.info("Deleting branch " + name);
+    const deleted = await nodegit.Branch.delete(await this.git.repo.getReference(name));
+
+    if (deleted) {
+      this.git.commandRecord.next("git branch -d " + name);
+      await this.git.refresh();
+    }
+  }
 
   public async checkout(branch: string | nodegit.Reference) {
     const branches = await this.git.repo.getReferences(nodegit.Reference.TYPE.LISTALL);

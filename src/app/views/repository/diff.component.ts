@@ -58,8 +58,6 @@ export class DiffPanelComponent implements OnChanges {
   @Input() preDiff?: nodegit.ConvenientPatch;
   @Input() diff: nodegit.ConvenientPatch;
 
-
-
   constructor(private errorService: ErrorService) {}
   /**
    * This function (called every time there are changes) updates the line changes.
