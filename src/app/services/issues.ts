@@ -1,30 +1,35 @@
 import { Injectable, OnDestroy } from "@angular/core";
-import { interval, Observable, Subject, Subscription } from "rxjs";
+import { interval, Observable, Subscription, BehaviorSubject } from "rxjs";
 import { combineLatest } from "rxjs/internal/observable/combineLatest";
-import { flatMap } from "rxjs/operators";
+import { flatMap, shareReplay, distinctUntilChanged } from "rxjs/operators";
 
-import { IssuesListForRepoResponseItem } from "@octokit/rest";
-import { CloseGitHubIssue, createGitHubIssue, getGitHubIssueList, SendGitHubCommentMessage } from "model/issue";
+import { GitHub, Issue } from "model/github";
 
-import { UserService } from "services/user";
 import { RepositoryService } from "services/repository";
+import { logger } from 'logger';
 
 
 @Injectable({providedIn: "root"})
-export class IssueService implements OnDestroy{
-
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
-  }
-  constructor(private userService: UserService, private repositoryService: RepositoryService) {
+export class IssueService implements OnDestroy {
+  constructor(private repositoryService: RepositoryService) {
     // Make our refresher update AT LEAST every REFRESH_RATE
-    this.subscription =
-      interval(this.REFRESH_RATE).subscribe(() => this.refresher.next());
+    this.subscription.add(
+      interval(this.REFRESH_RATE).subscribe(() => this.refresher.next())
+    );
+    this.subscription.add(
+      this.repositoryService.github.subscribe(github => this.currentGithub = github)
+    );
 
     this.issues =
-      combineLatest(this.userService.observeUser(), this.repositoryService.repository, this.refresher).pipe(
-        flatMap(([user, repository, _]) =>
-          getGitHubIssueList(user, repository.getName())));
+      combineLatest(this.repositoryService.github, this.refresher)
+      .pipe(
+        flatMap(([github, _]) => github && github.getIssueList()),
+        distinctUntilChanged(IssueService.areIssuesSame),
+        shareReplay(1)
+      );
+  }
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   // Force the issue list to refresh
@@ -32,40 +37,45 @@ export class IssueService implements OnDestroy{
     this.refresher.next();
   }
 
-
-
   public async sendCommentMessage(message: string) {
-    try {
-      const repoName = this.repositoryService.current().getName();
-      const issueNum = this.selectedIssue.number;
-      await SendGitHubCommentMessage(this.userService.getUser(), repoName, issueNum, message);
-    }catch (e) {
-    }
+    const issueNum = this.selectedIssue.number;
+    await this.currentGithub.sendCommentMessage(issueNum, message);
   }
 
   public async closeIssue() {
-    try {
-      await CloseGitHubIssue(this.userService.getUser(), this.repositoryService.current().getName(), this.selectedIssue.number);
-      this.refresh();
-    }catch (e) {
-
-    }
+    await this.currentGithub.closeIssue(this.selectedIssue.number);
+    this.refresh();
   }
 
   public async createIssue(issueTitle: string, description?: string) {
-    try {
-      await createGitHubIssue(this.userService.getUser(), this.repositoryService.current().getName(), issueTitle, description);
-      this.refresh();
-    }catch (e) {
-    }
+    await this.currentGithub.createIssue(issueTitle, description);
+    this.refresh();
   }
 
+  public selectedIssue: Issue;
+  public issues: Observable<Issue[]>;
 
-  public selectedIssue: IssuesListForRepoResponseItem;
-  public issues: Observable<IssuesListForRepoResponseItem[]>;
-  private refresher = new Subject<void>();
-  private subscription: Subscription;
+  /**
+   * Does a basic check for whether the current list is different from the previous one
+   */
+  private static areIssuesSame(prev: Issue[], cur: Issue[]) {
+    if(prev.length !== cur.length) {
+      logger.info("Updating issue list");
+      return false;
+    }
+
+    for(let i = 0; i < prev.length; ++i) {
+      if(prev[i].title !== cur[i].title || prev[i].updated_at !== cur[i].updated_at) {
+        logger.info("Updating issue list");
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  private currentGithub: GitHub = null;
+  private refresher = new BehaviorSubject<void>(null);
+  private subscription = new Subscription();
   private REFRESH_RATE = 4000;
-
-
 }

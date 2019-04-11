@@ -5,33 +5,17 @@ import * as nodegit from 'nodegit';
 import * as Octokit from '@octokit/rest';
 
 import { User } from './user';
-
-
-// Taken from https://developer.github.com/v3/repos/
-// Contains the important parts of the repo (list) response message
-export interface GithubRepository {
-  id: number;
-  node_id: string;
-  name: string;
-  full_name: string;
-  owner: any;
-  private: boolean;
-
-  url: string; // The URL for API access (https://api.github...)
-  html_url: string; // The URL for user access (https://github.com...)
-  clone_url: string;
-  git_url: string;
-}
+import { GithubRepositoryInfo } from './github';
 
 /**
  * Gets a list of repositories that could be used
  */
-export async function getOwnedGithubRepositories(user: User): Promise<GithubRepository[]> {
+export async function getOwnedGithubRepositories(user: User): Promise<GithubRepositoryInfo[]> {
     const response = await user.github.repos.list();
-    return (response.data as GithubRepository[]);
+    return (response.data as GithubRepositoryInfo[]);
 }
 
-export async function findGithubRepo(gitUrl: string, user: User): Promise<GithubRepository> {
+export async function findGithubRepo(gitUrl: string, user: User): Promise<GithubRepositoryInfo> {
   // Fetching should be done with user (if present) so we have user's permissions
   if(gitUrl.endsWith('.git'))
     gitUrl = gitUrl.substring(0, gitUrl.length - 4);
