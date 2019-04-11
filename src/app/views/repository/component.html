@@ -1,5 +1,12 @@
+<div class = "repo-header">
+  <h1>Commits History Graph</h1>
+</div>
+<app-graph-panel [repository]="repository"></app-graph-panel>
+<div class = "repo-header">
+  <h1>Changes Tracking</h1>
+</div>
 <div class="top-section">
   <app-file-panel [workingDirectory]="workingDirectory" (displayFile)="displayFile($event)"></app-file-panel>
   <app-diff-panel [diff]="selectedPatch" [preDiff]="selectedPrePatch" [workingDirectory]="workingDirectory"></app-diff-panel>
 </div>
-<app-graph-panel [repository]="repository"></app-graph-panel>
+
