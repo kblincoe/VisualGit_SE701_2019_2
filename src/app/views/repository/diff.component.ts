@@ -57,7 +57,7 @@ export class DiffPanelComponent implements OnChanges {
   // but because we have to work from the file in the working directory, we work backwards, unapplying the preDiff and then the actual diff.
   @Input() preDiff?: nodegit.ConvenientPatch;
   @Input() diff: nodegit.ConvenientPatch;
- 
+
 
 
   constructor(private errorService: ErrorService) {}
@@ -229,7 +229,7 @@ export class DiffPanelComponent implements OnChanges {
       // Now stage changes
       await this.save();
     } catch(error) {
-      logger.info("No file selected")
+      logger.info("No file selected");
       this.errorService.displayError("Error: You must select a file in order to discard it.");
 
     }
