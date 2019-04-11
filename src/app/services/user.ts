@@ -25,7 +25,7 @@ export class UserService {
     const twoFactorCallback = () => this.twoFactorService.displayModal()
       .then(
         (result) => new Promise<string>((resolve, reject) => {
-          resolve(result.code)
+          resolve(result.code);
         }
         ));
     const user = await User.login(username, password, twoFactorCallback);

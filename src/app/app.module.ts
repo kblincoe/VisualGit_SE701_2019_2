@@ -21,7 +21,7 @@ import { IFrameComponent } from "views/issuePage/component";
 import { NewIssueComponent } from "views/issuePage/createIssuePage/component";
 import { CommentIssueComponent } from "views/issuePage/commentIssuePanel/component";
 import { BranchComponent } from 'views/header/branch.component';
-import {TwoFactorContentComponent } from 'services/twofactorconfirm.service'
+import { TwoFactorContentComponent } from 'services/twofactorconfirm.service';
 
 @NgModule({
   declarations: [
@@ -44,7 +44,7 @@ import {TwoFactorContentComponent } from 'services/twofactorconfirm.service'
     FooterComponent,
     HeaderComponent
   ],
-  entryComponents: [ErrorContentComponent,TwoFactorContentComponent, TagsComponent, BranchComponent],
+  entryComponents: [ErrorContentComponent, TwoFactorContentComponent, TagsComponent, BranchComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
