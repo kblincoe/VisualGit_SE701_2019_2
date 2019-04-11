@@ -15,6 +15,13 @@ export default class Commit {
     }
 
     /**
+     * Gets the message of this commit
+     */
+    public getMessage() {
+        return this.commit.message();
+    }
+
+    /**
      * Adds a tag to this commit with a specified name and message
      */
     public async addTag(name: string, message: string) {

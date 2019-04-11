@@ -7,13 +7,16 @@
     </div>
     <div class="modal-body">
         <div class="tag-table table-responsive">
-            <table class="table table-striped table-sm">
+            <table class="table table-striped table-sm table-nowrap">
                 <thead>
                     <tr>
-                        <th>
+                        <th style="width: 25%">
                             Commit ID
                         </th>
-                        <th>
+                        <th cstyle="width: 50%">
+                            Message
+                        </th>
+                        <th style="width: 25%">
                             Tags
                         </th>
                     </tr>
@@ -21,10 +24,13 @@
                 <tbody>
                     <tr *ngFor="let commit of tagMap | keyvalue">
                         <ng-container *ngIf="commit.value.toString()">
-                            <td>
+                            <td style="width: 25%">
                                 {{commit.key.getId()}}
                             </td>
-                            <td>
+                            <td style="width: 50%"> 
+                                {{commit.key.getMessage()}}
+                            </td>
+                            <td style="width: 25%">
                                 {{commit.value.toString()}}
                             </td>
                         </ng-container>
@@ -44,7 +50,7 @@
                             Commit:
                             <select class="form-control" formControlName="commitList">
                                 <option *ngFor="let commit of commits" [ngValue]="commit">
-                                    ID: {{commit.getId()}}
+                                    {{getCommitDescription(commit)}}
                                 </option>
                             </select>
                         </label>
@@ -62,7 +68,7 @@
                             Commit:
                             <select class="form-control" formControlName="commitList">
                                 <option *ngFor="let commit of commits" [ngValue]="commit">
-                                    ID: {{commit.getId()}}
+                                        {{getCommitDescription(commit)}}
                                 </option>
                             </select>
                         </label>
