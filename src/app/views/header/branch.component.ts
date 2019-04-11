@@ -1,14 +1,15 @@
-import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
-
+import { Component, ViewChild, ElementRef, OnInit, NgZone } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { RepositoryService } from 'services/repository';
 import { Subscription } from 'rxjs';
-import { logger } from 'logger';
+
 import * as nodegit from 'nodegit';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { logger } from 'logger';
+
 import { Repository } from 'model/repository';
-import Commit from 'model/repository/commit';
 import { ErrorService } from 'services/error.service';
+import { RepositoryService } from 'services/repository';
 
 @Component({
   selector: 'app-header-branch',
@@ -17,9 +18,11 @@ import { ErrorService } from 'services/error.service';
 })
 export class BranchComponent implements OnInit {
   constructor(
+    private ngZone: NgZone,
     private modalService: NgbModal,
     private repositoryService: RepositoryService,
-    private errorService: ErrorService) {
+    private errorService: ErrorService,
+    private router: Router) {
 
   }
 
@@ -87,6 +90,8 @@ export class BranchComponent implements OnInit {
     try {
       await this.repositoryService.current().checkout(branch);
       this.modalService.dismissAll();
+
+      this.ngZone.run(() => this.router.navigate(['/repo']));
     } catch(error) {
       logger.info("Selecting branch failed:");
       logger.info(error);
