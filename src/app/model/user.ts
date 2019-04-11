@@ -65,7 +65,13 @@ export class User {
     try {
       await octokit.oauthAuthorizations.createAuthorization({note: uuid.v1()});
 
+<<<<<<< HEAD
       const gitCredentials = await User.generateGitCredentials(username, password);
+=======
+    await octokit.oauthAuthorizations.createAuthorization({note: uuid.v1()});
+
+    const gitCredentials = await User.generateGitCredentials(username, password);
+>>>>>>> 97a37d1ff655d55a8f866f62a327669fde62642b
 
       // Unfortunately not typed. See https://developer.github.com/v3/users/#get-the-authenticated-user
       // Doing this to ensure authentication of user credentials
