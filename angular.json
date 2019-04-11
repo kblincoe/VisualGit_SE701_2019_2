@@ -28,6 +28,7 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
+              "src/gitignore_templates",
               {
                 "glob": "package.json",
                 "input": "src/environments",
@@ -102,7 +103,8 @@
             "scripts": [],
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/gitignore_templates"
             ]
           }
         },
