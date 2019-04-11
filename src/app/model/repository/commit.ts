@@ -1,7 +1,6 @@
 import * as nodegit from 'nodegit';
 import Core from "./core";
 import { logger } from 'logger';
-
 export default class Commit {
     public constructor(git: Core, commit: nodegit.Commit) {
         this.git = git;
@@ -20,18 +19,13 @@ export default class Commit {
      */
     public async addTag(name: string, message: string) {
         logger.info(`Adding tag ${name} to ${this.commit.id()}`);
-        try {
-            await this.git.repo.createTag(
-                this.commit.id(),
-                name,
-                message
-            );
+        await this.git.repo.createTag(
+            this.commit.id(),
+            name,
+            message
+        );
 
-            await this.git.refresh();
-        } catch (error) {
-            logger.error("Error creating tag: ");
-            logger.error(error);
-        }
+        await this.git.refresh();
     }
 
     /**
@@ -39,16 +33,11 @@ export default class Commit {
      */
     public async removeTag(name: string) {
         logger.info(`Removing tag ${name}`);
-        try {
-            await this.git.repo.deleteTagByName(
+        await this.git.repo.deleteTagByName(
                 name
             );
 
-            await this.git.refresh();
-        } catch (error) {
-            logger.error("Error removing tag: ");
-            logger.error(error);
-        }
+        await this.git.refresh();
     }
 
     /**
