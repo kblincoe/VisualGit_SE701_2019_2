@@ -1,0 +1,19 @@
+<div class="panel">
+    <div style="margin-bottom: 10px;">
+        <span class="title-label text">Assignees</span>
+        <button class="setting-btn" (click)="manageAssignees()">
+            <img src="./assets/Settings.svg">
+        </button>
+    </div>
+
+    <div *ngIf="currentAssignees != null && currentAssignees.length; else displayNoAssignee">
+        <div *ngFor="let assignee of currentAssignees">
+            <span class="text">{{assignee.login}}</span>
+        </div>
+    </div>
+    <ng-template #displayNoAssignee>
+        <span class="text">No Assignee</span>
+    </ng-template>
+</div>
+
+<app-issue-assignee-management #assigneeManagement></app-issue-assignee-management>

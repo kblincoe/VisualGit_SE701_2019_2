@@ -1,0 +1,51 @@
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Assignees</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <!-- Table for displaying available assignees -->
+        <table *ngIf="currentAssignees != null" class="assignee-table table table-striped table-hover table-sm fixed_header">
+            <thead>
+                <tr>
+                    <th>
+                        Selected Assignees
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table-row" *ngFor="let currentAssignee of currentAssignees">
+                    <td>
+                        <div [ngClass]="['input-group']">
+                            <span class="assignee-label">{{currentAssignee.login}}</span>
+                            <button class="edit-btn remove-btn" (click)="removeAssignee(currentAssignee.login)">Remove</button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Table for displaying asignees that has already been assigned to the issue -->
+        <table *ngIf="availableAssignees != null" class="assignee-table table table-striped table-hover table-sm fixed_header">
+            <thead>
+                <tr>
+                    <th>
+                        Available Assignees
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table-row" *ngFor="let availableAssignee of availableAssignees">
+                    <td>
+                        <div [ngClass]="['input-group']">
+                            <span class="assignee-label">{{availableAssignee.login}}</span>
+                            <button class="edit-btn add-btn" (click)="addAssignee(availableAssignee.login)">Add</button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</ng-template>

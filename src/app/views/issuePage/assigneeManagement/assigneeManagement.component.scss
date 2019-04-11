@@ -1,0 +1,25 @@
+.assignee-label {
+    flex: 1 1 auto;
+}
+
+.edit-btn {
+    background-color: white;
+    border-radius: 10px;
+    min-width: 75px;
+}    
+
+.remove-btn {
+    color: red;
+    border: 1px red solid;
+}
+
+.add-btn {
+    color: green;
+    border: 1px green solid;
+}
+
+.assignee-table {
+    min-height: 40px;
+    max-height: 200px;
+    overflow-y: auto;
+}
