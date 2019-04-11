@@ -8,6 +8,7 @@ import { logger } from 'logger';
 import { Repository } from 'model/repository';
 import Commit from 'model/repository/commit';
 import { RepositoryService } from 'services/repository';
+import { ErrorService } from 'services/error.service';
 
 @Component({
   selector: 'app-header-tags',
@@ -15,7 +16,9 @@ import { RepositoryService } from 'services/repository';
   styleUrls: ["./tags.component.scss"]
 })
 export class TagsComponent implements OnInit, OnDestroy {
-  constructor(private modalService: NgbModal, private repositoryService: RepositoryService) {
+  constructor(private modalService: NgbModal,
+              private repositoryService: RepositoryService,
+              private errorService: ErrorService) {
     this.addTagForm = new FormGroup({
       tagName: new FormControl(null, [
         Validators.required
@@ -69,32 +72,35 @@ export class TagsComponent implements OnInit, OnDestroy {
       this.updateTagMap();
       this.addTagForm.get('commitList').reset();
       this.addTagForm.get('tagName').reset();
+    }, (error) => {
+      this.errorService.displayError(error);
     });
-
   }
 
   public removeTag() {
     const commit: Commit = this.removeTagForm.get('commitList').value;
     commit.removeTag(this.removeTagForm.get('tagName').value).then(() => {
-      this.updateTagMap();
-      this.removeTagForm.get('commitList').reset();
-      this.removeTagForm.get('tagName').reset();
-    });
+        this.updateTagMap();
+        this.removeTagForm.get('commitList').reset();
+        this.removeTagForm.get('tagName').reset();
+      }, (error) => {
+        this.errorService.displayError(error);
+      });
   }
 
   /**
    * Updates map between a commit and its tags
    */
   private updateTagMap() {
-    this.tagMap = new Map<Commit, string[]>();
-    for (const commit of this.commits) {
-      commit.getTags().then((tags) => {
-        this.tagMap.set(commit, tags);
-      });
-    }
+  this.tagMap = new Map<Commit, string[]>();
+  for (const commit of this.commits) {
+    commit.getTags().then((tags) => {
+      this.tagMap.set(commit, tags);
+    });
   }
+}
 
-  @ViewChild('content') content: ElementRef;
+@ViewChild('content') content: ElementRef;
 
   private subscription = new Subscription();
   private addTagForm: FormGroup;
