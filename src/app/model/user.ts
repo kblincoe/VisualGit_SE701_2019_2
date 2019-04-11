@@ -7,6 +7,7 @@ import * as Octokit from '@octokit/rest';
 
 import * as uuid from "uuid";
 
+export class ConnectionError extends Error {}
 export class AuthenticationError extends Error {}
 export class SshAuthenticationError extends AuthenticationError {}
 
@@ -61,14 +62,13 @@ export class User {
       },
       userAgent: 'octokit/rest.js v1.2.3',
     });
-
-    await octokit.oauthAuthorizations.createAuthorization({note: uuid.v1()});
-
-    const gitCredentials = await User.generateGitCredentials(username, password);
-
-    // Unfortunately not typed. See https://developer.github.com/v3/users/#get-the-authenticated-user
-    // Doing this to ensure authentication of user credentials
     try {
+      await octokit.oauthAuthorizations.createAuthorization({note: uuid.v1()});
+
+      const gitCredentials = await User.generateGitCredentials(username, password);
+
+      // Unfortunately not typed. See https://developer.github.com/v3/users/#get-the-authenticated-user
+      // Doing this to ensure authentication of user credentials
       const githubInfo = await octokit.users.getAuthenticated();
 
       return new User(
@@ -79,11 +79,12 @@ export class User {
         password
       );
     } catch(error) {
-      if(error.status === 401 || error.status === 404) {
+      if(error.status === 500) // Octokit seems to use 500 for connection issues.
+        throw new ConnectionError("Cannot reach GitHub servers. Are you connected to the internet?");
+      else if(error.status === 401 || error.status === 404)
         throw new AuthenticationError("Username or password incorrect");
-      } else {
+      else // Worst case, just rethrow
         throw error;
-      }
     }
   }
 
@@ -97,6 +98,7 @@ export class User {
     const cred = await User.generateGitCredentials("guest");
 
     const octokit = new Octokit({userAgent: 'octokit/rest.js v1.2.3'});
+
     const guestAvatar = './assets/VisualGit_Logo.png';
     return new User(
       cred,
