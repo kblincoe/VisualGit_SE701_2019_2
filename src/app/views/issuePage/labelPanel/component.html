@@ -1,0 +1,31 @@
+<div class="title">
+  <span>
+    <label style="color: #cccccc">Labels</label>
+  </span>
+  <button class="icon-btn" style="float: right" (click)="onSettingBtnClicked()"> <img class="icon" src="./assets/Settings.svg" title="Settings" style="height: 2vh;  width: 2vh"></button>
+</div>
+
+<!-- Label List Panel -->
+<div class="issue-list-region">
+  <div class="files-changed">
+
+    <!-- Each row -->
+    <div [ngClass]="['input-group']" *ngFor="let label of labelArray; let i = index" style="margin-bottom: 1px">
+
+      <!-- Select file button. Uses radios for toggling capability (i.e. only one file can be selected at a time) -->
+      <!--button class="btn btn-secondary shadow-none" style="width: 100%"-->
+      <label class="label" style="font-size: large; font-weight: bold;color: white; flex:1 1 auto;margin-left: 1vh;">
+          {{label.name}}
+      </label>
+      <div style="width: 1vh; height: 1vh; margin-right: 1vh;margin-top: 0.8vh" [style.background-color]="'#'+label.color">
+      </div>
+
+      <!--/button-->
+
+
+    </div>
+
+  </div>
+</div>
+
+<app-issue-dropdown #dropdown></app-issue-dropdown>

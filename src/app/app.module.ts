@@ -23,6 +23,8 @@ import { CommentIssueComponent } from "views/issuePage/commentIssuePanel/compone
 import { BranchComponent } from 'views/header/branch.component';
 import { TwoFactorContentComponent } from 'services/twofactorconfirm.service';
 import { MergeComponent } from 'views/header/merge.component';
+import { LabelComponent } from "views/issuePage/labelPanel/component";
+import { DropdownComponent } from "views/issuePage/labelPanel/dropdown.component";
 
 
 @NgModule({
@@ -32,6 +34,8 @@ import { MergeComponent } from 'views/header/merge.component';
     IFrameComponent,
     NewIssueComponent,
     CommentIssueComponent,
+    LabelComponent,
+    DropdownComponent,
     AppComponent,
     LoginComponent,
     RepositoryComponent,

@@ -1,5 +1,6 @@
 import { IssuesListForRepoResponseItem } from "@octokit/rest";
 import { User } from "model/user";
+import { IssuesListLabelsOnIssueResponseItem } from "node_modules/@octokit/rest";
 
 
 export async function  getGitHubIssueList(user: User, repoName: string): Promise<IssuesListForRepoResponseItem[]> {
@@ -53,6 +54,72 @@ export async function createGitHubIssue(user: User, repoName: string, issueTitle
     throw new Error("Failed to create a new issue");
   }
 }
+
+
+export async function getGitHubIssueLabels(user: User, repoName: string, issueNum: number): Promise<IssuesListLabelsOnIssueResponseItem[]> {
+  let labels: IssuesListLabelsOnIssueResponseItem[];
+  try {
+    const result = await user.github.issues.listLabelsOnIssue({
+      owner: user.name,
+      repo: repoName,
+      number: issueNum});
+    labels = result.data;
+    return labels;
+  }catch (e) {
+
+  }
+}
+
+// A method to get all the labels from a repo(labeled and unlabeled)
+export async function getAllAvailabeIssueLabels(user: User, repoName: string)
+  : Promise<IssuesListLabelsOnIssueResponseItem[]> {
+  let labels: IssuesListLabelsOnIssueResponseItem[];
+  try {
+    const result = await user.github.issues.listLabelsForRepo({
+      owner: user.name,
+      repo: repoName,
+      });
+    labels = result.data;
+    return labels;
+  }catch (e) {
+
+  }
+}
+
+
+export async function addLabels(user: User, repoName: string, issueNum: number, labelArray: string[]) {
+  let labels: IssuesListLabelsOnIssueResponseItem[];
+  try {
+    const result = await user.github.issues.addLabels({
+      owner: user.name,
+      repo: repoName,
+      number: issueNum,
+      labels: labelArray
+    });
+    labels = result.data;
+    return labels;
+  }catch (e) {
+
+  }
+}
+
+export async function removeLabel(user: User, repoName: string, issueNum: number, label: string) {
+  let labels: IssuesListLabelsOnIssueResponseItem[];
+  try {
+    const result = await user.github.issues.removeLabel({
+      owner: user.name,
+      repo: repoName,
+      number: issueNum,
+      name: label
+    });
+    labels = result.data;
+    return labels;
+  }catch (e) {
+
+  }
+}
+
+
 
 
 
