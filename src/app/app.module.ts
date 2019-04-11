@@ -24,6 +24,8 @@ import { BranchComponent } from 'views/header/branch.component';
 import { TwoFactorContentComponent } from 'services/twofactorconfirm.service';
 import { MergeComponent } from 'views/header/merge.component';
 
+import { NotifierModule } from 'angular-notifier';
+import {customNotifierOptions} from 'notification-config';
 
 @NgModule({
   declarations: [
@@ -53,7 +55,8 @@ import { MergeComponent } from 'views/header/merge.component';
     AppRoutingModule,
     ReactiveFormsModule,
     FormsModule,
-    NgbModule
+    NgbModule,
+    NotifierModule.withConfig(customNotifierOptions),
   ],
   providers: [],
   bootstrap: [AppComponent]
