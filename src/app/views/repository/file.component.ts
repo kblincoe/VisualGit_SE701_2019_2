@@ -7,6 +7,7 @@ import * as nodegit from 'nodegit';
 import { logger } from 'logger';
 
 import WorkingDirectory from 'model/repository/working-directory';
+import { ErrorService } from 'services/error.service';
 
 enum PatchType {
   Removed = "removed",
@@ -27,7 +28,9 @@ function changesEqual(a: nodegit.ConvenientPatch, b: nodegit.ConvenientPatch) {
 export class FilePanelComponent implements OnInit, OnDestroy, OnChanges {
   @Input() workingDirectory: WorkingDirectory;
   @Output() displayFile = new EventEmitter<{patch: nodegit.ConvenientPatch, prePatch?: nodegit.ConvenientPatch}>();
-
+  
+  constructor(private errorService: ErrorService) {}
+  
   public clear() {}
 
   public ngOnInit() {
@@ -91,14 +94,14 @@ export class FilePanelComponent implements OnInit, OnDestroy, OnChanges {
 
   async commit() {
     if (this.commitMessage.value == null) {
-      alert("Error: You need to enter a commit message before trying to commit");
+      this.errorService.displayError("Error: You need to enter a commit message before trying to commit");
     } 
     else if ((this.staged.length > 0)) {
           await this.workingDirectory.commit(this.commitMessage.value);
           this.commitMessage.setValue(null);
           this.unstageAll();
     } else {
-      alert("Error: You need to stage files before you can commit");
+      this.errorService.displayError("Error: You need to stage files before you can commit");
     } 
   }
 

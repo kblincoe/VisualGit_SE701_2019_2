@@ -6,6 +6,8 @@ import * as nodegit from 'nodegit';
 import { logger } from 'logger';
 
 import WorkingDirectory from 'model/repository/working-directory';
+import { NgbAlert, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ErrorService } from 'services/error.service';
 
 type ContentType = "added" | "removed" | "same";
 
@@ -13,6 +15,8 @@ interface LineInfo {
   text: string;
   type: ContentType;
 }
+
+
 
 async function unapply(contents: string[], diff: nodegit.ConvenientPatch): Promise<string[]> {
   let lineTranslate = 0;
@@ -53,9 +57,10 @@ export class DiffPanelComponent implements OnChanges {
   // but because we have to work from the file in the working directory, we work backwards, unapplying the preDiff and then the actual diff.
   @Input() preDiff?: nodegit.ConvenientPatch;
   @Input() diff: nodegit.ConvenientPatch;
+ 
 
 
-  constructor() {}
+  constructor(private errorService: ErrorService) {}
   /**
    * This function (called every time there are changes) updates the line changes.
    * It is a somewhat complex process but hopefully the comments explain it.
@@ -182,7 +187,7 @@ export class DiffPanelComponent implements OnChanges {
       this.diff.newFile().path()]);
     } catch(error) {
       logger.info("No file selected");
-      alert("Error: You must select a file in order to save it.");
+      this.errorService.displayError("Error: You must select a file in order to save it.");
     }
   }
 
@@ -225,7 +230,7 @@ export class DiffPanelComponent implements OnChanges {
       await this.save();
     } catch(error) {
       logger.info("No file selected")
-      alert("Error: You must select a file in order to discard it.");
+      this.errorService.displayError("Error: You must select a file in order to discard it.");
 
     }
   }
