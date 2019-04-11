@@ -27,6 +27,8 @@ import { MergeComponent } from 'views/header/merge.component';
 import { NotifierModule } from 'angular-notifier';
 import {customNotifierOptions} from 'notification-config';
 import { ConfirmContentComponent } from 'services/confirmation.service';
+import { AssigneeIssueComponent } from 'views/issuePage/assigneePanel/assignee.component';
+import { AssigneeManagementComponent } from 'views/issuePage/assigneeManagement/assigneeManagement.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +51,9 @@ import { ConfirmContentComponent } from 'services/confirmation.service';
     BranchComponent,
     MergeComponent,
     FooterComponent,
-    HeaderComponent
+    HeaderComponent,
+    AssigneeIssueComponent,
+    AssigneeManagementComponent
   ],
   entryComponents: [ErrorContentComponent, ConfirmContentComponent, TwoFactorContentComponent, TagsComponent, BranchComponent, MergeComponent],
   imports: [

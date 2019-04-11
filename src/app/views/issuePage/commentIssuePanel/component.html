@@ -1,19 +1,25 @@
-
 <button class="back-button icon-btn" (click)="onBackBtnClicked()"><img class="icon" src="./assets/Back.svg"></button>
-<div>
-  <div class="old-issue-panel">
-    <label class="label">{{issueTitle}}</label>
+<div class="row">
+  <div class="col-sm-8">
+    <div>
+      <div class="old-issue-panel">
+        <label class="label">{{issueTitle}}</label>
+      </div>
+    </div>
+    <div>
+      <div class="commit-panel align-bottom">
+        <textarea class="commit-message-input textArea" placeholder="Leave your comment here..."
+          [formControl]="commentMessage"></textarea>
+      </div>
+    </div>
+    <div class="buttons-panel">
+      <button class="btn btn-primary buttons" (click)="comment()">Comment</button>
+      <button class="btn btn-secondary buttons" (click)="closeIssue()">Close Issue</button>
+    </div>
   </div>
-</div>
 
-<div>
-  <div class="commit-panel align-bottom">
-    <textarea class="commit-message-input textArea" placeholder="Leave your comment here..." [formControl]="commentMessage"></textarea>
+  <!-- Right Panel for Assignees Feature -->
+  <div class="col-row-4">
+    <app-issue-assignee-panel></app-issue-assignee-panel>
   </div>
-</div>
-
-
-<div class="buttons-panel">
-  <button class="btn btn-primary buttons" (click)="comment()">Comment</button>
-  <button class="btn btn-secondary buttons" (click)="closeIssue()">Close Issue</button>
 </div>

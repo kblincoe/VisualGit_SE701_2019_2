@@ -22,12 +22,13 @@ export interface GithubRepositoryInfo {
  * Finds information about the given github repository, using the access rights of the user if given.
  */
 export async function findRepo(owner: string, name: string, user?: User): Promise<GithubRepositoryInfo> {
-  const response = await ((user && user.github) || new Octokit()).repos.get({owner, repo: name});
+  const response = await ((user && user.github) || new Octokit()).repos.get({ owner, repo: name });
 
   return response.data;
 }
 
 export type Issue = Octokit.IssuesListForRepoResponseItem;
+export type Assignee = Octokit.IssuesListAssigneesResponseItem;
 
 export class GitHub {
   // Can construct with repository info or URL
@@ -65,6 +66,48 @@ export class GitHub {
       repo: this.repoInfo.name,
       title: issueTitle,
       body: description
+    });
+  }
+
+  async getAllAssignees(): Promise<Assignee[]> {
+    let assignees: Assignee[];
+
+    const result = await this.user.github.issues.listAssignees({
+      owner: this.repoInfo.owner.login,
+      repo: this.repoInfo.name
+    });
+    assignees = result.data;
+    return assignees;
+  }
+
+  async getCurrentAssignees(issueNum: number): Promise<Assignee[]> {
+    let assignees: Assignee[];
+
+    const result = await this.user.github.issues.get({
+      owner: this.repoInfo.owner.login,
+      repo: this.repoInfo.name,
+      number: issueNum
+    });
+    assignees = result.data.assignees;
+    return assignees;
+  }
+
+  async addNewAssignees(issueNum: number, assigneeList: string[]) {
+    await this.user.github.issues.addAssignees({
+      owner: this.repoInfo.owner.login,
+      repo: this.repoInfo.name,
+      number: issueNum,
+      assignees: assigneeList
+    });
+
+  }
+
+  async removeAssignees(issueNum: number, assigneeList: string[]) {
+    await this.user.github.issues.removeAssignees({
+      owner: this.repoInfo.owner.login,
+      repo: this.repoInfo.name,
+      number: issueNum,
+      assignees: assigneeList
     });
   }
 
