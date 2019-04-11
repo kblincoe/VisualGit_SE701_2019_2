@@ -22,8 +22,8 @@ export class BranchComponent implements OnInit {
     private modalService: NgbModal,
     private repositoryService: RepositoryService,
     private errorService: ErrorService,
-    private router: Router) {
-
+    private router: Router,
+    ) {
   }
 
   /**
@@ -90,10 +90,14 @@ export class BranchComponent implements OnInit {
    */
   async selectBranch(branch: string) {
     try {
+
       await this.repositoryService.current().checkout(branch);
       this.modalService.dismissAll();
 
       this.ngZone.run(() => this.router.navigate(['/repo']));
+
+      this.repositoryService.current().refresh();
+
     } catch(error) {
       logger.info("Selecting branch failed:");
       logger.info(error);
@@ -114,6 +118,8 @@ export class BranchComponent implements OnInit {
         await this.repositoryService.current().createBranch(this.branchCreationName.value);
         await this.selectBranch(this.branchCreationName.value);
         this.modalService.dismissAll();
+        this.repositoryService.current().refresh();
+      
       }
       else {
         // popup a modal to show the error message
