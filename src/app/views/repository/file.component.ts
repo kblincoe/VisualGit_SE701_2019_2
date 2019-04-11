@@ -17,7 +17,7 @@ enum PatchType {
 }
 
 function changesEqual(a: nodegit.ConvenientPatch, b: nodegit.ConvenientPatch) {
-  return a.newFile().path() === b.newFile().path()
+  return a.newFile().path() === b.newFile().path();
 }
 
 @Component({
@@ -28,12 +28,14 @@ function changesEqual(a: nodegit.ConvenientPatch, b: nodegit.ConvenientPatch) {
 export class FilePanelComponent implements OnInit, OnDestroy, OnChanges {
   @Input() workingDirectory: WorkingDirectory;
   @Output() displayFile = new EventEmitter<{patch: nodegit.ConvenientPatch, prePatch?: nodegit.ConvenientPatch}>();
-  
+
   constructor(private errorService: ErrorService) {}
-  
+
   public clear() {}
 
   public ngOnInit() {
+    this.staged = [];
+    this.unstaged = [];
     this.subscription = this.selected.valueChanges.subscribe((patch: nodegit.ConvenientPatch) => {
       let prePatch;
       // If this is a staged change, we should check for an unstaged change to unapply first.
@@ -93,16 +95,18 @@ export class FilePanelComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   async commit() {
+    // Ensure there's a commit message.
     if (this.commitMessage.value == null) {
       this.errorService.displayError("Error: You need to enter a commit message before trying to commit");
-    } 
-    else if ((this.staged.length > 0)) {
-          await this.workingDirectory.commit(this.commitMessage.value);
-          this.commitMessage.setValue(null);
-          this.unstageAll();
-    } else {
+    }
+    // Ensure that there are files to commit.
+    else if (!this.staged || this.staged.length == 0) {
       this.errorService.displayError("Error: You need to stage files before you can commit");
-    } 
+    } else {
+      await this.workingDirectory.commit(this.commitMessage.value);
+      this.commitMessage.setValue(null);
+      this.unstageAll();
+    }
   }
 
   public patchType(change: nodegit.ConvenientPatch) {
