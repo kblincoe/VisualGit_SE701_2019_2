@@ -5,7 +5,11 @@ import { RepositoryInfo } from './repository.list';
 import { logger } from 'logger';
 import { Repository } from 'model/repository';
 import { UserService } from './user';
+
 import { GitHub } from 'model/github';
+
+import * as nodegit from 'nodegit';
+import { promises as fs  } from 'fs';
 
 const REFRESH_RATE = 3.0 * 1000;
 
@@ -43,6 +47,27 @@ export class RepositoryService implements OnDestroy {
 
   public current() {
     return this.repositorySubject.getValue();
+  }
+
+  public async initRepo(repoDir: string, autoInit: boolean, ignoreTemplate: string) {
+    const path = require("path");
+    const fileName = "README.md";
+
+    nodegit.Repository.init(path.resolve(__dirname, repoDir), 0)
+      .then( (repo) => {
+        if(autoInit) {
+          const content = "# Welcome\nVisualGit is an easy-to-use, visually-oriented desktop client for Git.";
+          fs.writeFile(path.join(repo.workdir(), fileName), content);
+        }
+        if(ignoreTemplate !== "None.gitignore") {
+          const template = './gitignore_templates/' + ignoreTemplate;
+          fs.copyFile(path.resolve(__dirname, template), repo.workdir() + ".gitignore");
+        }
+        return;
+      })
+      .catch( (reasonForFailure) => {
+        return reasonForFailure;
+      });
   }
 
   public repository: Observable<Repository>;

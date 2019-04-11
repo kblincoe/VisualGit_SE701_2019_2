@@ -39,3 +39,25 @@
 
 </div>
 
+<div class="create_repo">
+  <h1>Create Repository</h1>
+  <div class="input-body" [formGroup]="creatRepoFrom">
+    <div>
+      <input type="text" class="form-control" readonly formControlName="repoLocaltion" (click)="chooseRepoLocaltion()" placeholder="Localtion"/>
+    </div>
+    <br>
+    <div class="form-check">
+      <input type="checkbox" class="form-check-input" formControlName="repoCreateInit">
+      <label class="form-check-initREADME">Initialize this repository with a README</label>
+    </div>
+    <br>
+    <div ngbDropdown class="add_gitignore">
+      <button ngbDropdownToggle>Add .gitignore: {{choosedTemplate}} </button>
+      <div ngbDropdownMenu class="show_gitignore_templates">
+        <button ngbDropdownItem *ngFor="let template of gitignoreTemplates" (click)="addGitignoreTemplate(template)">{{template}}</button>
+      </div>
+    </div>
+    <br>
+    <button class="btn btn-primary" (click)="createRepo()" [disabled]="creatRepoFrom.invalid">Create Repository</button>
+  </div>
+</div>

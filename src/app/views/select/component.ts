@@ -14,6 +14,7 @@ import { UserService } from 'services/user';
 
 import { ProgressbarComponent } from './progressbar.component';
 import { ErrorService } from "services/error.service";
+import { StyleService } from 'services/style';
 
 @Component({
   selector: "app-select-screen",
@@ -30,9 +31,10 @@ export class SelectRepositoryComponent implements OnInit, OnDestroy {
     private repositoryService: RepositoryService,
     private ngZone: NgZone,
     private errorService: ErrorService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private styleService: StyleService
   ) {
-
+    this.gitignoreTemplates = this.styleService.listTemplates();
   }
   public ngOnInit() {
     this.subscription.add(this.cloneUrlForm.valueChanges.subscribe(this.onCloneUrlUpdate.bind(this)));
@@ -180,6 +182,12 @@ export class SelectRepositoryComponent implements OnInit, OnDestroy {
     publicPath: new FormControl("", Validators.required),
     privatePath: new FormControl("", Validators.required)
   });
+  // Create repo
+  creatRepoFrom: FormGroup = new FormGroup({
+    repoLocaltion:  new FormControl("", Validators.required),
+    repoCreateInit: new FormControl(false)
+  });
+
 
   private onCloneUrlUpdate(cloneUrl: string) {
     const prevName = this.cloneName;
@@ -200,6 +208,51 @@ export class SelectRepositoryComponent implements OnInit, OnDestroy {
     }
   }
 
+
+  addGitignoreTemplate(template: string) {
+    this.choosedTemplate = template;
+  }
+
+
+  async chooseRepoLocaltion() {
+    // Wrapped in a promise so that the parent knows when we have updated the form.
+    return new Promise(res =>
+      electron.remote.dialog.showOpenDialog(
+        electron.remote.getCurrentWindow(),
+        {
+          title: "Repository Init Into",
+          properties: ["openDirectory"],
+          message: "Select Directory"
+        },
+        paths => {
+          if(paths && paths.length > 0) {
+            this.creatRepoFrom.patchValue({repoLocaltion: paths[0]});
+          }
+          res();
+        }
+      )
+    );
+  }
+
+  async createRepo() {
+    const repoDir = this.creatRepoFrom.value.repoLocaltion;
+    const fs = require('fs');
+    if(fs.existsSync(repoDir + "\\.git")) {
+      alert("A git repository already exist! Please choose another folder!");
+      this.creatRepoFrom.setValue({repoLocaltion: "", repoCreateInit: false});
+      this.choosedTemplate = "None"
+      return;
+    }
+    const autoInit = this.creatRepoFrom.value.repoCreateInit;
+    const ignoreTemplate = this.choosedTemplate + ".gitignore";
+    this.repositoryService.initRepo(repoDir, autoInit, ignoreTemplate);
+    alert("Create Success!");
+    this.creatRepoFrom.setValue({repoLocaltion: "", repoCreateInit: false});
+    this.choosedTemplate = "None";
+  }
+
   private cloneName = "repo-name";
   private subscription: Subscription = new Subscription();
+  gitignoreTemplates: string[] = [];
+  choosedTemplate = "None";
 }

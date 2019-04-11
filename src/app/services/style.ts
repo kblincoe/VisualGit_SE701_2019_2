@@ -5,6 +5,7 @@ import * as electron from 'electron';
 import { logger } from 'logger';
 
 import { Theme, defaultTheme } from 'model/themes';
+import { promises as fs  } from 'fs';
 
 @Injectable({providedIn: 'root'})
 export class StyleService {
@@ -31,6 +32,18 @@ export class StyleService {
   }
   public observeTheme() {
     return this.themeSubject.asObservable();
+  }
+
+  public listTemplates(): string[] {
+    const templateFolder = './gitignore_templates';
+    const path = require("path");
+    const templates = [];
+    templates.push("None");
+
+    fs.readdir(path.resolve(__dirname, templateFolder)).then(
+      listing => listing.forEach(file => templates.push(file.split(".")[0]))
+    );
+    return templates;
   }
 
   private themeSubject = new BehaviorSubject(defaultTheme);
