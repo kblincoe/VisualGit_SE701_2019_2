@@ -1,4 +1,4 @@
-<nav [hidden]="!loggedIn" class="toolbar full-width navbar navbar-expand-lg" role="navigation">
+<nav [hidden]="this.router.url == '/login'" class="toolbar full-width navbar navbar-expand-lg" role="navigation">
   <!-- Header row, for navigation to other pages -->
 
   <!-- Navbar expansion button -->
@@ -42,12 +42,12 @@
       <button class="icon-btn" (click)="sync()"> <img class="icon" src="./assets/refresh-button.png" title="Sync"></button>
     </div>
 
-    <li ngbDropdown *ngIf="userIconUrl" placement="bottom-right" class="navbar-nav user-menu">
-      <button ngbDropdownToggle *ngIf="userIconUrl" class="icon-btn"><img class="icon" [src]="userIconUrl"></button>
+    <li ngbDropdown placement="bottom-right" class="navbar-nav user-menu">
+        <button ngbDropdownToggle *ngIf="loggedIn" class="icon-btn"><img class="icon" [src]="userIconUrl"></button>
+        <button ngbDropdownToggle *ngIf="!loggedIn" class="icon-btn"><img class="icon" src="./assets/No-sign-in.png"></button>
       <div ngbDropdownMenu>
-        <!--<span ngbDropdownItem disabled>{{userService.getUser().name}}</span>-->
-        <!-- Need to replace guest user's URL as "/<Default name>"-->
-        <span ngbDropdownItem disabled>Signed in as <b>{{this.username}}</b></span>
+        <span ngbDropdownItem *ngIf="loggedIn" disabled>Signed in as <b>{{this.username}}</b></span>
+        <span ngbDropdownItem *ngIf="!loggedIn" disabled>You are not signed in</span>
         <button ngbDropdownItem (click)="toggleHelp()">Help</button>
         <button ngbDropdownItem (click)="toggleSetting()">Settings</button>
         <button ngbDropdownItem (click)="toggleLog()">{{loggedIn ? "Logout" : "Login"}}</button>
