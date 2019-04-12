@@ -1,6 +1,7 @@
 import * as Octokit from "@octokit/rest";
 import { User } from "model/user";
 import { Observable } from 'rxjs';
+import { IssuesListForRepoResponseItemLabelsItem, IssuesListLabelsOnIssueResponseItem } from "node_modules/@octokit/rest";
 
 // Taken from https://developer.github.com/v3/repos/
 // Contains the important parts of the repo (list) response message
@@ -28,6 +29,7 @@ export async function findRepo(owner: string, name: string, user?: User): Promis
 }
 
 export type Issue = Octokit.IssuesListForRepoResponseItem;
+export type Label = Octokit.IssuesListForRepoResponseItemLabelsItem;
 export type Assignee = Octokit.IssuesListAssigneesResponseItem;
 
 export class GitHub {
@@ -109,6 +111,58 @@ export class GitHub {
       number: issueNum,
       assignees: assigneeList
     });
+  }
+
+   async getGitHubIssueLabels(issueNum: number): Promise<Label[]> {
+    let labels: Label[];
+
+    const result = await this.user.github.issues.listLabelsOnIssue({
+        owner: this.repoInfo.owner.login,
+        repo: this.repoInfo.name,
+        number: issueNum});
+    labels = result.data;
+    return labels;
+  }
+
+// A method to get all the labels from a repo(labeled and unlabeled)
+   async  getAllAvailabeIssueLabels(): Promise<Label[]> {
+    let labels: Label[];
+
+    const result = await this.user.github.issues.listLabelsForRepo({
+        owner: this.repoInfo.owner.login,
+        repo: this.repoInfo.name,
+      });
+    labels = result.data;
+    return labels;
+  }
+
+
+  async addLabels(issueNum: number, labelArray: string[]) {
+    let labels: IssuesListLabelsOnIssueResponseItem[];
+
+    const result = await this.user.github.issues.addLabels({
+        owner: this.repoInfo.owner.login,
+        repo: this.repoInfo.name,
+        number: issueNum,
+        labels: labelArray
+      });
+    labels = result.data;
+    return labels;
+
+  }
+
+  async removeLabel(issueNum: number, label: string) {
+    let labels: IssuesListLabelsOnIssueResponseItem[];
+
+    const result = await this.user.github.issues.removeLabel({
+        owner: this.repoInfo.owner.login,
+        repo: this.repoInfo.name,
+        number: issueNum,
+        name: label
+      });
+    labels = result.data;
+    return labels;
+
   }
 
   public issues: Observable<Issue[]>;

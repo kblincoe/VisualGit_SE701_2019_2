@@ -3,11 +3,12 @@ import { interval, Observable, Subscription, BehaviorSubject } from "rxjs";
 import { combineLatest } from "rxjs/internal/observable/combineLatest";
 import { flatMap, shareReplay, distinctUntilChanged } from "rxjs/operators";
 
-import { GitHub, Issue, Assignee } from "model/github";
+import { GitHub, Issue, Assignee,  Label  } from "model/github";
 
 import { RepositoryService } from "services/repository";
 import { logger } from 'logger';
 import { CurrencyIndex } from '@angular/common/src/i18n/locale_data';
+import { IssuesListLabelsOnIssueResponseItem } from "node_modules/@octokit/rest";
 
 
 @Injectable({ providedIn: "root" })
@@ -23,11 +24,11 @@ export class IssueService implements OnDestroy {
 
     this.issues =
       combineLatest(this.repositoryService.github, this.refresher)
-        .pipe(
-          flatMap(([github, _]) => github && github.getIssueList()),
-          distinctUntilChanged(IssueService.areIssuesSame),
-          shareReplay(1)
-        );
+      .pipe(
+        flatMap(([github, _]) => github && github.getIssueList()),
+        distinctUntilChanged(IssueService.areIssuesSame),
+        shareReplay(1)
+      );
 
     this.allAssignees =
       combineLatest(this.repositoryService.github, this.refresher).pipe(
@@ -46,6 +47,25 @@ export class IssueService implements OnDestroy {
         distinctUntilChanged(IssueService.areAssigneeSame),
         shareReplay(1)
       );
+
+    this.labels =
+      combineLatest(this.repositoryService.github, this.refresher).pipe(
+        flatMap(([github, _]) => this.selectedIssue == null ? null :
+          github && github.getGitHubIssueLabels(this.selectedIssue.number)
+        ),
+        distinctUntilChanged(IssueService.areLabelSame),
+        shareReplay(1)
+      );
+    this.allLabels =
+      combineLatest(this.repositoryService.github, this.refresher).pipe(
+        flatMap(([github, _]) => this.selectedIssue == null ? null :
+          github && github.getAllAvailabeIssueLabels()
+        ),
+        distinctUntilChanged(IssueService.areLabelSame),
+        shareReplay(1)
+      );
+
+
   }
 
   ngOnDestroy(): void {
@@ -73,7 +93,20 @@ export class IssueService implements OnDestroy {
     this.refresh();
   }
 
-  public async addAssigneesToIssue(assignees: string[]) {  
+  public async removeLabel(labelName: string) {
+    await this.currentGithub.removeLabel(this.selectedIssue.number, labelName);
+    this.refresh();
+  }
+
+  public async addLabel(labelName: string) {
+    const label: string[] = new Array();
+    label.push(labelName);
+    await this.currentGithub.addLabels(this.selectedIssue.number, label);
+    this.refresh();
+
+  }
+
+  public async addAssigneesToIssue(assignees: string[]) {
     await this.currentGithub.addNewAssignees(this.selectedIssue.number, assignees);
     this.refresh();
   }
@@ -88,6 +121,9 @@ export class IssueService implements OnDestroy {
   public issues: Observable<Issue[]>;
   public allAssignees: Observable<Assignee[]>;
   public currentAssignees: Observable<Assignee[]>;
+  public labels: Observable<Label[]>;
+  public allLabels: Observable<Label[]>;
+  public available: Observable<Label[]>;
 
   /**
    * Does a basic check for whether the current list is different from the previous one
@@ -101,6 +137,22 @@ export class IssueService implements OnDestroy {
     for (let i = 0; i < prev.length; ++i) {
       if (prev[i].title !== cur[i].title || prev[i].updated_at !== cur[i].updated_at) {
         logger.info("Updating issue list");
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  private static areLabelSame(prev: Label[], cur: Label[]) {
+    if(prev.length !== cur.length) {
+      logger.info("Updating label list");
+      return false;
+    }
+
+    for(let i = 0; i < prev.length; ++i) {
+      if(prev[i].name !== cur[i].name || prev[i].id !== cur[i].id || prev[i].node_id !== cur[i].node_id ) {
+        logger.info("Updating label list");
         return false;
       }
     }
@@ -129,3 +181,4 @@ export class IssueService implements OnDestroy {
   private subscription = new Subscription();
   private REFRESH_RATE = 4000;
 }
+
