@@ -94,6 +94,7 @@ export class HeaderComponent implements OnInit, OnDestroy  {
       await this.router.navigate(['/repo']);
 
     }
+    this.isShowMenu = false;
   }
 
   /**
@@ -246,5 +247,6 @@ export class HeaderComponent implements OnInit, OnDestroy  {
   private subscription = new Subscription();
   private repoSubscription = new Subscription();
   private readonly notifier: NotifierService;
+  private isShowMenu = false;
 
 }
