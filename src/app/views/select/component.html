@@ -4,7 +4,8 @@
   <h1>Clone from Internet</h1>
   <div class="input-body">
     <div class="input-group">
-      <input type="text" class="form-control" [formControl]="cloneUrlForm" placeholder="https://github.com/user/repository.git"/>
+      <input type="text" class="form-control" [formControl]="cloneUrlForm" placeholder="https://github.com/user/repository.git" 
+            onfocus="this.placeholder=''" onblur="this.placeholder='https://github.com/user/repository.git'"/>
     </div>
     <br>
     <div class="input-group">

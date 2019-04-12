@@ -7,12 +7,14 @@
       <br><br>
 
       <div class="input-group">
-        <input type="text" class="form-control" style="width: 85%;" formControlName="username" placeholder="Username or Email">
+        <input type="text" class="form-control" style="width: 85%;" formControlName="username" placeholder="Username or Email"
+              onfocus="this.placeholder=''" onblur="this.placeholder='Username or Email'">
       </div>
       <br>
 
       <div class="input-group">
-        <input id="password" class="form-control" type="password" formControlName="password" placeholder="Password">
+        <input id="password" class="form-control" type="password" formControlName="password" placeholder="Password"
+              onfocus="this.placeholder=''" onblur="this.placeholder='Password'">
       </div>
       <br>
 
