@@ -51,7 +51,7 @@
       <label class="form-check-initREADME">Initialize this repository with a README</label>
     </div>
     <br>
-    <div ngbDropdown class="add_gitignore">
+    <div ngbDropdown class="add_gitignore" autoClose="outside" [(open)]= isShowMenu>
       <button ngbDropdownToggle>Add .gitignore: {{choosedTemplate}} </button>
       <div ngbDropdownMenu class="show_gitignore_templates">
         <button ngbDropdownItem *ngFor="let template of gitignoreTemplates" (click)="addGitignoreTemplate(template)">{{template}}</button>

@@ -211,6 +211,7 @@ export class SelectRepositoryComponent implements OnInit, OnDestroy {
 
   addGitignoreTemplate(template: string) {
     this.choosedTemplate = template;
+    this.isShowMenu = false;
   }
 
 
@@ -255,4 +256,5 @@ export class SelectRepositoryComponent implements OnInit, OnDestroy {
   private subscription: Subscription = new Subscription();
   gitignoreTemplates: string[] = [];
   choosedTemplate = "None";
+  private isShowMenu = false;
 }

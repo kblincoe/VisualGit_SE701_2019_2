@@ -18,7 +18,7 @@
 
       <!-- Repo list -->
       <div [hidden]="!currentRepo && !repositories"><img src="./assets/RightArrow.svg" class="right-arrow"></div>
-      <div ngbDropdown class="nav-item" [hidden]="!currentRepo && !repositories">
+      <div ngbDropdown class="nav-item" [hidden]="!currentRepo && !repositories" autoClose="outside" [(open)]= isShowMenu>
         <button ngbDropdownToggle class="dropdown-btn">{{currentRepo || "repository"}}</button>
         <div ngbDropdownMenu class="scrollable-menu">
           <button ngbDropdownItem *ngFor="let repo of repositories" (click)="selectRepository(repo)">{{repo.uniqueName}}</button>
