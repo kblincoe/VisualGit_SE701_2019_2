@@ -23,6 +23,8 @@ import { CommentIssueComponent } from "views/issuePage/commentIssuePanel/compone
 import { BranchComponent } from 'views/header/branch.component';
 import { TwoFactorContentComponent } from 'services/twofactorconfirm.service';
 import { MergeComponent } from 'views/header/merge.component';
+import { LabelComponent } from "views/issuePage/labelPanel/component";
+import { DropdownComponent } from "views/issuePage/labelPanel/dropdown.component";
 
 import { NotifierModule } from 'angular-notifier';
 import {customNotifierOptions} from 'notification-config';
@@ -37,6 +39,8 @@ import { AssigneeManagementComponent } from 'views/issuePage/assigneeManagement/
     IFrameComponent,
     NewIssueComponent,
     CommentIssueComponent,
+    LabelComponent,
+    DropdownComponent,
     AppComponent,
     LoginComponent,
     RepositoryComponent,

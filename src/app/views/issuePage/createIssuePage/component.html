@@ -1,19 +1,32 @@
 
 <button class="back-button icon-btn" (click)="onBackBtnClicked()"><img class="icon" src="./assets/Back.svg"></button>
-<div>
-  <div class="input-group">
-    <input type="text" class="form-control title" placeholder="Title" [formControl]="titleMessage">
+
+<div class="container">
+  <div class="row">
+    <div class="col-xs-6" style="width: 80%">
+      <div>
+        <div class="input-group">
+          <input type="text" class="form-control title" placeholder="Title" [formControl]="titleMessage">
+        </div>
+      </div>
+
+      <div>
+        <div class="commit-panel align-bottom">
+          <textarea class="commit-message-input textArea" placeholder="Leave your comment here..." [formControl]="bodyMessage"></textarea>
+        </div>
+      </div>
+
+
+      <div class="buttons-panel">
+        <button class="btn btn-primary buttons" (click)="save()">Create Issue</button>
+        <button class="btn btn-secondary" (click)="discard()">Discard</button>
+      </div>
+
+    </div>
+    <!--div class="col-xs-6" style="width: 15%; margin-left: 2vh">
+      <div class="label-panel">
+        <app-issue-label></app-issue-label>
+      </div>
+    </div-->
   </div>
-</div>
-
-<div>
-  <div class="commit-panel align-bottom">
-    <textarea class="commit-message-input textArea" placeholder="Leave your comment here..." [formControl]="bodyMessage"></textarea>
-  </div>
-</div>
-
-
-<div class="buttons-panel">
-  <button class="btn btn-primary buttons" (click)="save()">Create Issue</button>
-  <button class="btn btn-secondary" (click)="discard()">Discard</button>
 </div>
