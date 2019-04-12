@@ -65,6 +65,7 @@
 
 // For the header row for staged files
 .files-header {
+  padding:3%;
   flex: initial;
 
   display: flex;
@@ -77,7 +78,8 @@
 
   .header {
     flex: 1 1 auto;
-    text-align: center;
+    text-align:center;
+    vertical-align: middle;
     min-height: 35px;
 
     margin: 0;
