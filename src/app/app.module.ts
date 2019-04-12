@@ -26,6 +26,7 @@ import { MergeComponent } from 'views/header/merge.component';
 
 import { NotifierModule } from 'angular-notifier';
 import {customNotifierOptions} from 'notification-config';
+import { ConfirmContentComponent } from 'services/confirmation.service';
 
 @NgModule({
   declarations: [
@@ -43,13 +44,14 @@ import {customNotifierOptions} from 'notification-config';
     GraphTooltipComponent,
     ErrorContentComponent,
     TwoFactorContentComponent,
+    ConfirmContentComponent,
     TagsComponent,
     BranchComponent,
     MergeComponent,
     FooterComponent,
     HeaderComponent
   ],
-  entryComponents: [ErrorContentComponent, TwoFactorContentComponent, TagsComponent, BranchComponent, MergeComponent],
+  entryComponents: [ErrorContentComponent, ConfirmContentComponent, TwoFactorContentComponent, TagsComponent, BranchComponent, MergeComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
