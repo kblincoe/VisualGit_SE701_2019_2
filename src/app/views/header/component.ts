@@ -93,8 +93,6 @@ export class HeaderComponent implements OnInit, OnDestroy  {
       await this.router.navigate(['/repo']);
 
     }
-
-
   }
 
   /**
