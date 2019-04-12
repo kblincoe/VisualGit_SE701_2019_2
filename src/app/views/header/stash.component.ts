@@ -110,6 +110,9 @@ export class StashComponent implements OnInit {
         // Inform the repositoryService.
         await this.repositoryService.current().createStash(message);
         this.stashes.unshift(message);
+
+        // Clear the text box so the user doesn't have to edit it.
+        this.stashInput = "";
       }
       else {
         // Popup a modal to show the error message.
@@ -134,6 +137,7 @@ export class StashComponent implements OnInit {
   searchableStashes: string[] = [];
 
   stashName = new FormControl('');
+  stashInput: string;
   currentRepo: string;
   currentBranch: string;
 }

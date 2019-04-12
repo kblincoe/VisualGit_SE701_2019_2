@@ -26,7 +26,7 @@
             </tbody>
         </table>
         <div>
-            <input class="form-control" id="create-stash-input" [formControl]="stashName" placeholder="Stash name">
+            <input class="form-control" id="create-stash-input" [formControl]="stashName" [(ngModel)]="stashInput" placeholder="Stash name">
             <button (click)="createStash()" class="btn">Stash current edits</button>
         </div>
     </div>
