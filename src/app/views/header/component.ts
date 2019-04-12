@@ -174,8 +174,9 @@ export class HeaderComponent implements OnInit, OnDestroy  {
   }
   async sync() {
     // Only push if the pull succeeded.
-    if(await this.pull())
+    if(await this.pull()) {
       await this.push();
+    }
   }
 
   async issue() {
